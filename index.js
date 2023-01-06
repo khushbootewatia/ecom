@@ -1,8 +1,7 @@
 const express = require('express')
-// const mongoose = require('mongoose')
 const connectDb = require('./config/dbConnection')
 const route = require('./src/user/user.route')
-require('dotenv').config({path: 'env.development'})
+require('dotenv').config({path: ".env"})
 
 const logger = require('./logger/logger')
 
