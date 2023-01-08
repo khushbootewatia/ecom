@@ -11,9 +11,10 @@ logger.error('text error')
 // const port = 3000
 
 const app = express()
+app.use(express.json());
 connectDb();
 
-// app.use('/', route)
+app.use('/api/user', route)
 
 app.listen(process.env.PORT, function(){
     console.log(`running on port ${process.env.PORT}`)
