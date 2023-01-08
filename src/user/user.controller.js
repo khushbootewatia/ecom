@@ -86,7 +86,7 @@ module.exports.signin = async (req, res) => {
     });
   } else {
     res.send({
-      token: util.generateToken({}),
+      token: util.generateToken({email}),
     });
   }
 }
