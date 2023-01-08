@@ -1,160 +1,92 @@
 const bcrypt = require("bcrypt");
-const _ = require("lodash");
-const axios = require("axios");
-const otpGenerator = require('otp-generator');
 
-const { User } = require('../user/user.model');
-const  Otp = require('../otp/otp.model');
+const util = require("../../utils/util")
 
+const { User,TransientUser } = require('../user/user.model');
+
+
+console.log(User," ------",TransientUser,"line 8")
+const sendGrid = require("../../services/sendgrid_email")
+
+//******************************SIGNUP********************************//
 
 module.exports.signUp = async (req, res) => {
+  let {name,email,password}= req.body
    console.log(req.body);
 try {
-  if(!req.body.number){
-    return res.status(400).json({message:"Enter all fields"});
+  if(!email){
+    return res.status(400).json({message:"Email is required"});
 }
 const user = await User.findOne({
-    number: req.body.number
+    email: email,
+    
 });
-if (user) return res.status(400).send("User already registered!");
-const OTP = otpGenerator.generate(6, {
-    digits: true, alphabets: false, upperCase: false, specialChars: false
-});
+
+if (user && user.isVerified ) return res.status(400).send({"message":"User already registered!"});
+if(!user ){
+password = util.generateHash(password)
+User.create({
+  name,email,password
+})
+}
+//otp generate
+const otp = util.generateOtp();
+
 // console.log(OTP);
-const number = req.body.number;
-const greenwebsms = new URLSearchParams();
-greenwebsms.append('token', '05fa33c4cb50c35f4a258e85ccf50509');
-greenwebsms.append('to', `+${number}`);
-greenwebsms.append('message', `Verification Code ${OTP}`);
 
-await axios.post('http://api.greenweb.com.bd/api.php', greenwebsms)
 
-const otp = await Otp({ 
-        number: number, 
-        otp: OTP 
-    });
+console.log(otp);
 
-//console.log(otp);
-//const salt = await bcrypt.genSalt(10)
-//otp.otp = await bcrypt.hash(otp.otp, salt);
+const hashedOtp = util.generateHash(otp)
 
-await otp.save();
+
+await TransientUser.create({email:email,otp:hashedOtp});
+const payload ={to:email,subject:"verification Email"}
+sendGrid.sendEmail(payload)
 res.status(200).send({message:"Otp send successfully!",otp});
 } catch (error) {
-  console.log("error 20",error);
-}
+  throw error
+} 
    
 }
 
+//********************************VERIFY OTP*********************************//
 
-module.exports.verifyOtp = async (req, res) => {
+module.exports.verifyOtp = (req, res) => {
+    let {email,otp}= req.body;
+    console.log("emsil",email);
+  TransientUser.findOne({email})
+  .then(transientUser =>{
+        if(!transientUser || !util.compareHash(otp,transientUser.otp) )  return res.status(200).send({"message":"incorrect otp"})
+       return User.findOneAndUpdate({email},{$set :{isVerified:true}},{new:true})
+  })
+  .then(user=>{
+    console.log(user,"user");
+    if(user && user.isVerified)
+      return res.status(200).send({"message":"otp verified successfully"})
+    return res.status(400).send({"message":"something went wrong please try again"})
     
-    const otpHolder = await Otp.find({
-        number: req.body.number
-    });
-    // console.log(otpHolder[0].otp);
-    // console.log(req.body.otp);
-
-    if (otpHolder[0].otp !== req.body.otp){
-        console.log("hello");
-    }
-    
-    if (otpHolder[0].otp !== req.body.otp) return res.status(400).send("Enter Correct OTP!");
-    
-    const rightOtpFind = otpHolder[otpHolder.length - 1];
-    // const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
-
-    // if (rightOtpFind.number === req.body.number && validUser) {
-        if (rightOtpFind.number === req.body.number) {
-        const user = new User(_.pick(req.body, ["number"]));
-        const token = user.generateJWT();
-        const result = await user.save();
-        const OTPDelete = await Otp.deleteMany({
-            number: rightOtpFind.number
-        });
-        return res.status(200).send({
-            message: "User Registration Successfull!",
-            token: token,
-            data: result
-        });
-    } else {
-        return res.status(400).send("Your OTP was wrong!")
-    }
+  })
+  .catch(err=>{
+    throw err
+  })
 }
 
-//signin
+// ******************************** SIGN IN ***********************************
+
 module.exports.signin = async (req, res) => {
-  const signinUser = await User.findOne({
-    email: req.body.email,
-    password: req.body.password,
-  });
+  const {email,password} = req.body
+  
+  const signinUser = await User.findOne({email});
+  if(!signinUser || !util.compareHash(password,signinUser.password) )  return res.status(200).send({"message":"incorrect email or password"})
+// console.log(signinUser,"sp");
   if (!signinUser) {
     res.status(401).send({
       message: 'Invalid Email or Password',
     });
   } else {
     res.send({
-      _id: signinUser._id,
-      name: signinUser.name,
-      email: signinUser.email,
-      token: generateToken(signinUser),
+      token: util.generateToken({}),
     });
   }
 }
-
-// //signin 
-// app.post("/login", async (req, res) => {
-
-//     // Our login logic starts here
-//     try {
-//       // Get user input
-//       const { email, password } = req.body;
-  
-//       // Validate user input
-//       if (!(email && password)) {
-//         res.status(400).send("All input is required");
-//       }
-//       // Validate if user exist in our database
-//       const user = await User.findOne({ email });
-  
-//       if (user && (await bcrypt.compare(password, user.password))) {
-//         // Create token
-//         const token = jwt.sign(
-//           { user_id: user._id, email },
-//           process.env.TOKEN_KEY,
-//           {
-//             expiresIn: "2h",
-//           }
-//         );
-  
-//         // save user token
-//         user.token = token;
-  
-//         // user
-//         res.status(200).json(user);
-//       }
-//       res.status(400).send("Invalid Credentials");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//     // Our register logic ends here
-//   });
-
-//   //create
-//   app.post('/signup', (req, res) => {
-//     // Get the user's email address from the form submission
-//     const email = req.body.email;
-  
-//     // Generate the OTP
-//     const otp = otplib.authenticator.generate(secret);
-  
-//     // Send the OTP to the user's email address
-//     transporter.sendMail({
-//       from: 'antino_ecom@gmail.com',
-//       to: email,
-//       subject: 'Signup OTP',
-//       text: `Your OTP is: ${otp}`
-//     });
-// });
-//     // Render the OTP form
-    
