@@ -4,11 +4,13 @@ const route = require('./src/user/user.route')
 require('dotenv').config({path: ".env"})
 
 const logger = require('./logger/logger')
+const errorController = require('./logger/error.controller')
+const errorHandler = require('./src/errorHandler/appError')
 
 logger.info('text info')
 logger.warn('text warn')
 logger.error('text error')
-// const port = 3000
+
 
 const app = express()
 connectDb();
