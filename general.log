@@ -232,3 +232,6 @@ Jan-09-2023 01:08:36 [error] {"message":"text error"}
 Jan-09-2023 01:51:31 [info] {"message":"text info"}
 Jan-09-2023 01:51:31 [warn] {"message":"text warn"}
 Jan-09-2023 01:51:31 [error] {"message":"text error"}
+Jan-09-2023 11:20:28 [info] {"message":"text info"}
+Jan-09-2023 11:20:28 [warn] {"message":"text warn"}
+Jan-09-2023 11:20:28 [error] {"message":"text error"}
