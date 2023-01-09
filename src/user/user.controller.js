@@ -95,5 +95,12 @@ module.exports.signin = async (req, res) => {
 
 // **************************************CHANGE PASSWORD***************************************
 
+module.exports.changePassword= async(req, res) => {
+ const{email,password,newPassword} = req.body;
+ const user = await User.findOne({
+  email
+});
+if(!user)
 
 
+}

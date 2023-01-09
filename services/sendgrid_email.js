@@ -40,38 +40,10 @@ function sendEmail(payload) {
         // })
 }
 
-const sendEmailWithAttachments = async (payload) => {
-    let filePath = payload.filePath
-    
-    return fs.readFile(filePath,  (err, data) => {
-        var mailOption  = {
-            "to": payload.to,
-            "from": payload.from,
-            "subject": payload.subject,
-            "html": payload.html,
-            attachments: [{
-                filename: payload.filename,
-                content: data.toString('base64'),
-                type: payload.type,
-                disposition: 'attachment',
-                // contentId: 'myId'
-            }]
-        }
-        return sgMail.send(mailOption)
-        .then(response => {
-            if (!response) {
-                return false
-            } else {
-                return true
-            }
-        })
-    })
-}
-
 
 // ========================== Export Module Start ==========================
 module.exports = {
     sendEmail,
-    sendEmailWithAttachments
+    
 }
 
