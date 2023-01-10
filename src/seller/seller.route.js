@@ -3,7 +3,7 @@ const { signUp, verifyOtp, signin, changePassword} = require('../seller/seller.c
 
 router.route('/signup')
     .post(signUp);
-router.route('/signup/verify')
+router.route('/verifyOtp')
     .post(verifyOtp);
 router.route('/signin')
     .post(signin);

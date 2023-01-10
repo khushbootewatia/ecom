@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const {Schema} = require('mongoose')
 
 
 const sellerSchema = new mongoose.Schema({
@@ -26,6 +27,10 @@ const sellerSchema = new mongoose.Schema({
         type: Number,
         unique: true,
         required:true
+    },
+    isVerified:{
+        type: Boolean,
+        default: false
     },
 
     account:{
@@ -75,5 +80,6 @@ const otpSellerSchema = Schema(
 
 
 
-module.exports = mongoose.model('Seller',sellerSchema)
-module.exports = mongoose.model('otpSeller',otpSellerSchema)
+const Seller=  mongoose.model('Seller',sellerSchema);
+const otpSeller = mongoose.model('otpSeller',otpSellerSchema)
+module.exports = {Seller, otpSeller}

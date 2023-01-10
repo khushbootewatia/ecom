@@ -7,7 +7,7 @@ var fs          = require('fs')
 sgMail.setApiKey(config.cfg.sendgrid.key);
 
 
-function _templateRead(template, params) {
+    function _templateRead(template, params) {
     let filename = "lib/emailTemplate/"+template;
     return new Promise(function (resolve, reject) {
         ejs.renderFile(filename, params, function (error, htmlData) {
@@ -46,4 +46,3 @@ module.exports = {
     sendEmail,
     
 }
-
