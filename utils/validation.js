@@ -1,23 +1,33 @@
-// const joi = require('joi')
+const joi = require('joi');
+const AppError = require('../src/errorHandler/appError');
 
-// const userSchema = joi.object().keys({
-//     name: joi
-//         .string()
-//         .required(),
+const createUserSchema = joi.object().keys({
+    name: joi
+        .string()
+        .required(),
 
-//     email: joi
-//         .string()
-//         .unique()
-//         .required(),
+    email: joi
+        .string()
+        .email()
+        .required(),
 
-//     Mobile: joi
-//     .number()
-//     .unique()
-//     .required()   
+    password: joi
+        .string()
+        .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
 
-// })
+})
 
-// module.exports ={
-//     userSchema
-// }
+const validateCreateUserSchema = async (req, res, next) => {
+    const {error} = createUserSchema.validate(req.body)
+    if(!error)
+    next();
+    else {
+        throw new AppError("Bad request", 400)
+    }
+
+}
+
+module.exports = {
+    validateCreateUserSchema
+}
 

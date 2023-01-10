@@ -10,3 +10,10 @@ Jan-06-2023 14:27:35 [error] {"message":"text error"}
 Jan-06-2023 15:47:39 [info] {"message":"text info"}
 Jan-06-2023 15:47:39 [warn] {"message":"text warn"}
 Jan-06-2023 15:47:39 [error] {"message":"text error"}
+Jan-09-2023 14:59:07 [info] {"message":"text info"}
+Jan-09-2023 14:59:07 [warn] {"message":"text warn"}
+Jan-09-2023 14:59:07 [error] {"message":"text error"}
+Jan-09-2023 15:02:15 [info] {"message":"localhost:3000/userSignUp - POST - ::1"}
+Jan-09-2023 15:03:33 [info] {"message":"localhost:3000/userSignUp - POST - ::1"}
+Jan-09-2023 15:04:04 [info] {"message":"localhost:3000/userSignUp - POST - ::1"}
+Jan-09-2023 15:05:35 [info] {"message":"localhost:3000/signup - POST - ::1"}

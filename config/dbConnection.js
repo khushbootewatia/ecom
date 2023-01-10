@@ -20,7 +20,7 @@ require('dotenv').config({path: ".env"})
 mongoose.set('strictQuery', false);
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URL, {
+        mongoose.connect("mongodb+srv://practisenode:N7aT30Cq6NAQNUiP@cluster0.aeryvte.mongodb.net/ecommerce", {
             useNewUrlParser: true,
         });
         console.log('MongoDB Connected...')
