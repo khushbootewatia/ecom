@@ -1,16 +1,18 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const util = require("../../utils/util")
+const catchAsync = require("../../utils/catchAsync")
 
 const { User, TransientUser } = require('../user/user.model');
 
 
-console.log(User, " ------", TransientUser, "line 8")
+// console.log(User, " ------", TransientUser, "line 8")
 const sendGrid = require("../../services/sendgrid_email")
 
 //******************************SIGNUP********************************//
 
 module.exports.signUp = async (req, res) => {
+  // console.log(req);
   let { name, email, password } = req.body
   console.log(req.body);
 
@@ -43,7 +45,7 @@ module.exports.signUp = async (req, res) => {
 
 
     await TransientUser.create({ email: email, otp: hashedOtp });
-    const payload = { to: email, subject: "verification Email" }
+    const payload = { to: email, subject: "verification Email",otp}
     sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
@@ -74,13 +76,13 @@ module.exports.verifyOtp = (req, res) => {
     })
 }
 
-// ******************************** SIGN IN ***********************************
+// ******************************** SIGN IN ***************************************************
 
 module.exports.signin = async (req, res) => {
   const { email, password } = req.body
 
   const signinUser = await User.findOne({ email });
-  if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status(200).send({ "message": "incorrect email or password" })
+  if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status().send({ "message": "incorrect email or password" })
   // console.log(signinUser,"sp");
   if (!signinUser) {
     res.status(401).send({
@@ -96,11 +98,28 @@ module.exports.signin = async (req, res) => {
 // **************************************CHANGE PASSWORD***************************************
 
 module.exports.changePassword= async(req, res) => {
- const{email,password,newPassword} = req.body;
- const user = await User.findOne({
-  email
-});
-// if(!user)
+ const { email, password ,newPassword} = req.body
 
+ const signinUser = await User.findOne({ email }).lean();
+ if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status(200).send({ "message": "incorrect email or password" })
+ 
+ if (!signinUser) {
+  res.status(401).send({
+    "message": 'Invalid Email or Password',
+  });
+} else {
+  
+
+}
+
+
+
+
+// *************************************SIGNOUT************************************
+
+module.exports.signout= catchAsync(async (req, res) => {
+  await authService.signout(req.body.refreshToken);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
 }
