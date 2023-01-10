@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const AppError = require("../errorHandler/appError")
 
 const util = require("../../utils/util")
 
@@ -10,14 +11,14 @@ const sendGrid = require("../../services/sendgrid_email")
 
 //******************************SIGNUP********************************//
 
-module.exports.signUp = async (req, res) => {
-  let { name, email, password } = req.body
-  console.log(req.body);
-
+module.exports.signUp = async (req, res,next) => {
   try {
+  let { name, email, password } = req.body
+  // console.log(req.body);
+
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      throw new AppError("Email is required", 400)
     }
     const user = await User.findOne({
       email: email,
@@ -44,10 +45,10 @@ module.exports.signUp = async (req, res) => {
 
     await TransientUser.create({ email: email, otp: hashedOtp });
     const payload = { to: email, subject: "verification Email" }
-    sendGrid.sendEmail(payload)
+    // sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
-    throw error
+    next (error)
   }
 
 }
@@ -66,7 +67,7 @@ module.exports.verifyOtp = (req, res) => {
       console.log(user, "user");
       if (user && user.isVerified)
         return res.status(200).send({ "message": "otp verified successfully" })
-      return res.status(400).send({ "message": "something went wrong please try again" })
+        throw new AppError("something went wrong please try again", 400)
 
     })
     .catch(err => {
@@ -83,9 +84,8 @@ module.exports.signin = async (req, res) => {
   if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status(200).send({ "message": "incorrect email or password" })
   // console.log(signinUser,"sp");
   if (!signinUser) {
-    res.status(401).send({
-      message: 'Invalid Email or Password',
-    });
+    // res.status(401).send({message: 'Invalid Email or Password',});
+    throw new AppError("Invalid Email or Password", 401)
   } else {
     res.send({
       token: util.generateToken({ email }),
@@ -95,12 +95,12 @@ module.exports.signin = async (req, res) => {
 
 // **************************************CHANGE PASSWORD***************************************
 
-module.exports.changePassword= async(req, res) => {
- const{email,password,newPassword} = req.body;
- const user = await User.findOne({
-  email
-});
-// if(!user)
+module.exports.changePassword = async (req, res) => {
+  const { email, password, newPassword } = req.body;
+  const user = await User.findOne({
+    email
+  });
+  // if(!user)
 
 
 }
