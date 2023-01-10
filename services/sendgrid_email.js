@@ -18,6 +18,17 @@ sgMail.setApiKey(config.cfg.sendgrid.key);
 //         });
 //     });
 // }
+    function _templateRead(template, params) {
+    let filename = "lib/emailTemplate/"+template;
+    return new Promise(function (resolve, reject) {
+        ejs.renderFile(filename, params, function (error, htmlData) {
+            if (error) {
+                reject(error);
+            }
+            resolve(htmlData);
+        });
+    });
+}
 
 function sendEmail(payload) {
     // return _templateRead(payload.template,payload)
@@ -46,4 +57,3 @@ module.exports = {
     sendEmail,
     
 }
-
