@@ -3,7 +3,7 @@ const AppError = require("../errorHandler/appError")
 
 const util = require("../../utils/util")
 
-const { User, TransientUser } = require('../user/user.model');
+const { User, TransientUser, forgetUser } = require('../user/user.model');
 
 
 console.log(User, " ------", TransientUser, "line 8")
@@ -88,7 +88,7 @@ module.exports.signin = async (req, res) => {
     throw new AppError("Invalid Email or Password", 401)
   } else {
     res.send({
-      token: util.generateToken({ email }),
+      token: util.generateToken({ email,role:"" }),
     });
   }
 }
@@ -104,3 +104,70 @@ module.exports.changePassword = async (req, res) => {
 
 
 }
+
+module.exports.forgetPasswordFunc = async (req, res) => {
+  console.log("Coming here")
+  let { email } = req.body;
+  console.log(email)
+  try {
+    console.log(User)
+    const value = await User.findOne({email});
+    console.log(User,value)
+    const otp = util.generateOtp();
+    const hashedOtp = util.generateHash(otp);
+    try {
+        const findingOtpInForget = await forgetUser.findOne({email})
+        console.log(findingOtpInForget)
+        if (findingOtpInForget){
+            console.log("User found")
+            findingOtpInForget.otp = hashedOtp
+        }else{
+            console.log("user created");
+            await forgetUser.create({ email: req.body.email, otp: hashedOtp });
+        }
+      
+    } catch (err) {
+      console.log(err);
+    }
+
+    const payload = { to: email, subject: otp };
+    const mailing = async (req, res) => {
+      await sendMailer(payload);
+    };
+
+    mailing();
+    res.status(200).send({ message: "Otp send successfully!", otp });
+  } catch (err) {
+    res.send("Email not registered");
+  }
+};
+
+module.exports.verifyChangedOtp = async (req, res) => {
+  let { email, otp, newPassword } = req.body;
+  const verifyingOtp = await forgetUser.findOne({ email });
+  console.log(req.body)
+  console.log(verifyingOtp)
+  console.log(util.compareHash(otp, verifyingOtp.otp))
+  if (verifyingOtp && bcrypt.compare(otp, verifyingOtp.otp)) {
+    console.log("Coming here in if");
+    const hash = await bcrypt.hash(newPassword, 10);
+    User.findOneAndUpdate(
+      { email: { $gte: email } },
+      { password: hash },
+      null,
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Original Doc : ", docs);
+          res.send("Password Updated")
+        }
+      }
+    );
+    
+  } else {
+    console.log("coming in else");
+    return res.status(200).send({ message: "incorrect otp" });
+  }
+};
+

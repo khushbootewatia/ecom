@@ -21,7 +21,7 @@ mongoose.set('strictQuery', false);
 const connectDB = async () => {
     console.log(process.env.MONGODB_URL)
     try {
-        mongoose.connect("mongodb+srv://practisenode:N7aT30Cq6NAQNUiP@cluster0.aeryvte.mongodb.net/ecommerce", {
+        mongoose.connect(process.env.MONGODB_URL, {
             useNewUrlParser: true,
         });
         console.log('MongoDB Connected...')
