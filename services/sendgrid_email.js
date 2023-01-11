@@ -1,5 +1,5 @@
 const config    = require('../config');
-
+const {resetToken}= require('../src/user/user.controller')
 // var     ejs     = require('ejs');
 const sgMail    = require('@sendgrid/mail');
 var fs          = require('fs')
@@ -46,7 +46,31 @@ console.log(JSON.stringify(error))
 
 
 
-
+const sendEmailForResetPassword=(payload) =>{
+  const sgMail = require('@sendgrid/mail');
+  
+  sgMail.setApiKey(config.cfg.sendgrid.key);
+  
+  sgMail.setApiKey(process.env.SENDGRID_KEY);
+  
+  const msg = {
+    to: payload.to,
+    from: 'wdnarendrakumar@gmail.com',
+    subject: 'OTP verification',
+    html: `<p><h2>"You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
+    "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
+    http://localhost:5001/api/user/resetPassword/${payload.resetToken}
+    "\n\n" +
+    "If you did not request this, please ignore this email and your password will remain unchanged.\n,
+   </h2>
+   <h1>  ${payload.email}</h1></p>`
+  };
+  
+  sgMail.send(msg).catch((error)=>{
+  console.log(JSON.stringify(error))
+  })
+  
+  }
 
 
 
@@ -74,7 +98,7 @@ console.log(JSON.stringify(error))
 
 // ========================== Export Module Start ==========================
 module.exports = {
-    sendEmail,
+    sendEmail,sendEmailForResetPassword
     
 }
 

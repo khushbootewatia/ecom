@@ -23,6 +23,7 @@ module.exports.generateToken = (userObject) => {
 
 }
 
+
 module.exports.signout = async (refreshToken) => {
   const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
   if (!refreshTokenDoc) {

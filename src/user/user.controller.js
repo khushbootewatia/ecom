@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-
+const crypto = require("crypto")
 const util = require("../../utils/util")
 const catchAsync = require("../../utils/catchAsync")
 
@@ -45,7 +45,7 @@ module.exports.signUp = async (req, res) => {
 
 
     await TransientUser.create({ email: email, otp: hashedOtp });
-    const payload = { to: email, subject: "verification Email",otp}
+    const payload = { to: email, subject: "verification Email", otp }
     sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
@@ -95,31 +95,12 @@ module.exports.signin = async (req, res) => {
   }
 }
 
-// **************************************CHANGE PASSWORD***************************************
-
-module.exports.changePassword= async(req, res) => {
- const { email, password ,newPassword} = req.body
-
- const signinUser = await User.findOne({ email }).lean();
- if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status(200).send({ "message": "incorrect email or password" })
- 
- if (!signinUser) {
-  res.status(401).send({
-    "message": 'Invalid Email or Password',
-  });
-} else {
-  
-
-}
-
-
 
 
 // *************************************SIGNOUT************************************
 
-module.exports.signout= catchAsync(async (req, res) => {
-  await authService.signout(req.body.refreshToken);
-  res.status(httpStatus.NO_CONTENT).send();
-});
+// module.exports.signout= catchAsync(async (req, res) => {
+//   await authService.signout(req.body.refreshToken);
+//   res.status(httpStatus.NO_CONTENT).send();
+// });
 
-}
