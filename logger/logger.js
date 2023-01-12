@@ -1,7 +1,6 @@
 const {createLogger,transports,format} = require("winston")
 const{combine,timestamp,printf,colorize} = format
 
-
 const formatter = printf((info)=>{
     let object={message:info.message}
     return `${info.timestamp} [${info.level}] ${JSON.stringify(object)}`

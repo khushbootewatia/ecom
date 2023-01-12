@@ -29,6 +29,7 @@ sgMail.setApiKey(config.cfg.sendgrid.key);
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
+<<<<<<< HEAD
 const msg = {
   to: payload.to,
   from: 'sunil.r@antino.io',
@@ -41,6 +42,30 @@ const msg = {
 sgMail.send(msg).catch((error)=>{
 console.log(JSON.stringify(error))
 })
+=======
+// function _templateRead(template, params) {
+//     let filename = "lib/emailTemplate/"+template;
+//     return new Promise(function (resolve, reject) {
+//         ejs.renderFile(filename, params, function (error, htmlData) {
+//             if (error) {
+//                 reject(error);
+//             }
+//             resolve(htmlData);
+//         });
+//     });
+// }
+    function _templateRead(template, params) {
+    let filename = "lib/emailTemplate/"+template;
+    return new Promise(function (resolve, reject) {
+        ejs.renderFile(filename, params, function (error, htmlData) {
+            if (error) {
+                reject(error);
+            }
+            resolve(htmlData);
+        });
+    });
+}
+>>>>>>> develop
 
 }
 
@@ -98,4 +123,3 @@ module.exports = {
     sendEmail,sendEmailForResetPassword
     
 }
-

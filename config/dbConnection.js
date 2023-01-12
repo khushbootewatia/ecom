@@ -1,7 +1,7 @@
 // const express = require('express')
+const dotenv = require('dotenv').config();
 const mongoose = require('mongoose')
-require('dotenv').config({path: ".env"})
-
+console.log('dotenv', dotenv);
 // const connectDb = async() =>{
 //     try{
 //         await mongoose.connect(process.env.MONGODB_URL, {
@@ -19,8 +19,9 @@ require('dotenv').config({path: ".env"})
 
 mongoose.set('strictQuery', false);
 const connectDB = async () => {
+    console.log(process.env.MONGODB_URL)
     try {
-        await mongoose.connect(process.env.MONGODB_URL, {
+        mongoose.connect(process.env.MONGODB_URL, {
             useNewUrlParser: true,
         });
         console.log('MongoDB Connected...')

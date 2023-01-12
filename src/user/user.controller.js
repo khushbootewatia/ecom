@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const bcrypt = require("bcryptjs");
 // const AppError = require("../errorHandler/appError")
 const util = require("../../utils/util")
@@ -6,8 +7,20 @@ const { User, TransientUser } = require('../user/user.model');
 const sendGrid = require("../../services/sendgrid_email")
 
 
+=======
+const bcrypt = require("bcrypt");
+const AppError = require("../errorHandler/appError")
+
+const util = require("../../utils/util")
+
+const { User, TransientUser, forgetUser } = require('../user/user.model');
 
 
+const sendGrid = require("../../services/sendgrid_email")
+>>>>>>> develop
+
+
+<<<<<<< HEAD
 //******************************SIGNUP********************************//
 
 module.exports.signUp = async (req, res, next) => {
@@ -15,6 +28,13 @@ module.exports.signUp = async (req, res, next) => {
     let { name, email, password } = req.body;
     // console.log(req.body);
 
+=======
+module.exports.signUp = async (req, res,next) => {
+  try {
+  let { name, email, password } = req.body
+  // console.log(req.body);
+
+>>>>>>> develop
 
     if (!email) {
       throw new AppError("Email is required", 400)
@@ -47,7 +67,11 @@ module.exports.signUp = async (req, res, next) => {
     // sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
+<<<<<<< HEAD
     next(error)
+=======
+    next (error)
+>>>>>>> develop
   }
 
 }
@@ -66,7 +90,11 @@ module.exports.verifyOtp = (req, res) => {
       console.log(user, "user");
       if (user && user.isVerified)
         return res.status(200).send({ "message": "otp verified successfully" })
+<<<<<<< HEAD
       throw new AppError("something went wrong please try again", 400)
+=======
+        throw new AppError("something went wrong please try again", 400)
+>>>>>>> develop
 
     })
     .catch(err => {
@@ -87,14 +115,92 @@ module.exports.signin = async (req, res) => {
     throw new AppError("Invalid Email or Password", 401)
   } else {
     res.send({
-      token: util.generateToken({ email }),
+      token: util.generateToken({ email}),
     });
   }
 }
 
 
+<<<<<<< HEAD
+=======
+module.exports.changePassword = async (req, res) => {
+  const { email, password, newPassword } = req.body;
+  const user = await User.findOne({
+    email
+  });
+  // if(!user)
 
+>>>>>>> develop
 
+}
+
+module.exports.forgetPasswordFunc = async (req, res) => {
+  console.log("Coming here")
+  let { email } = req.body;
+  console.log(email)
+  try {
+    console.log(User)
+    const value = await User.findOne({email});
+    console.log(User,value)
+    const otp = util.generateOtp();
+    const hashedOtp = util.generateHash(otp);
+    try {
+        const findingOtpInForget = await forgetUser.findOne({email})
+        console.log(findingOtpInForget)
+        if (findingOtpInForget){
+            console.log("User found")
+            findingOtpInForget.otp = hashedOtp
+        }else{
+            console.log("user created");
+            await forgetUser.create({ email: req.body.email, otp: hashedOtp });
+        }
+      
+    } catch (err) {
+      console.log(err);
+    }
+
+    const payload = { to: email, subject: otp };
+    const mailing = async (req, res) => {
+      await sendMailer(payload);
+    };
+
+    mailing();
+    res.status(200).send({ message: "Otp send successfully!", otp });
+  } catch (err) {
+    res.send("Email not registered");
+  }
+};
+
+module.exports.verifyChangedOtp = async (req, res) => {
+  let { email, otp, newPassword } = req.body;
+  const verifyingOtp = await forgetUser.findOne({ email });
+  console.log(req.body)
+  console.log(verifyingOtp)
+  console.log(util.compareHash(otp, verifyingOtp.otp))
+  if (verifyingOtp && bcrypt.compare(otp, verifyingOtp.otp)) {
+    console.log("Coming here in if");
+    const hash = await bcrypt.hash(newPassword, 10);
+    User.findOneAndUpdate(
+      { email: { $gte: email } },
+      { password: hash },
+      null,
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Original Doc : ", docs);
+          res.send("Password Updated")
+        }
+      }
+    );
+    
+  } else {
+    console.log("coming in else");
+    return res.status(200).send({ message: "incorrect otp" });
+  }
+};
+
+<<<<<<< HEAD
 // **************************************FORGET PASSWORD***************************************
 
 
@@ -160,3 +266,5 @@ module.exports.resetPassword = async (req, res) => {
 };
 
 //*****************************************CHANGE PASSWORD********************************** */
+=======
+>>>>>>> develop

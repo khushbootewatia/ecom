@@ -47,6 +47,18 @@ const transientUserSchema = Schema(
     }
 )
 
+const forgetUserSchema = new Schema({
+    email:{
+        type: String,
+        required: true
+    },
+    otp:{
+        type: String,
+        required: true
+    }
+})
+
+
 userSchema.methods.generateJWT = function () {
     const token = jwt.sign({
         _id: this._id,
@@ -56,4 +68,9 @@ userSchema.methods.generateJWT = function () {
 }
 
 module.exports.User = model('User', userSchema);
+<<<<<<< HEAD
 module.exports.TransientUser = model('transient_user', transientUserSchema);
+=======
+module.exports.TransientUser= model('transient_user', transientUserSchema);
+module.exports.forgetUser =  model('forgetUser',forgetUserSchema);
+>>>>>>> develop
