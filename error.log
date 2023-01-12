@@ -1,6 +1,11 @@
 Jan-06-2023 14:16:32 [error] {"message":"text error"}
 Jan-06-2023 14:17:41 [error] {"message":"text error"}
 Jan-06-2023 14:27:35 [error] {"message":"text error"}
+<<<<<<< HEAD
+Jan-06-2023 15:47:39 [error] {"message":"text error"}
+Jan-09-2023 14:59:07 [error] {"message":"text error"}
+=======
+>>>>>>> features/yatin/seller
 Jan-06-2023 17:24:18 [error] {"message":"text error"}
 Jan-06-2023 17:27:09 [error] {"message":"text error"}
 Jan-06-2023 17:28:46 [error] {"message":"text error"}
@@ -133,5 +138,8 @@ Jan-10-2023 11:29:11 [error] {"message":"text error"}
 Jan-10-2023 11:32:02 [error] {"message":"text error"}
 Jan-10-2023 11:34:30 [error] {"message":"text error"}
 Jan-10-2023 11:37:57 [error] {"message":"text error"}
+<<<<<<< HEAD
+=======
 Jan-06-2023 15:47:39 [error] {"message":"text error"}
 Jan-09-2023 14:59:07 [error] {"message":"text error"}
+>>>>>>> features/yatin/seller

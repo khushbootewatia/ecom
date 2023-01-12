@@ -418,3 +418,5 @@ Jan-11-2023 12:06:30 [info] {"message":"localhost:3000/api/seller/forgetPassword
 Jan-11-2023 12:07:37 [info] {"message":"localhost:3000/api/seller/forgetPassword - POST - ::1"}
 Jan-11-2023 12:11:22 [info] {"message":"localhost:3000/api/seller/forgetPassword - POST - ::1"}
 Jan-11-2023 14:49:54 [info] {"message":"localhost:3000/api/sller/forgetPasswordFunc - POST - ::1"}
+>>>>>>> features/yatin/seller
+Jan-12-2023 11:57:13 [info] {"message":"localhost:3000/api/sellerr/verifyChangedOtp - POST - ::1"}

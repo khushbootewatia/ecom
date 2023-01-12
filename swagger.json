@@ -1,0 +1,105 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "E-Commerce ",
+        "description": "E-Commerce website",
+        "version": "1.0.0",
+        "termsOfService": "http://swagger.io/terms/",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://localhost:5001"
+        }
+    },
+    "basePath": "/apidocs",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/user/signup": {
+            "post": {
+                "tags": [
+                    "/signUp"
+                ],
+                "summary": "login Using this api",
+                "description": "",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Login through your email and password",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/signUp"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/signUp"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Invalid input"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Invalid user"
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schema": {
+            "signUp": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "isVerified": {
+                        "type": "boolen",
+                        "required": false
+                    },
+                    "name": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "password": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            }
+        }
+    }
+}

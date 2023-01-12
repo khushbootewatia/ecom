@@ -20,6 +20,9 @@ const userSchema = Schema({
         type: String,
         required: true
     },
+    resetPasswordToken: String,
+    
+    resetPasswordExpires: Date,
 
 }, { timestamps: true });
 
@@ -65,5 +68,6 @@ userSchema.methods.generateJWT = function () {
 }
 
 module.exports.User = model('User', userSchema);
+// module.exports.TransientUser = model('transient_user', transientUserSchema);
 module.exports.TransientUser= model('transient_user', transientUserSchema);
 module.exports.forgetUser =  model('forgetUser',forgetUserSchema);

@@ -1,3 +1,11 @@
+// const bcrypt = require("bcryptjs");
+// // const AppError = require("../errorHandler/appError")
+// const util = require("../../utils/util")
+// const crypto = require("crypto")
+// const { User, TransientUser } = require('../user/user.model');
+// const sendGrid = require("../../services/sendgrid_email")
+
+
 const bcrypt = require("bcrypt");
 const AppError = require("../errorHandler/appError")
 
@@ -8,11 +16,17 @@ const { User, TransientUser, forgetUser } = require('../user/user.model');
 
 const sendGrid = require("../../services/sendgrid_email")
 
+
 //******************************SIGNUP********************************//
 
-module.exports.signUp = async (req, res,next) => {
+module.exports.signUp = async (req, res, next) => {
   try {
-  let { name, email, password } = req.body
+    let { name, email, password } = req.body;
+    // console.log(req.body);
+
+// module.exports.signUp = async (req, res,next) => {
+//   try {
+//   let { name, email, password } = req.body
   // console.log(req.body);
 
 
@@ -47,7 +61,8 @@ module.exports.signUp = async (req, res,next) => {
     // sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
-    next (error)
+    next(error)
+    // next (error)
   }
 
 }
@@ -66,7 +81,8 @@ module.exports.verifyOtp = (req, res) => {
       console.log(user, "user");
       if (user && user.isVerified)
         return res.status(200).send({ "message": "otp verified successfully" })
-        throw new AppError("something went wrong please try again", 400)
+      // throw new AppError("something went wrong please try again", 400)
+      //   throw new AppError("something went wrong please try again", 400)
 
     })
     .catch(err => {
@@ -92,7 +108,6 @@ module.exports.signin = async (req, res) => {
   }
 }
 
-// **************************************CHANGE PASSWORD***************************************
 
 module.exports.changePassword = async (req, res) => {
   const { email, password, newPassword } = req.body;
@@ -170,3 +185,68 @@ module.exports.verifyChangedOtp = async (req, res) => {
   }
 };
 
+// **************************************FORGET PASSWORD***************************************
+
+
+
+module.exports.forgetPassword = (req, res) => {
+  const { email } = req.body;
+  User.findOne({ email: email }, (err, user) => {
+    console.log(user);
+    if (err) {
+      res.status(500).json({ message: err });
+    } else if (!user) {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      // Generate and set a password reset token
+      const resetToken = crypto.randomBytes(20).toString("hex");
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+      user.save((err) => {
+        if (err) {
+          res.status(500).json({ message: err });
+        } else {
+          // Send the password reset email
+          const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
+          sendGrid.sendEmailForResetPassword(payload)
+          res.status(200).send({ message: "Link send successfully!" });
+
+
+        }
+      });
+    }
+  });
+}
+
+// *************************************RESET PASSWORD************************************
+
+
+module.exports.resetPassword = async (req, res) => {
+  const { password } = req.body;
+  let { token } = req.params;
+  // console.log(User);
+  // console.log(token);
+  User.findOne({ resetPasswordToken: token}, (err, user) => {
+
+    if (err) {
+      res.status(500).json({ message: err });
+    } else if (!user) {
+      res.status(404).json({ message: "Password reset token is invalid or has expired." });
+    } else {
+      // console.log(user);
+      user.password = util.generateHash(password);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      user.save((err) => {
+        if (err) {
+          res.status(500).json({ message: err });
+        } else {
+          res.status(200).json({ message: "Password reset successful." });
+        }
+      });
+      
+    }
+  });
+};
+
+//*****************************************CHANGE PASSWORD********************************** */
