@@ -6,7 +6,6 @@ const util = require("../../utils/util")
 const { User, TransientUser, forgetUser } = require('../user/user.model');
 
 
-console.log(User, " ------", TransientUser, "line 8")
 const sendGrid = require("../../services/sendgrid_email")
 
 //******************************SIGNUP********************************//
@@ -88,7 +87,7 @@ module.exports.signin = async (req, res) => {
     throw new AppError("Invalid Email or Password", 401)
   } else {
     res.send({
-      token: util.generateToken({ email,role:"" }),
+      token: util.generateToken({ email}),
     });
   }
 }
