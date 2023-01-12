@@ -68,9 +68,6 @@ userSchema.methods.generateJWT = function () {
 }
 
 module.exports.User = model('User', userSchema);
-<<<<<<< HEAD
-module.exports.TransientUser = model('transient_user', transientUserSchema);
-=======
+// module.exports.TransientUser = model('transient_user', transientUserSchema);
 module.exports.TransientUser= model('transient_user', transientUserSchema);
 module.exports.forgetUser =  model('forgetUser',forgetUserSchema);
->>>>>>> develop

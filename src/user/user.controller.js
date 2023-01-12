@@ -1,13 +1,11 @@
-<<<<<<< HEAD
-const bcrypt = require("bcryptjs");
-// const AppError = require("../errorHandler/appError")
-const util = require("../../utils/util")
-const crypto = require("crypto")
-const { User, TransientUser } = require('../user/user.model');
-const sendGrid = require("../../services/sendgrid_email")
+// const bcrypt = require("bcryptjs");
+// // const AppError = require("../errorHandler/appError")
+// const util = require("../../utils/util")
+// const crypto = require("crypto")
+// const { User, TransientUser } = require('../user/user.model');
+// const sendGrid = require("../../services/sendgrid_email")
 
 
-=======
 const bcrypt = require("bcrypt");
 const AppError = require("../errorHandler/appError")
 
@@ -17,10 +15,8 @@ const { User, TransientUser, forgetUser } = require('../user/user.model');
 
 
 const sendGrid = require("../../services/sendgrid_email")
->>>>>>> develop
 
 
-<<<<<<< HEAD
 //******************************SIGNUP********************************//
 
 module.exports.signUp = async (req, res, next) => {
@@ -28,13 +24,11 @@ module.exports.signUp = async (req, res, next) => {
     let { name, email, password } = req.body;
     // console.log(req.body);
 
-=======
-module.exports.signUp = async (req, res,next) => {
-  try {
-  let { name, email, password } = req.body
+// module.exports.signUp = async (req, res,next) => {
+//   try {
+//   let { name, email, password } = req.body
   // console.log(req.body);
 
->>>>>>> develop
 
     if (!email) {
       throw new AppError("Email is required", 400)
@@ -67,11 +61,8 @@ module.exports.signUp = async (req, res,next) => {
     // sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
-<<<<<<< HEAD
     next(error)
-=======
-    next (error)
->>>>>>> develop
+    // next (error)
   }
 
 }
@@ -90,11 +81,8 @@ module.exports.verifyOtp = (req, res) => {
       console.log(user, "user");
       if (user && user.isVerified)
         return res.status(200).send({ "message": "otp verified successfully" })
-<<<<<<< HEAD
-      throw new AppError("something went wrong please try again", 400)
-=======
-        throw new AppError("something went wrong please try again", 400)
->>>>>>> develop
+      // throw new AppError("something went wrong please try again", 400)
+      //   throw new AppError("something went wrong please try again", 400)
 
     })
     .catch(err => {
@@ -121,8 +109,6 @@ module.exports.signin = async (req, res) => {
 }
 
 
-<<<<<<< HEAD
-=======
 module.exports.changePassword = async (req, res) => {
   const { email, password, newPassword } = req.body;
   const user = await User.findOne({
@@ -130,7 +116,6 @@ module.exports.changePassword = async (req, res) => {
   });
   // if(!user)
 
->>>>>>> develop
 
 }
 
@@ -200,7 +185,6 @@ module.exports.verifyChangedOtp = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 // **************************************FORGET PASSWORD***************************************
 
 
@@ -266,5 +250,3 @@ module.exports.resetPassword = async (req, res) => {
 };
 
 //*****************************************CHANGE PASSWORD********************************** */
-=======
->>>>>>> develop

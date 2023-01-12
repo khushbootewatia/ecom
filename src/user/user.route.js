@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const router = require('express').Router();
 const { signUp, verifyOtp, signin, forgetPassword , resetPassword } = require('../user/user.controller');
 
@@ -10,8 +9,7 @@ router.post('/resetPassword/:token',resetPassword);
 // router.route('/signout')
 //     .post(signout);
 module.exports = router;
-=======
-const router = require("express").Router();
+// const router = require("express").Router();
 const {
   signUp,
   verifyOtp,
@@ -29,4 +27,3 @@ router.route("/changePassword").post(changePassword);
 router.route("/forgetPasswordFunc").post(forgetPasswordFunc);
 router.route("/verifyChangedOtp").post(verifyChangedOtp);
 module.exports = router;
->>>>>>> develop

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 const joi = require('joi');
 const AppError = require('../src/errorHandler/appError');
 
@@ -33,4 +31,3 @@ module.exports = {
     validateCreateUserSchema
 }
 
->>>>>>> develop
