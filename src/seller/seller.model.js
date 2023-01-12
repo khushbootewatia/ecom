@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
+const jwt = require('jsonwebtoken');
 
 
 const sellerSchema = new mongoose.Schema({
@@ -31,6 +32,10 @@ const sellerSchema = new mongoose.Schema({
     isVerified:{
         type: Boolean,
         default: false
+    },
+    role:{
+        type: String,
+        default: "seller"
     },
 
     account:{
@@ -78,8 +83,20 @@ const otpSellerSchema = Schema(
   }
 )
 
+const forgetSellerSchema = new Schema({
+    email:{
+        type: String,
+        required: true
+    },
+    otp:{
+        type: String,
+        required: true
+    }
+})
+
 
 
 const Seller=  mongoose.model('Seller',sellerSchema);
 const otpSeller = mongoose.model('otpSeller',otpSellerSchema)
-module.exports = {Seller, otpSeller}
+const forgetSeller=  mongoose.model('forgetSeller',forgetSellerSchema);
+module.exports = {Seller, otpSeller, forgetSeller}

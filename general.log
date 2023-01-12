@@ -4,6 +4,7 @@ Jan-06-2023 14:16:32 [error] {"message":"text error"}
 Jan-06-2023 14:17:41 [info] {"message":"text info"}
 Jan-06-2023 14:17:41 [warn] {"message":"text warn"}
 Jan-06-2023 14:17:41 [error] {"message":"text error"}
+<<<<<<< HEAD
 Jan-06-2023 14:27:35 [info] {"message":"text info"}
 Jan-06-2023 14:27:35 [warn] {"message":"text warn"}
 Jan-06-2023 14:27:35 [error] {"message":"text error"}
@@ -17,6 +18,8 @@ Jan-09-2023 15:02:15 [info] {"message":"localhost:3000/userSignUp - POST - ::1"}
 Jan-09-2023 15:03:33 [info] {"message":"localhost:3000/userSignUp - POST - ::1"}
 Jan-09-2023 15:04:04 [info] {"message":"localhost:3000/userSignUp - POST - ::1"}
 Jan-09-2023 15:05:35 [info] {"message":"localhost:3000/signup - POST - ::1"}
+=======
+>>>>>>> features/yatin/seller
 Jan-06-2023 17:24:18 [info] {"message":"text info"}
 Jan-06-2023 17:24:18 [warn] {"message":"text warn"}
 Jan-06-2023 17:24:18 [error] {"message":"text error"}
@@ -412,4 +415,12 @@ Jan-10-2023 11:34:30 [warn] {"message":"text warn"}
 Jan-10-2023 11:34:30 [error] {"message":"text error"}
 Jan-10-2023 11:37:57 [info] {"message":"text info"}
 Jan-10-2023 11:37:57 [warn] {"message":"text warn"}
+<<<<<<< HEAD
 Jan-10-2023 11:37:57 [error] {"message":"text error"}
+=======
+Jan-11-2023 12:00:20 [info] {"message":"localhost:3000/api/seller/forgetPassword - POST - ::1"}
+Jan-11-2023 12:06:30 [info] {"message":"localhost:3000/api/seller/forgetPassword - POST - ::1"}
+Jan-11-2023 12:07:37 [info] {"message":"localhost:3000/api/seller/forgetPassword - POST - ::1"}
+Jan-11-2023 12:11:22 [info] {"message":"localhost:3000/api/seller/forgetPassword - POST - ::1"}
+Jan-11-2023 14:49:54 [info] {"message":"localhost:3000/api/sller/forgetPasswordFunc - POST - ::1"}
+>>>>>>> features/yatin/seller

@@ -2,6 +2,7 @@ const express = require('express')
 const connectDb = require('./config/dbConnection')
 const route = require('./src/user/user.route')
 const sellerRoute = require('./src/seller/seller.route')
+//const forgetPasswordRoute = require("./src/forgetPassword/forgetPassword.route")
 require('dotenv').config({path: ".env"})
 
 const logger = require('./logger/logger')
@@ -21,6 +22,7 @@ app.use(errorController)
 
 app.use('/api/user', route);
 app.use('/api/seller', sellerRoute);
+// app.use('/api/forgetPassword',forgetPasswordRoute)
 
 app.use('/', (req, res,next) => {
     logger.info(`localhost:3000${req.originalUrl} - ${req.method} - ${req.ip}`)
