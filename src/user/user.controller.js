@@ -1,25 +1,23 @@
 const bcrypt = require("bcryptjs");
-const crypto = require("crypto")
+// const AppError = require("../errorHandler/appError")
 const util = require("../../utils/util")
-const catchAsync = require("../../utils/catchAsync")
-
+const crypto = require("crypto")
 const { User, TransientUser } = require('../user/user.model');
-
-
-// console.log(User, " ------", TransientUser, "line 8")
 const sendGrid = require("../../services/sendgrid_email")
+
+
+
 
 //******************************SIGNUP********************************//
 
-module.exports.signUp = async (req, res) => {
-  // console.log(req);
-  let { name, email, password } = req.body
-  console.log(req.body);
-
+module.exports.signUp = async (req, res, next) => {
   try {
+    let { name, email, password } = req.body;
+    // console.log(req.body);
+
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      throw new AppError("Email is required", 400)
     }
     const user = await User.findOne({
       email: email,
@@ -45,11 +43,11 @@ module.exports.signUp = async (req, res) => {
 
 
     await TransientUser.create({ email: email, otp: hashedOtp });
-    const payload = { to: email, subject: "verification Email", otp }
-    sendGrid.sendEmail(payload)
+    const payload = { to: email, subject: "verification Email" }
+    // sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
-    throw error
+    next(error)
   }
 
 }
@@ -68,7 +66,7 @@ module.exports.verifyOtp = (req, res) => {
       console.log(user, "user");
       if (user && user.isVerified)
         return res.status(200).send({ "message": "otp verified successfully" })
-      return res.status(400).send({ "message": "something went wrong please try again" })
+      throw new AppError("something went wrong please try again", 400)
 
     })
     .catch(err => {
@@ -76,18 +74,17 @@ module.exports.verifyOtp = (req, res) => {
     })
 }
 
-// ******************************** SIGN IN ***************************************************
+// ******************************** SIGN IN ***********************************
 
 module.exports.signin = async (req, res) => {
   const { email, password } = req.body
 
   const signinUser = await User.findOne({ email });
-  if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status().send({ "message": "incorrect email or password" })
+  if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status(200).send({ "message": "incorrect email or password" })
   // console.log(signinUser,"sp");
   if (!signinUser) {
-    res.status(401).send({
-      message: 'Invalid Email or Password',
-    });
+    // res.status(401).send({message: 'Invalid Email or Password',});
+    throw new AppError("Invalid Email or Password", 401)
   } else {
     res.send({
       token: util.generateToken({ email }),
@@ -97,10 +94,69 @@ module.exports.signin = async (req, res) => {
 
 
 
-// *************************************SIGNOUT************************************
 
-// module.exports.signout= catchAsync(async (req, res) => {
-//   await authService.signout(req.body.refreshToken);
-//   res.status(httpStatus.NO_CONTENT).send();
-// });
+// **************************************FORGET PASSWORD***************************************
 
+
+
+module.exports.forgetPassword = (req, res) => {
+  const { email } = req.body;
+  User.findOne({ email: email }, (err, user) => {
+    console.log(user);
+    if (err) {
+      res.status(500).json({ message: err });
+    } else if (!user) {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      // Generate and set a password reset token
+      const resetToken = crypto.randomBytes(20).toString("hex");
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+      user.save((err) => {
+        if (err) {
+          res.status(500).json({ message: err });
+        } else {
+          // Send the password reset email
+          const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
+          sendGrid.sendEmailForResetPassword(payload)
+          res.status(200).send({ message: "Link send successfully!" });
+
+
+        }
+      });
+    }
+  });
+}
+
+// *************************************RESET PASSWORD************************************
+
+
+module.exports.resetPassword = async (req, res) => {
+  const { password } = req.body;
+  let { token } = req.params;
+  // console.log(User);
+  // console.log(token);
+  User.findOne({ resetPasswordToken: token}, (err, user) => {
+
+    if (err) {
+      res.status(500).json({ message: err });
+    } else if (!user) {
+      res.status(404).json({ message: "Password reset token is invalid or has expired." });
+    } else {
+      // console.log(user);
+      user.password = util.generateHash(password);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      user.save((err) => {
+        if (err) {
+          res.status(500).json({ message: err });
+        } else {
+          res.status(200).json({ message: "Password reset successful." });
+        }
+      });
+      
+    }
+  });
+};
+
+//*****************************************CHANGE PASSWORD********************************** */

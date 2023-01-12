@@ -41,3 +41,4 @@ module.exports.wishList=(req, res) => {
             res.status(400).send({ message: "Something went wrong", error: err })
         })
 }
+

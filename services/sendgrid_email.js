@@ -31,7 +31,7 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const msg = {
   to: payload.to,
-  from: 'wdnarendrakumar@gmail.com',
+  from: 'sunil.r@antino.io',
   subject: 'OTP verification',
   text: 'please verify this otp',
   html: `<p><h2>please use this otp to verify you account</h2>
@@ -57,13 +57,10 @@ const sendEmailForResetPassword=(payload) =>{
     to: payload.to,
     from: 'wdnarendrakumar@gmail.com',
     subject: 'OTP verification',
-    html: `<p><h2>"You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
-    "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
-    http://localhost:5001/api/user/resetPassword/${payload.resetToken}
-    "\n\n" +
-    "If you did not request this, please ignore this email and your password will remain unchanged.\n,
-   </h2>
-   <h1>  ${payload.email}</h1></p>`
+    html: ` <p>You are receiving this email because you (or someone else) have requested to reset the password for your account.</p>
+    <p>Please click on the following link to complete the process:</p>
+    <a href="http://localhost:5001/api/user/resetPassword/${payload.resetToken}"><h3>Reset password</h3></a>
+    <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`
   };
   
   sgMail.send(msg).catch((error)=>{
