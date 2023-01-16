@@ -1,12 +1,13 @@
 const WishListModel = require('./wishlist.model');
 const { v4: uuidv4} = require("uuid");
-
+// const User = require('../user/user.model');
+// const { default: mongoose } = require('mongoose');
 //*************************************ADD ITEM TO WIHLIST********************************* */
 
 module.exports.wishlistAddItem =  (req, res) => {
     const { userId, categoryId, productId } = req.body;
     const wishListItemId = uuidv4(); 
-    WishListModel.create({ wishListItemId, userId, categoryId, productId })
+    WishListModel.create({ userId,categoryId, productId,wishListItemId})
         .then(result => {
             res.status(201).send({ message: "Item added Success", result: "result" })
         })

@@ -31,7 +31,7 @@ const productSchema = new mongoose.Schema({
         required: true
     },
 
-    price: {
+    productPrice: {
         type: Number,
         required: true
     },

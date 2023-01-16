@@ -1,8 +1,14 @@
 const { Schema, model } = require('mongoose');
-const jwt = require('jsonwebtoken');
+
 
 
 const userSchema = Schema({
+   userId:{
+        type:String,
+        trim : true,
+        unique:true
+   },
+   
     email: {
         type: String,
         required: true,
@@ -33,7 +39,7 @@ const transientUserSchema = Schema(
             required: true
 
         },
-        otp: {
+        otpHash: {
             type: String,
             required: true
 
@@ -47,27 +53,8 @@ const transientUserSchema = Schema(
     }
 )
 
-const forgetUserSchema = new Schema({
-    email:{
-        type: String,
-        required: true
-    },
-    otp:{
-        type: String,
-        required: true
-    }
-})
 
 
-userSchema.methods.generateJWT = function () {
-    const token = jwt.sign({
-        _id: this._id,
-        email: this.email
-    }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" });
-    return token
-}
 
 module.exports.User = model('User', userSchema);
-// module.exports.TransientUser = model('transient_user', transientUserSchema);
 module.exports.TransientUser= model('transient_user', transientUserSchema);
-module.exports.forgetUser =  model('forgetUser',forgetUserSchema);

@@ -1,7 +1,7 @@
 // const express = require('express')
 const dotenv = require('dotenv').config();
 const mongoose = require('mongoose')
-console.log('dotenv', dotenv);
+// console.log('dotenv', dotenv);
 // const connectDb = async() =>{
 //     try{
 //         await mongoose.connect(process.env.MONGODB_URL, {
@@ -19,7 +19,7 @@ console.log('dotenv', dotenv);
 
 mongoose.set('strictQuery', false);
 const connectDB = async () => {
-    console.log(process.env.MONGODB_URL)
+    // console.log(process.env.MONGODB_URL)
     try {
         mongoose.connect(process.env.MONGODB_URL, {
             useNewUrlParser: true,

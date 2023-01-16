@@ -12,7 +12,7 @@ const cfg = {
         key: process.env.SENDGRID_KEY,
         fromEmail : process.env.SENDGRID_FROM_EMAIL
     },
-    jwtSecretKey: "asd7abjsd7",
+    jwtSecretKey: "asdgcsvdcgvsgcv",
     tokenExpirationTime: 72 * 60 * 60 * 1000,
 
     homePath: process.env.HOMEPATH,

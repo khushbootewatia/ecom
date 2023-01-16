@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { wishlistAddItem,wishlistRemoveItem,wishList} = require('../wishlist/wishlist.controller')
 
 
-router.route('/addItem')
+router.route('/addItem/:userId')
     .post(wishlistAddItem);
 
     router.route('/removeItem')
