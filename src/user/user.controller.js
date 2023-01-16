@@ -1,22 +1,34 @@
+<<<<<<< Updated upstream
 const bcrypt = require("bcrypt");
+=======
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto")
+>>>>>>> Stashed changes
 const AppError = require("../errorHandler/appError")
-
 const util = require("../../utils/util")
+<<<<<<< Updated upstream
 
 const { User, TransientUser } = require('../user/user.model');
 
 
 console.log(User, " ------", TransientUser, "line 8")
+=======
+const { User, TransientUser, forgetUser } = require('../user/user.model');
+>>>>>>> Stashed changes
 const sendGrid = require("../../services/sendgrid_email")
 
 //******************************SIGNUP********************************//
 
 module.exports.signUp = async (req, res,next) => {
   try {
+<<<<<<< Updated upstream
   let { name, email, password } = req.body
   // console.log(req.body);
 
 
+=======
+    let { name, email, password } = req.body;
+>>>>>>> Stashed changes
     if (!email) {
       throw new AppError("Email is required", 400)
     }
@@ -25,7 +37,8 @@ module.exports.signUp = async (req, res,next) => {
 
     });
 
-    if (user && user.isVerified) return res.status(400).send({ "message": "User already registered!" });
+    if (user && user.isVerified) 
+    throw new AppError("User already registered",400)
     if (!user) {
       password = util.generateHash(password)
       User.create({
@@ -34,21 +47,19 @@ module.exports.signUp = async (req, res,next) => {
     }
     //otp generate
     const otp = util.generateOtp();
-
-    // console.log(OTP);
-
-
     console.log(otp);
-
     const hashedOtp = util.generateHash(otp)
-
 
     await TransientUser.create({ email: email, otp: hashedOtp });
     const payload = { to: email, subject: "verification Email" }
     // sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
   } catch (error) {
+<<<<<<< Updated upstream
     next (error)
+=======
+    next(error)    
+>>>>>>> Stashed changes
   }
 
 }
@@ -65,10 +76,15 @@ module.exports.verifyOtp = (req, res) => {
     })
     .then(user => {
       console.log(user, "user");
+<<<<<<< Updated upstream
       if (user && user.isVerified)
         return res.status(200).send({ "message": "otp verified successfully" })
         throw new AppError("something went wrong please try again", 400)
 
+=======
+      if (user && user.isVerified)        
+      throw new AppError("something went wrong please try again", 400)
+>>>>>>> Stashed changes
     })
     .catch(err => {
       throw err
@@ -81,10 +97,9 @@ module.exports.signin = async (req, res) => {
   const { email, password } = req.body
 
   const signinUser = await User.findOne({ email });
-  if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status(200).send({ "message": "incorrect email or password" })
-  // console.log(signinUser,"sp");
+  if (!signinUser || !util.compareHash(password, signinUser.password)) 
+  throw new AppError("Incorrect email or password")
   if (!signinUser) {
-    // res.status(401).send({message: 'Invalid Email or Password',});
     throw new AppError("Invalid Email or Password", 401)
   } else {
     res.send({
@@ -103,4 +118,139 @@ module.exports.changePassword = async (req, res) => {
   // if(!user)
 
 
+<<<<<<< Updated upstream
 }
+=======
+}
+
+module.exports.forgetPasswordFunc = async (req, res) => {
+  console.log("Coming here")
+  let { email } = req.body;
+  try {
+    console.log(User)
+    const value = await User.findOne({email});
+    console.log(User,value)
+    const otp = util.generateOtp();
+    const hashedOtp = util.generateHash(otp);
+    try {
+        const findingOtpInForget = await forgetUser.findOne({email})
+        console.log(findingOtpInForget)
+        if (findingOtpInForget){
+            console.log("User found")
+            findingOtpInForget.otp = hashedOtp
+        }else{
+            console.log("user created");
+            await forgetUser.create({ email: req.body.email, otp: hashedOtp });
+        }
+      
+    } catch (err) {
+      console.log(err);
+    }
+
+    const payload = { to: email, subject: otp };
+    const mailing = async (req, res) => {
+      await sendMailer(payload);
+    };
+
+    mailing();
+    res.status(200).send({ message: "Otp send successfully!", otp });
+  } catch (err) {
+    res.send("Email not registered");
+  }
+};
+
+module.exports.verifyChangedOtp = async (req, res) => {
+  let { email, otp, newPassword } = req.body;
+  const verifyingOtp = await forgetUser.findOne({ email });
+  console.log(req.body)
+  console.log(verifyingOtp)
+  console.log(util.compareHash(otp, verifyingOtp.otp))
+  if (verifyingOtp && bcrypt.compare(otp, verifyingOtp.otp)) {
+    console.log("Coming here in if");
+    const hash = await bcrypt.hash(newPassword, 10);
+    User.findOneAndUpdate(
+      { email: { $gte: email } },
+      { password: hash },
+      null,
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Original Doc : ", docs);
+          res.send("Password Updated")
+        }
+      }
+    );
+    
+  } else {
+    console.log("coming in else");
+    return res.status(200).send({ message: "incorrect otp" });
+  }
+};
+
+// **************************************FORGET PASSWORD***************************************
+
+
+
+module.exports.forgetPassword = (req, res) => {
+  const { email } = req.body;
+  User.findOne({ email: email }, (err, user) => {
+    console.log(user);
+    if (err) {
+      res.status(500).json({ message: err });
+    } else if (!user) {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      // Generate and set a password reset token
+      const resetToken = crypto.randomBytes(20).toString("hex");
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+      user.save((err) => {
+        if (err) {
+          res.status(500).json({ message: err });
+        } else {
+          // Send the password reset email
+          const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
+          sendGrid.sendEmailForResetPassword(payload)
+          res.status(200).send({ message: "Link send successfully!" });
+
+
+        }
+      });
+    }
+  });
+}
+
+// *************************************RESET PASSWORD************************************
+
+
+module.exports.resetPassword = async (req, res) => {
+  const { password } = req.body;
+  let { token } = req.params;
+  // console.log(User);
+  // console.log(token);
+  User.findOne({ resetPasswordToken: token}, (err, user) => {
+
+    if (err) {
+      res.status(500).json({ message: err });
+    } else if (!user) {
+      res.status(404).json({ message: "Password reset token is invalid or has expired." });
+    } else {
+      // console.log(user);
+      user.password = util.generateHash(password);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      user.save((err) => {
+        if (err) {
+          res.status(500).json({ message: err });
+        } else {
+          res.status(200).json({ message: "Password reset successful." });
+        }
+      });
+      
+    }
+  });
+};
+
+//*****************************************CHANGE PASSWORD********************************** */
+>>>>>>> Stashed changes
