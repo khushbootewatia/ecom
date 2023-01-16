@@ -2,10 +2,8 @@ const {createLogger,transports,format} = require("winston")
 const{combine,timestamp,printf,colorize} = format
 
 const formatter = printf((info)=>{
-    let object={message:info.message}
-    return `${info.timestamp} [${info.level}] ${JSON.stringify(object)}`
+    return `${info.timestamp} [${info.level}] ${info.message} `
 })
-
 
 const logger = createLogger({
     format: combine(timestamp({ format: `MMM-DD-YYYY HH:mm:ss` }),formatter,colorize()),
@@ -15,4 +13,4 @@ const logger = createLogger({
     ]
 })
 
-module.exports = logger
+module.exports = logger;

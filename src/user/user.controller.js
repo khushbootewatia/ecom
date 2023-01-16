@@ -1,19 +1,10 @@
-// const bcrypt = require("bcryptjs");
-// // const AppError = require("../errorHandler/appError")
-// const util = require("../../utils/util")
-// const crypto = require("crypto")
-// const { User, TransientUser } = require('../user/user.model');
-// const sendGrid = require("../../services/sendgrid_email")
-
-
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto")
 const AppError = require("../errorHandler/appError")
-
 const util = require("../../utils/util")
 
+
 const { User, TransientUser, forgetUser } = require('../user/user.model');
-
-
 const sendGrid = require("../../services/sendgrid_email")
 
 
@@ -21,15 +12,8 @@ const sendGrid = require("../../services/sendgrid_email")
 
 module.exports.signUp = async (req, res, next) => {
   try {
-    let { name, email, password } = req.body;
-    // console.log(req.body);
 
-// module.exports.signUp = async (req, res,next) => {
-//   try {
-//   let { name, email, password } = req.body
-  // console.log(req.body);
-
-
+    let { name, email, password } = req.body
     if (!email) {
       throw new AppError("Email is required", 400)
     }
@@ -38,7 +22,8 @@ module.exports.signUp = async (req, res, next) => {
 
     });
 
-    if (user && user.isVerified) return res.status(400).send({ "message": "User already registered!" });
+    if (user && user.isVerified)
+      throw new AppError("User already registered", 400)
     if (!user) {
       password = util.generateHash(password)
       User.create({
@@ -47,31 +32,23 @@ module.exports.signUp = async (req, res, next) => {
     }
     //otp generate
     const otp = util.generateOtp();
-
-    // console.log(OTP);
-
-
     console.log(otp);
-
     const hashedOtp = util.generateHash(otp)
-
 
     await TransientUser.create({ email: email, otp: hashedOtp });
     const payload = { to: email, subject: "verification Email" }
     // sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
+    
   } catch (error) {
     next(error)
-    // next (error)
   }
-
 }
 
 //********************************VERIFY OTP*********************************//
 
 module.exports.verifyOtp = (req, res) => {
   let { email, otp } = req.body;
-  // console.log("email", email);
   TransientUser.findOne({ email })
     .then(transientUser => {
       if (!transientUser || !util.compareHash(otp, transientUser.otp)) return res.status(200).send({ "message": "incorrect otp" })
@@ -80,10 +57,7 @@ module.exports.verifyOtp = (req, res) => {
     .then(user => {
       console.log(user, "user");
       if (user && user.isVerified)
-        return res.status(200).send({ "message": "otp verified successfully" })
-      // throw new AppError("something went wrong please try again", 400)
-      //   throw new AppError("something went wrong please try again", 400)
-
+      throw new AppError("something went wrong please try again", 400)
     })
     .catch(err => {
       throw err
@@ -96,14 +70,13 @@ module.exports.signin = async (req, res) => {
   const { email, password } = req.body
 
   const signinUser = await User.findOne({ email });
-  if (!signinUser || !util.compareHash(password, signinUser.password)) return res.status(200).send({ "message": "incorrect email or password" })
-  // console.log(signinUser,"sp");
+  if (!signinUser || !util.compareHash(password, signinUser.password))
+    throw new AppError("Incorrect email or password")
   if (!signinUser) {
-    // res.status(401).send({message: 'Invalid Email or Password',});
     throw new AppError("Invalid Email or Password", 401)
   } else {
     res.send({
-      token: util.generateToken({ email}),
+      token: util.generateToken({ email }),
     });
   }
 }
@@ -116,30 +89,27 @@ module.exports.changePassword = async (req, res) => {
   });
   // if(!user)
 
-
 }
 
 module.exports.forgetPasswordFunc = async (req, res) => {
-  console.log("Coming here")
   let { email } = req.body;
-  console.log(email)
   try {
     console.log(User)
-    const value = await User.findOne({email});
-    console.log(User,value)
+    const value = await User.findOne({ email });
+    console.log(User, value)
     const otp = util.generateOtp();
     const hashedOtp = util.generateHash(otp);
     try {
-        const findingOtpInForget = await forgetUser.findOne({email})
-        console.log(findingOtpInForget)
-        if (findingOtpInForget){
-            console.log("User found")
-            findingOtpInForget.otp = hashedOtp
-        }else{
-            console.log("user created");
-            await forgetUser.create({ email: req.body.email, otp: hashedOtp });
-        }
-      
+      const findingOtpInForget = await forgetUser.findOne({ email })
+      console.log(findingOtpInForget)
+      if (findingOtpInForget) {
+        console.log("User found")
+        findingOtpInForget.otp = hashedOtp
+      } else {
+        console.log("user created");
+        await forgetUser.create({ email: req.body.email, otp: hashedOtp });
+      }
+
     } catch (err) {
       console.log(err);
     }
@@ -163,7 +133,6 @@ module.exports.verifyChangedOtp = async (req, res) => {
   console.log(verifyingOtp)
   console.log(util.compareHash(otp, verifyingOtp.otp))
   if (verifyingOtp && bcrypt.compare(otp, verifyingOtp.otp)) {
-    console.log("Coming here in if");
     const hash = await bcrypt.hash(newPassword, 10);
     User.findOneAndUpdate(
       { email: { $gte: email } },
@@ -178,9 +147,8 @@ module.exports.verifyChangedOtp = async (req, res) => {
         }
       }
     );
-    
+
   } else {
-    console.log("coming in else");
     return res.status(200).send({ message: "incorrect otp" });
   }
 };
@@ -224,16 +192,13 @@ module.exports.forgetPassword = (req, res) => {
 module.exports.resetPassword = async (req, res) => {
   const { password } = req.body;
   let { token } = req.params;
-  // console.log(User);
-  // console.log(token);
-  User.findOne({ resetPasswordToken: token}, (err, user) => {
+  User.findOne({ resetPasswordToken: token }, (err, user) => {
 
     if (err) {
       res.status(500).json({ message: err });
     } else if (!user) {
       res.status(404).json({ message: "Password reset token is invalid or has expired." });
     } else {
-      // console.log(user);
       user.password = util.generateHash(password);
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
@@ -244,9 +209,10 @@ module.exports.resetPassword = async (req, res) => {
           res.status(200).json({ message: "Password reset successful." });
         }
       });
-      
+
     }
   });
 };
 
 //*****************************************CHANGE PASSWORD********************************** */
+
