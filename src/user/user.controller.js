@@ -1,14 +1,14 @@
 
 
 const bcrypt = require("bcrypt");
-const AppError = require("../errorHandler/appError")
 
 const util = require("../../utils/util")
 
 const { User, TransientUser, forgetUser } = require('../user/user.model');
 
 
-const sendGrid = require("../../services/sendgrid_email")
+const sendGrid = require("../../services/sendgrid_email");
+const AppError = require("../../utils/errorHandler");
 
 
 //******************************SIGNUP********************************//
@@ -103,15 +103,14 @@ module.exports.signin = async (req, res) => {
 }
 
 
-module.exports.changePassword = async (req, res) => {
-  const { email, password, newPassword } = req.body;
-  const user = await User.findOne({
-    email
-  });
-  // if(!user)
+// module.exports.changePassword = async (req, res) => {
+//   const { email, password, newPassword } = req.body;
+//   const user = await User.findOne({
+//     email
+//   });
 
 
-}
+// }
 
 module.exports.forgetPasswordFunc = async (req, res) => {
   let { email } = req.body;

@@ -1,8 +1,9 @@
 const bcrypt = require("bcrypt");
 const util = require("../../utils/util");
-const { Seller, OtpSeller } = require("../seller/seller.model");
+// const { Seller, OtpSeller } = require("../seller/seller.model");
+const sellerService = require("./seller.service")
 const { sendMailer } = require("../../services/nodemailer");
-const AppError = require("../errorHandler/appError");
+const AppError = require("../../utils/errorHandler");
 const {
   signUpSchema,
   signInSchema,
@@ -72,53 +73,58 @@ const verifyOtp = async (req, res) => {
 
 ///////////////////////////////         SIGN IN         /////////////////////////////
 
-const signin = async (req, res) => {
-  const { error, value } = signInSchema.validate(req.body);
-  if (error) {
-    const message = error.details[0].message;
-    res.send({ message });
-    return;
-  }
+const signin = async (req, res, next) => {
+  try {
+    const reference = "signin"
   const { email, password } = req.body;
-  const seller = await Seller.findOne({ email });
+  const seller = await sellerService.getSeller({email})
   if (!seller) {
-    res.send("Seller Not found");
-    return;
-    // throw new AppError("seller not found", 404);
+    throw new AppError(reference, "Seller not found", 404);
   }
   if (!(await bcrypt.compare(req.body.password, seller.password))) {
-    res.send("Incorrect Password");
-    return;
-    // throw new AppError("Password incorrect", 401);
+    throw new AppError(reference, "Password incorrect", 401);
   }
   res.send({
     token: util.generateToken({ email }),
   });
+  } catch (error) {
+    error.reference = error.reference ? error.reference : "POST /sellers/signin"
+    next(error)
+  }
 };
 
 ///////////////////////////////         Change Password        /////////////////////////////
 
-const changePassword = async (req, res) => {
-  const { error, value } = changePasswordSchema.validate(req.body);
-  if (error) {
-    const message = error.details[0].message;
-    res.send({ message });
-    return;
-  }
+const changePassword = async (req, res, next) => {
+  try {
   const { email, currentPassword, newPassword } = req.body;
   const seller = await Seller.findOne({ email });
   if (!seller) {
     res.send("Seller not found");
     return;
   }
-  if (!(await bcrypt.compare(currentPassword, seller.password))) {
-    res.send("Incorrect Current Password");
+
+  if (currentPassword == newPassword){
+    res.send("Your current password cannot be your new password")
     return;
-    // throw new AppError("Password incorrect", 401);
   }
+
+  if (!(await bcrypt.compare(currentPassword, seller.password))) {
+    // res.send("Incorrect Current Password");
+    // return;
+    throw new AppError("Password incorrect", 401);
+  }
+
   const hash = await bcrypt.hash(newPassword, 10);
   seller.password = hash;
-  res.send("Password Updated Successfully");
+  // res.send("Password Updated Successfully");
+  res.json({
+    status: true,
+    data: "Password updated successfully"
+  })
+  } catch (error) {
+    next(error)
+  }
 };
 
 ///////////////////////////////         Forget Password Func        /////////////////////////////

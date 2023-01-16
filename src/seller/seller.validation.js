@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const AppError = require('../../src/errorHandler/appError');
 
 const signUpSchema = Joi.object({
     name: Joi.string().min(2).max(10).required(),
@@ -13,10 +12,13 @@ const signUpSchema = Joi.object({
     bankName:Joi.string().required()
 })
 
-const signInSchema = Joi.object({
+const signInSchema = (payload) =>{
+    const schema = Joi.object({
     email: Joi.string().required().email(),
     password: Joi.string().required()
 })
+return schema.validate(payload)
+}
 
 const verifyOtpSchema = Joi.object({
     email: Joi.string().required().email(),

@@ -145,3 +145,15 @@ Jan-09-2023 14:59:07 [error] {"message":"text error"}
 >>>>>>> features/yatin/seller
 Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}
 Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}
+Jan-16-2023 17:51:45 [error] {"message":"Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: data and hash arguments required}"}
+Jan-16-2023 17:53:07 [error] {"message":"Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: data and hash arguments required}"}
+Jan-16-2023 17:53:38 [error] {"message":"Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: data and hash arguments required}"}
+Jan-16-2023 17:55:33 [error] {"message":"Error: {reference: Anonymous, message: Invalid Body!, errorCode: 500, errors: [], error: Invalid Body!}"}
+Jan-16-2023 17:56:25 [error] {"message":"Error: {reference: Anonymous, message: Invalid Body!, errorCode: 500, errors: [], error: Invalid Body!}"}
+Jan-16-2023 17:56:50 [error] {"message":"Error: {reference: validationMiddleware, message: \"password\" is required, errorCode: 412, errors: [], error: \"password\" is required}"}
+Jan-16-2023 17:57:25 [error] {"message":"Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Unexpected token i in JSON at position 11}"}
+Jan-16-2023 17:57:36 [error] {"message":"Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Unexpected token i in JSON at position 11}"}
+Jan-16-2023 17:57:53 [error] {"message":"Error: {reference: validationMiddleware, message: \"password\" is required, errorCode: 412, errors: [], error: \"password\" is required}"}
+Jan-16-2023 17:58:58 [error] {"message":"Error: {reference: validationMiddleware, message: password is required, errorCode: 412, errors: [], error: password is required}"}
+Jan-16-2023 18:00:16 [error] {"message":"Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: data and hash arguments required}"}
+Jan-16-2023 18:19:22 [error] {"message":"Error: {reference: POST /sellers/signin, message: Server Error!, errorCode: 500, errors: [], error: Seller.findOne is not a function}"}
