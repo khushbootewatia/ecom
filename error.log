@@ -143,3 +143,5 @@ Jan-10-2023 11:37:57 [error] {"message":"text error"}
 Jan-06-2023 15:47:39 [error] {"message":"text error"}
 Jan-09-2023 14:59:07 [error] {"message":"text error"}
 >>>>>>> features/yatin/seller
+Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}
+Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}

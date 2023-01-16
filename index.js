@@ -1,13 +1,10 @@
 const express = require('express')
 const connectDb = require('./config/dbConnection')
-<<<<<<< HEAD
 const userRoute = require('./src/user/user.route')
 const wishlistRoute = require('./src/wishlist/wishlist.route')
-=======
 const route = require('./src/user/user.route')
 const sellerRoute = require('./src/seller/seller.route')
 //const forgetPasswordRoute = require("./src/forgetPassword/forgetPassword.route")
->>>>>>> develop
 require('dotenv').config({path: ".env"})
 
 const logger = require('./logger/logger')
@@ -41,26 +38,24 @@ app.all('*', (req, res, next) => {
 })
 
 
-<<<<<<< HEAD
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+// const swaggerUi = require('swagger-ui-express');
+// const swaggerDocument = require('./swagger.json');
 
-app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
-// const swaggerUi = require("swagger-ui-express")
-// 
-// const swaggerDocument = require("./api/docs/swagger.json");
-swaggerUi.setup(swaggerDocument)
+// // const swaggerUi = require("swagger-ui-express")
+// // 
+// // const swaggerDocument = require("./api/docs/swagger.json");
+// swaggerUi.setup(swaggerDocument)
 
 app.use(express.json());
 app.use('/api/user', userRoute)
 app.use('/api/wishlist', wishlistRoute)
-=======
->>>>>>> develop
 
 app.listen(3000, function(){
     console.log(`running on port ${3000}`)
 })
+
 
 

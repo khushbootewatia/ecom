@@ -1,5 +1,5 @@
 const config    = require('../config');
-const {resetToken}= require('../src/user/user.controller')
+//const {resetToken}= require('../src/user/user.controller')
 // var     ejs     = require('ejs');
 const sgMail    = require('@sendgrid/mail');
 var fs          = require('fs')

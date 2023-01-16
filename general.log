@@ -420,3 +420,9 @@ Jan-11-2023 12:11:22 [info] {"message":"localhost:3000/api/seller/forgetPassword
 Jan-11-2023 14:49:54 [info] {"message":"localhost:3000/api/sller/forgetPasswordFunc - POST - ::1"}
 >>>>>>> features/yatin/seller
 Jan-12-2023 11:57:13 [info] {"message":"localhost:3000/api/sellerr/verifyChangedOtp - POST - ::1"}
+Jan-12-2023 16:30:18 [info] {"message":"localhost:3000/ - GET - ::1"}
+Jan-16-2023 11:03:31 [info] {"message":"localhost:3000/api/seller/signup - POST - ::1"}
+Jan-16-2023 11:04:25 [info] {"message":"localhost:3000/api/seller/signup - POST - ::1"}
+Jan-16-2023 11:04:57 [info] {"message":"localhost:3000/api/seller/signup - POST - ::1"}
+Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}
+Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}

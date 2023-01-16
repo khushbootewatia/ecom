@@ -1,10 +1,5 @@
 node_modules
 .env
-<<<<<<< HEAD
 package-lock.json
 error.log
 general.log
-=======
-error.log
-general.log
->>>>>>> develop

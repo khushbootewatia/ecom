@@ -1,165 +1,175 @@
 const bcrypt = require("bcrypt");
-
 const util = require("../../utils/util");
-
-const { Seller, otpSeller, forgetSeller } = require("../seller/seller.model");
-
-
+const { Seller, OtpSeller } = require("../seller/seller.model");
 const { sendMailer } = require("../../services/nodemailer");
+const AppError = require("../errorHandler/appError");
+const {
+  signUpSchema,
+  signInSchema,
+  verifyOtpSchema,
+  changePasswordSchema,
+  forgetPasswordSchema,
+  verifyChangedOtpSchema,
+} = require("./seller.validation");
 
-const signin = async (req, res) => {
-  try {
-    const values = await Seller.findOne({ email: req.body.email });
-    if (!values) {
-      return res.status(404).send("User not found");
-    } else {
-      if (await bcrypt.compare(req.body.password, values.password)) {
-        const email1 = req.body.email
-        res.send({
-          token: util.generateToken({ email1}),
-        });
-      } else {
-        res.write("Password incorrect");
-        res.send();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    res.send();
+///////////////////////////////         SIGN UP        /////////////////////////////
+
+const signUp = async (req, res, next) => {
+  const { error, value } = signUpSchema.validate(req.body);
+  if (error) {
+    const message = error.details[0].message;
+    res.send({ message });
+    return;
   }
-};
-
-const changePassword = async (req, res) => {
-  try {
-    const values = await Seller.findOne({ email: req.body.email });
-    if (!values) {
-      return res.status(404).send("User not found");
-    } else {
-      if (await bcrypt.compare(req.body.currentPassword, values.password)) {
-        const hash = await bcrypt.hash(req.body.newPassword, 10);
-        values.password = hash;
-      } else {
-        res.write("Password incorrect");
-        res.send();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    res.send();
+  const sellerEmail = await Seller.findOne({ email: req.body.email });
+  if (sellerEmail) {
+    res.send("Seller exists");
+    return;
   }
+  const hash = await bcrypt.hash(req.body.password, 10);
+  const seller = await Seller.create({
+    name: req.body.name,
+    email: req.body.email,
+    address: req.body.address,
+    password: hash,
+    mobile: req.body.mobile,
+    accountHolderName: req.body.accountHolderName,
+    accountNumber: req.body.accountNumber,
+    ifscCode: req.body.ifscCode,
+    bankName: req.body.bankName,
+  });
+  const otp = util.generateOtp();
+  const hashedOtp = util.generateHash(otp);
+  await OtpSeller.create({ email: req.body.email, otp: hashedOtp });
+  const payload = { to: req.body.email, subject: otp };
+  await sendMailer(payload);
+  res.status(200).send({ message: "Otp send successfully!" });
 };
 
-const signUp = async (req, res) => {
-  ////
-  try {
-    const sellerEmail = await Seller.findOne({ email: req.body.email });
-    if (sellerEmail) {
-      res.send("User already exists with this email");
-    } else {
-      const hash = await bcrypt.hash(req.body.password, 10);
-      const seller = await Seller.create({
-        name: req.body.name,
-        email: req.body.email,
-        address: req.body.address,
-        password: hash,
-        mobile: req.body.mobile,
-        account: {
-          accountHolderName: req.body.account.accountHolderName,
-          accountNumber: req.body.account.accountNumber,
-          ifscCode: req.body.account.ifscCode,
-          bankName: req.body.account.bankName,
-        },
-      });
-      const otp = util.generateOtp();
-
-      // console.log(OTP);
-
-      const hashedOtp = util.generateHash(otp);
-      await otpSeller.create({ email: req.body.email, otp: hashedOtp });
-      const payload = { to: req.body.email, subject: otp };
-      const mailing = async (req, res) => {
-        await sendMailer(payload);
-      };
-      mailing();
-      res.status(200).send({ message: "Otp send successfully!", otp });
-    }
-  } catch {}
-};
+///////////////////////////////         Verify OTP         /////////////////////////////
 
 const verifyOtp = async (req, res) => {
-  let { email, otp } = req.body;
-  const verifyingOtp = await otpSeller.findOne({ email });
-  if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
-    return res.status(200).send({ message: "incorrect otp" });
-  } else {
-    Seller.findOneAndUpdate({email: {$gte:email} }, 
-      {isVerified:true}, null, function (err, docs) {
-      if (err){
-          console.log(err)
-      }
-      else{
-          console.log("Original Doc : ",docs);
-      }
-    })
+  const { error, value } = verifyOtpSchema.validate(req.body);
+  if (error) {
+    const message = error.details[0].message;
+    res.send({ message });
+    return;
   }
+  let { email, otp } = req.body;
+  const verifyingOtp = await OtpSeller.findOne({ email });
+  if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
+    res.send("Incoorect otp");
+    return;
+    throw new AppError("OTP incorrect", 401);
+  }
+  await Seller.findOneAndUpdate(
+    { email: { $gte: email } },
+    { isVerified: true }
+  );
+  await OtpSeller.findOneAndDelete({ email: { $gte: email } });
+  res.send("User Verified");
 };
+
+///////////////////////////////         SIGN IN         /////////////////////////////
+
+const signin = async (req, res) => {
+  const { error, value } = signInSchema.validate(req.body);
+  if (error) {
+    const message = error.details[0].message;
+    res.send({ message });
+    return;
+  }
+  const { email, password } = req.body;
+  const seller = await Seller.findOne({ email });
+  if (!seller) {
+    res.send("Seller Not found");
+    return;
+    // throw new AppError("seller not found", 404);
+  }
+  if (!(await bcrypt.compare(req.body.password, seller.password))) {
+    res.send("Incorrect Password");
+    return;
+    // throw new AppError("Password incorrect", 401);
+  }
+  res.send({
+    token: util.generateToken({ email }),
+  });
+};
+
+///////////////////////////////         Change Password        /////////////////////////////
+
+const changePassword = async (req, res) => {
+  const { error, value } = changePasswordSchema.validate(req.body);
+  if (error) {
+    const message = error.details[0].message;
+    res.send({ message });
+    return;
+  }
+  const { email, currentPassword, newPassword } = req.body;
+  const seller = await Seller.findOne({ email });
+  if (!seller) {
+    res.send("Seller not found");
+    return;
+  }
+  if (!(await bcrypt.compare(currentPassword, seller.password))) {
+    res.send("Incorrect Current Password");
+    return;
+    // throw new AppError("Password incorrect", 401);
+  }
+  const hash = await bcrypt.hash(newPassword, 10);
+  seller.password = hash;
+  res.send("Password Updated Successfully");
+};
+
+///////////////////////////////         Forget Password Func        /////////////////////////////
 
 const forgetPasswordFunc = async (req, res) => {
-  let { email } = req.body;
-  try {
-    const value = await Seller.findOne({email});
-    const otp = util.generateOtp();
-    const hashedOtp = util.generateHash(otp);
-    try {
-        const findingOtpInForget = await forgetSeller.findOne({email})
-        console.log(findingOtpInForget)
-        if (findingOtpInForget){
-            findingOtpInForget.otp = hashedOtp
-        }else{
-            await forgetSeller.create({ email: req.body.email, otp: hashedOtp });
-        }
-      
-    } catch (err) {
-      console.log(err);
-    }
-
-    const payload = { to: email, subject: otp };
-    const mailing = async (req, res) => {
-      await sendMailer(payload);
-    };
-
-    mailing();
-    res.status(200).send({ message: "Otp send successfully!", otp });
-  } catch (err) {
-    res.send("Email not registered");
+  const { error, value } = forgetPasswordSchema.validate(req.body);
+  if (error) {
+    const message = error.details[0].message;
+    res.send({ message });
+    return;
   }
+  let { email } = req.body;
+  const seller = await Seller.findOne({ email });
+  if (!seller) {
+    res.send("Seller not found");
+    return;
+    // throw new AppError("Seller not found", 404);
+  }
+  const otp = util.generateOtp();
+  const hashedOtp = util.generateHash(otp);
+  const findingOtpInForget = await OtpSeller.findOne({ email });
+  if (findingOtpInForget) {
+    findingOtpInForget.otp = hashedOtp;
+  } else {
+    await OtpSeller.create({ email: email, otp: hashedOtp });
+  }
+  const payload = { to: email, subject: otp };
+  await sendMailer(payload);
+  res.status(200).send({ message: "Otp send successfully!" });
 };
+
+//////////////////////////////         Verify Changed OTP        /////////////////////////////
 
 const verifyChangedOtp = async (req, res) => {
-  let { email, otp, newPassword } = req.body;
-  const verifyingOtp = await forgetSeller.findOne({ email });
-  console.log(util.compareHash(otp, verifyingOtp.otp))
-  if (verifyingOtp && bcrypt.compare(otp, verifyingOtp.otp)) {
-    const hash = await bcrypt.hash(newPassword, 10);
-    Seller.findOneAndUpdate(
-      { email: { $gte: email } },
-      { password: hash },
-      null,
-      function (err, docs) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send("Password Updated")
-        }
-      }
-    );
-    
-  } else {
-    console.log("coming in else");
-    return res.status(200).send({ message: "incorrect otp" });
+  const { error, value } = verifyChangedOtpSchema.validate(req.body);
+  if (error) {
+    const message = error.details[0].message;
+    res.send({ message });
+    return;
   }
+  let { email, otp, newPassword } = req.body;
+  const verifyingOtp = await OtpSeller.findOne({ email });
+  if (!verifyingOtp || !(await bcrypt.compare(otp, verifyingOtp.otp))) {
+    res.send("Wrong email or bad request");
+    return;
+  }
+  const hash = await bcrypt.hash(newPassword, 10);
+  await Seller.findOneAndUpdate({ email: { $gte: email } }, { password: hash });
+  await OtpSeller.findOneAndDelete({ email: { $gte: email } });
+  res.send("Password Updated");
 };
-
 
 module.exports = {
   signin,
@@ -167,5 +177,6 @@ module.exports = {
   signUp,
   verifyOtp,
   forgetPasswordFunc,
-  verifyChangedOtp
+  verifyChangedOtp,
 };
+
