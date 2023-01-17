@@ -1,23 +1,10 @@
 // const express = require('express')
 const dotenv = require('dotenv').config();
 const mongoose = require('mongoose')
-// const connectDb = async() =>{
-//     try{
-//         await mongoose.connect(process.env.MONGODB_URL, {
-//             useNewUrlParser: true,
-//         })
-//         console.log('mongodb is connected')
-//     }
-//     catch(error){
-//         console.log(error)
-//     }
-// }
-
-
-// module.exports = connectDb
 
 mongoose.set('strictQuery', false);
 const connectDB = async () => {
+    // console.log(process.env.MONGODB_URL)
     try {
         mongoose.connect(process.env.MONGODB_URL, {
             useNewUrlParser: true,

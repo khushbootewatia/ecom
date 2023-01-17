@@ -143,6 +143,7 @@ Jan-10-2023 11:37:57 [error] {"message":"text error"}
 Jan-06-2023 15:47:39 [error] {"message":"text error"}
 Jan-09-2023 14:59:07 [error] {"message":"text error"}
 >>>>>>> features/yatin/seller
+<<<<<<< HEAD
 Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}
 Jan-16-2023 11:59:56 [error] {"message":"400 - Unexpected token } in JSON at position 46"}
 Jan-16-2023 17:51:45 [error] {"message":"Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: data and hash arguments required}"}
@@ -259,3 +260,12 @@ Jan-17-2023 13:42:08 [error] {"message":"Error: {reference: validationMiddleware
 Jan-17-2023 13:42:28 [error] {"message":"Error: {reference: validationMiddleware, message: email is required, errorCode: 412, errors: [], error: email is required}"}
 Jan-17-2023 13:42:46 [error] {"message":"Error: {reference: async (req, res, next) => {\r\n  try{\r\n    const reference = verifyChangedOtp;\r\n  let { email, otp, newPassword } = req.body;\r\n  const verifyingOtp = await OtpSeller.findOne({ email });\r\n    if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {\r\n      throw new AppError(reference, \"Incorrect Otp or Bad request\", 400);\r\n    }\r\n  const hash = await bcrypt.hash(newPassword, 10);\r\n  await Seller.findOneAndUpdate({ email: { $gte: email } }, { password: hash });\r\n  await OtpSeller.findOneAndDelete({ email: { $gte: email } });\r\n  res.send(\"Password Updated\");\r\n}catch (error) {\r\n  error.reference = error.reference ? error.reference : \"POST /seller/verifyChangedOtp\";\r\n  next(error);\r\n}\r\n}, message: Incorrect Otp or Bad request, errorCode: 400, errors: [], error: Incorrect Otp or Bad request}"}
 Jan-17-2023 13:42:51 [error] {"message":"Error: {reference: validationMiddleware, message: email is required, errorCode: 412, errors: [], error: email is required}"}
+=======
+Jan-13-2023 20:42:09 [error] {"message":"400 - Unexpected token } in JSON at position 14"}
+Jan-13-2023 20:42:09 [error] {"message":"400 - Unexpected token } in JSON at position 14"}
+Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at position 33"}
+Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at position 33"}
+>>>>>>> da6afeaf85b20773743efe052a071fdf054b5f92
+Jan-17-2023 15:50:44 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
+Jan-17-2023 15:50:57 [error] Error: {reference: validationMiddleware, message: password is required, errorCode: 412, errors: [], error: password is required} 
+Jan-17-2023 15:51:10 [error] Error: {reference: changePassword, message: Current Password Incorrect, errorCode: 401, errors: [], error: Current Password Incorrect} 

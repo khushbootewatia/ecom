@@ -1,5 +1,5 @@
 const config    = require('../config');
-//const {resetToken}= require('../src/user/user.controller')
+// const {resetToken}= require('../src/user/user.controller')
 // var     ejs     = require('ejs');
 const sgMail    = require('@sendgrid/mail');
 var fs          = require('fs')
@@ -28,7 +28,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(config.cfg.sendgrid.key);
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
-
+console.log(payload.otp);
 const msg = {
   to: payload.to,
   from: 'sunil.r@antino.io',
@@ -77,7 +77,7 @@ const sendEmailForResetPassword=(payload) =>{
   
   const msg = {
     to: payload.to,
-    from: 'wdnarendrakumar@gmail.com',
+    from: 'sunil.r@antino.io',
     subject: 'OTP verification',
     html: ` <p>You are receiving this email because you (or someone else) have requested to reset the password for your account.</p>
     <p>Please click on the following link to complete the process:</p>

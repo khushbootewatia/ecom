@@ -4,7 +4,7 @@ let objectId = mongoose.Schema.Types.ObjectId
 const productSchema = new mongoose.Schema({
     sellerId: {
         type: objectId,
-        ref : 'seller'
+        ref : 'Seller'
     },
     productName: {
         type: String,
@@ -28,10 +28,10 @@ const productSchema = new mongoose.Schema({
 
     productImage: {
         type: String,
-        required: true
+        // required: true
     },
 
-    price: {
+    productPrice: {
         type: Number,
         required: true
     },
@@ -42,7 +42,7 @@ const productSchema = new mongoose.Schema({
     },
 
     deletedAt: {
-        type: Date.now(),
+        type: Date,
         default: null
     },
 

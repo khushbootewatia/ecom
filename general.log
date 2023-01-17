@@ -420,6 +420,7 @@ Jan-11-2023 12:11:22 [info] {"message":"localhost:3000/api/seller/forgetPassword
 Jan-11-2023 14:49:54 [info] {"message":"localhost:3000/api/sller/forgetPasswordFunc - POST - ::1"}
 >>>>>>> features/yatin/seller
 Jan-12-2023 11:57:13 [info] {"message":"localhost:3000/api/sellerr/verifyChangedOtp - POST - ::1"}
+<<<<<<< HEAD
 Jan-12-2023 16:30:18 [info] {"message":"localhost:3000/ - GET - ::1"}
 Jan-16-2023 11:03:31 [info] {"message":"localhost:3000/api/seller/signup - POST - ::1"}
 Jan-16-2023 11:04:25 [info] {"message":"localhost:3000/api/seller/signup - POST - ::1"}
@@ -540,3 +541,18 @@ Jan-17-2023 13:42:08 [error] {"message":"Error: {reference: validationMiddleware
 Jan-17-2023 13:42:28 [error] {"message":"Error: {reference: validationMiddleware, message: email is required, errorCode: 412, errors: [], error: email is required}"}
 Jan-17-2023 13:42:46 [error] {"message":"Error: {reference: async (req, res, next) => {\r\n  try{\r\n    const reference = verifyChangedOtp;\r\n  let { email, otp, newPassword } = req.body;\r\n  const verifyingOtp = await OtpSeller.findOne({ email });\r\n    if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {\r\n      throw new AppError(reference, \"Incorrect Otp or Bad request\", 400);\r\n    }\r\n  const hash = await bcrypt.hash(newPassword, 10);\r\n  await Seller.findOneAndUpdate({ email: { $gte: email } }, { password: hash });\r\n  await OtpSeller.findOneAndDelete({ email: { $gte: email } });\r\n  res.send(\"Password Updated\");\r\n}catch (error) {\r\n  error.reference = error.reference ? error.reference : \"POST /seller/verifyChangedOtp\";\r\n  next(error);\r\n}\r\n}, message: Incorrect Otp or Bad request, errorCode: 400, errors: [], error: Incorrect Otp or Bad request}"}
 Jan-17-2023 13:42:51 [error] {"message":"Error: {reference: validationMiddleware, message: email is required, errorCode: 412, errors: [], error: email is required}"}
+=======
+Jan-13-2023 20:42:09 [error] {"message":"400 - Unexpected token } in JSON at position 14"}
+Jan-13-2023 20:42:09 [error] {"message":"400 - Unexpected token } in JSON at position 14"}
+Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at position 33"}
+Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at position 33"}
+>>>>>>> da6afeaf85b20773743efe052a071fdf054b5f92
+Jan-17-2023 15:50:44 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 15:50:44 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
+Jan-17-2023 15:50:49 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 15:50:57 [info] http://localhost:3000/api/seller/signin - POST METHOD  
+Jan-17-2023 15:50:57 [error] Error: {reference: validationMiddleware, message: password is required, errorCode: 412, errors: [], error: password is required} 
+Jan-17-2023 15:51:02 [info] http://localhost:3000/api/seller/signin - POST METHOD  
+Jan-17-2023 15:51:10 [info] http://localhost:3000/api/seller/changePassword - POST METHOD  
+Jan-17-2023 15:51:10 [error] Error: {reference: changePassword, message: Current Password Incorrect, errorCode: 401, errors: [], error: Current Password Incorrect} 
+Jan-17-2023 15:51:15 [info] http://localhost:3000/api/seller/changePassword - POST METHOD  

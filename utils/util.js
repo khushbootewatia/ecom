@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const config = require("../config")
+require('dotenv').config({path: ".env"})
 
 
 module.exports.generateOtp = () => {
@@ -12,7 +13,8 @@ module.exports.generateHash = (data) => {
 }
 
 module.exports.compareHash = (data, hash) => {
-  return bcrypt.compareSync(data, hash)
+  console.log("data",data,"    hash",hash);
+  return bcrypt.compareSync(String(data), hash)
 }
 
 // module.exports.generateToken = (userObject) => {
@@ -48,6 +50,18 @@ module.exports.compareHash = (data, hash) => {
 //     }
 //   }
 // }
+class ApiError extends Error {
+  constructor(statusCode, message, isOperational = true, stack = '') {
+    super(message);
+    this.statusCode = statusCode;
+    this.isOperational = isOperational;
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+}
 module.exports.generateToken = (userObject)=> {
     let expireTime;
     if (userObject.tokenExpirationTime)
