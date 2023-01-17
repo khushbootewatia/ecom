@@ -5,11 +5,12 @@ const { User } = require("../user/user.model");
 const wishlistSchema = mongoose.Schema({
 
     userId: {
-        type: Usmongoose.Schema.Types.ObjectId, ref: 'User' 
+        type: mongoose.Schema.Types.ObjectId, ref: 'User' 
         
     },
     categoryId: {
-        type: String
+        type: String,
+        
     },
     productId: {
         type: String

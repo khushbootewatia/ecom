@@ -5,7 +5,7 @@ const createUserSchema = joi.object().keys({
     name: joi
         .string()
         .required()
-        .error(new Error("Name is not correct")),
+        .error(new Error("Name field is empty or incorrect")),
 
     email: joi
         .string()

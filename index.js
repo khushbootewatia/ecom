@@ -3,9 +3,11 @@ const connectDb = require('./config/dbConnection')
 const wishlistRoute = require('./src/wishlist/wishlist.route')
 const userRoute = require('./src/user/user.route')
 const sellerRoute = require('./src/seller/seller.route')
+const cartRoute = require('./src/cart/cart.route')
 const productRoute = require('./src/product/product.route')
+const categoryRoute = require("./src/category/category.route")
 const apiLogger = require('./logger/apiRoute')
-
+const port = process.env.PORT
 require('dotenv').config({path: ".env"})
 
 const errorController = require('./logger/error.controller')
@@ -22,12 +24,14 @@ app.use('/api/user', apiLogger,userRoute);
 app.use('/api/seller', apiLogger,sellerRoute);
 app.use('/api/product',apiLogger,productRoute)
 app.use('/api/wishlist',apiLogger, wishlistRoute)
+app.use('/api/category',apiLogger, categoryRoute)
+app.use('/api/cart',apiLogger,cartRoute)
 app.use(errorController)
 
-app.all('*', (req, res, next) => {
-    throw new appError(`Requested URL localhost:3000${req.path} not found!`, 404);
+// app.all('*', (req, res, next) => {
+//     throw new appError(`Requested URL localhost:5001${req.path} not found!`, 404);
 
-})
+// })
 
 
 const swaggerUi = require('swagger-ui-express');
@@ -37,8 +41,8 @@ app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 swaggerUi.setup(swaggerDocument)
 
-app.listen(3000, function(){
-    console.log(`running on port ${3000}`)
+app.listen(port, function(){
+    console.log(`running on port ${port}`)
 })
 
 

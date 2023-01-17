@@ -7,7 +7,7 @@ const categorySchema = mongoose.Schema({
         type : String
     },
     sellerId :{
-        
+        type : String
     },
     categoryName : {
         type : String

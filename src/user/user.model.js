@@ -42,10 +42,10 @@ const transientUserSchema = Schema(
         otpHash: {
             type: String,
             required: true
+            
 
         },
-        createdAt: { type: Date, default: Date.now, index: { expires: 600 } }
-
+       
         // After 60 seconds it deleted automatically from the database
     },
     {
