@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
-const AppError = require("../errorHandler/appError")
 const util = require("../../utils/util")
 const crypto = require("crypto")
 const { User, TransientUser } = require('../user/user.model');
 const sendGrid = require("../../services/sendgrid_email")
 const { v4: uuidv4} = require("uuid");
+const { AppError } = require("../../utils/errorHandler");
 
 
 
@@ -120,8 +120,6 @@ module.exports.signin = async (req, res) => {
 //     email
 //   });
 //   // if(!user)
-
-
 // }
 
 // module.exports.forgetPasswordFunc = async (req, res) => {

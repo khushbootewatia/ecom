@@ -1,5 +1,5 @@
 const joi = require('joi');
-// const AppError = require('../errorHandler/appError');
+// const { AppError } = require("../../utils/errorHandler");;
 
 const createproductSchema = joi.object().keys({
     productName: joi

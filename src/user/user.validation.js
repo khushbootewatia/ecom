@@ -1,5 +1,5 @@
 const joi = require('joi');
-const AppError = require('../errorHandler/appError');
+const { AppError } = require("../../utils/errorHandler");;
 
 const createUserSchema = joi.object().keys({
     name: joi

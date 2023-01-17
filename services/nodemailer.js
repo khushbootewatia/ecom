@@ -3,7 +3,6 @@ const config = require("../config");
 var nodemailer = require("nodemailer");
 
 const sendMailer = async(e) => {
-  console.log("function called",e);
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -12,7 +11,6 @@ const sendMailer = async(e) => {
     },
   });
   var message = e.subject
-  console.log(message)
   var mailOptions = {
     from: "yatinnarula99913@gmail.com",
     to: e.to,
@@ -24,7 +22,7 @@ const sendMailer = async(e) => {
     if (error) {
       console.log(error);
     } else {
-      console.log("Email sent: " + info.response);
+      console.log("Email sent: " );
     }
   });
 };

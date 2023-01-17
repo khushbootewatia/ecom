@@ -1,7 +1,7 @@
 // const productSchema = require('../product/product.model')
 const productSchema = require("../product/product.model")
 const sellerSchema = require('../seller/seller.model')
-const AppError = require('../errorHandler/appError')
+const { AppError } = require("../../utils/errorHandler");
 const {upload} = require('../../utils/awsS3')
 const { application } = require('express')
 

@@ -1,164 +1,186 @@
-const bcrypt = require("bcryptjs");
-
+const bcrypt = require("bcrypt");
 const util = require("../../utils/util");
-
-const { Seller, otpSeller, forgetSeller } = require("../seller/seller.model");
-
-
+const { Seller, OtpSeller } = require("../seller/seller.model");
+const sellerService = require("./seller.service");
 const { sendMailer } = require("../../services/nodemailer");
+const { AppError } = require("../../utils/errorHandler");
+const express = require("express");
+const app = express();
+app.use(express.json());
+const {
+  signUpSchema,
+  signInSchema,
+  verifyOtpSchema,
+  changePasswordSchema,
+  forgetPasswordSchema,
+  verifyChangedOtpSchema,
+} = require("./seller.validation");
 
-const signin = async (req, res) => {
-  try {
-    const values = await Seller.findOne({ email: req.body.email });
-    if (!values) {
-      return res.status(404).send("User not found");
-    } else {
-      if (await bcrypt.compare(req.body.password, values.password)) {
-        const email1 = req.body.email
-        res.send({
-          token: util.generateToken({ email1}),
-        });
-      } else {
-        res.write("Password incorrect");
-        res.send();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    res.send();
-  }
-};
+///////////////////////////////         SIGN UP        /////////////////////////////
 
-const changePassword = async (req, res) => {
+const signUp = async (req, res, next) => {
   try {
-    const values = await Seller.findOne({ email: req.body.email });
-    if (!values) {
-      return res.status(404).send("User not found");
-    } else {
-      if (await bcrypt.compare(req.body.currentPassword, values.password)) {
-        const hash = await bcrypt.hash(req.body.newPassword, 10);
-        values.password = hash;
-      } else {
-        res.write("Password incorrect");
-        res.send();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    res.send();
-  }
-};
-
-const signUp = async (req, res) => {
-  ////
-  try {
-    const sellerEmail = await Seller.findOne({ email: req.body.email });
+    const { email } = req.body;
+    const reference = "signup";
+    const sellerEmail = await sellerService.getSeller({ email });
     if (sellerEmail) {
-      res.send("User already exists with this email");
-    } else {
-      const hash = await bcrypt.hash(req.body.password, 10);
-      const seller = await Seller.create({
-        name: req.body.name,
-        email: req.body.email,
-        address: req.body.address,
-        password: hash,
-        mobile: req.body.mobile,
-        account: {
-          accountHolderName: req.body.account.accountHolderName,
-          accountNumber: req.body.account.accountNumber,
-          ifscCode: req.body.account.ifscCode,
-          bankName: req.body.account.bankName,
-        },
-      });
-      const otp = util.generateOtp();
-
-      // console.log(OTP);
-
-      const hashedOtp = util.generateHash(otp);
-      await otpSeller.create({ email: req.body.email, otp: hashedOtp });
-      const payload = { to: req.body.email, subject: otp };
-      const mailing = async (req, res) => {
-        await sendMailer(payload);
-      };
-      mailing();
-      res.status(200).send({ message: "Otp send successfully!", otp });
+      throw new AppError(reference, "Seller already exists", 409);
     }
-  } catch {}
-};
-
-const verifyOtp = async (req, res) => {
-  let { email, otp } = req.body;
-  const verifyingOtp = await otpSeller.findOne({ email });
-  if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
-    return res.status(200).send({ message: "incorrect otp" });
-  } else {
-    Seller.findOneAndUpdate({email: {$gte:email} }, 
-      {isVerified:true}, null, function (err, docs) {
-      if (err){
-          console.log(err)
-      }
-      else{
-          console.log("Original Doc : ",docs);
-      }
-    })
-  }
-};
-
-const forgetPasswordFunc = async (req, res) => {
-  let { email } = req.body;
-  try {
-    const value = await Seller.findOne({email});
+    const hash = await bcrypt.hash(req.body.password, 10);
+    const seller = await Seller.create({
+      name: req.body.name,
+      email: req.body.email,
+      address: req.body.address,
+      password: hash,
+      mobile: req.body.mobile,
+      accountHolderName: req.body.accountHolderName,
+      accountNumber: req.body.accountNumber,
+      ifscCode: req.body.ifscCode,
+      bankName: req.body.bankName,
+    });
     const otp = util.generateOtp();
     const hashedOtp = util.generateHash(otp);
-    try {
-        const findingOtpInForget = await forgetSeller.findOne({email})
-        console.log(findingOtpInForget)
-        if (findingOtpInForget){
-            findingOtpInForget.otp = hashedOtp
-        }else{
-            await forgetSeller.create({ email: req.body.email, otp: hashedOtp });
-        }
-      
-    } catch (err) {
-      console.log(err);
+    await OtpSeller.create({ email: req.body.email, otp: hashedOtp });
+    const payload = { to: req.body.email, subject: otp };
+    await sendMailer(payload);
+    res.status(200).send({ message: "Otp send successfully!" });
+  } catch (error) {
+    error.reference = error.reference ? error.reference : "POST /seller/signup";
+    next(error);
+  }
+};
+
+///////////////////////////////         Verify OTP         /////////////////////////////
+
+const verifyOtp = async (req, res, next) => {
+  try {
+    const reference = "verifyOtp";
+    let { email, otp } = req.body;
+    const verifyingOtp = await OtpSeller.findOne({ email });
+    if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
+      throw new AppError(reference, "Incorrect Otp", 400);
     }
-
-    const payload = { to: email, subject: otp };
-    const mailing = async (req, res) => {
-      await sendMailer(payload);
-    };
-
-    mailing();
-    res.status(200).send({ message: "Otp send successfully!", otp });
-  } catch (err) {
-    res.send("Email not registered");
-  }
-};
-
-const verifyChangedOtp = async (req, res) => {
-  let { email, otp, newPassword } = req.body;
-  const verifyingOtp = await forgetSeller.findOne({ email });
-  console.log(util.compareHash(otp, verifyingOtp.otp))
-  if (verifyingOtp && bcrypt.compare(otp, verifyingOtp.otp)) {
-    const hash = await bcrypt.hash(newPassword, 10);
-    Seller.findOneAndUpdate(
+    await Seller.findOneAndUpdate(
       { email: { $gte: email } },
-      { password: hash },
-      null,
-      function (err, docs) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send("Password Updated")
-        }
-      }
+      { isVerified: true }
     );
-    
-  } else {
-    console.log("coming in else");
-    return res.status(200).send({ message: "incorrect otp" });
+    await OtpSeller.findOneAndDelete({ email: { $gte: email } });
+    res.send("User Verified");
+  } catch (error) {
+    error.reference = error.reference
+      ? error.reference
+      : "POST /seller/verifyOtp";
+    next(error);
   }
 };
+
+///////////////////////////////         SIGN IN         /////////////////////////////
+
+const signin = async (req, res, next) => {
+  try {
+    const reference = "signin";
+    const { email, password } = req.body;
+    const seller = await sellerService.getSeller({ email });
+    if (!seller) {
+      throw new AppError(reference, "Seller not found", 404);
+    }
+    if (!(await bcrypt.compare(req.body.password, seller.password))) {
+      throw new AppError(reference, "Password incorrect", 401);
+    }
+    res.send({
+      token: util.generateToken({ email }),
+    });
+  } catch (error) {
+    error.reference = error.reference ? error.reference : "POST /seller/signin";
+    next(error);
+  }
+};
+
+///////////////////////////////         Change Password        /////////////////////////////
+
+const changePassword = async (req, res, next) => {
+  try {
+    const reference = "changePassword";
+    const { email, currentPassword, newPassword } = req.body;
+    const seller = await sellerService.getSeller({ email });
+    if (!seller) {
+      throw new AppError(reference, "Seller not found", 404);
+    }
+    if (currentPassword == newPassword) {
+      throw new AppError(reference, "Current and new Password same", 400);
+    }
+    if (!(await bcrypt.compare(currentPassword, seller.password))) {
+      throw new AppError(reference, "Current Password Incorrect", 401);
+    }
+    const hash = await bcrypt.hash(newPassword, 10);
+    seller.updateOne({ password: hash }, function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+    });
+    res.json({
+      status: true,
+      data: "Password updated successfully",
+    });
+  } catch (error) {
+    error.reference = error.reference
+      ? error.reference
+      : "POST /seller/changePassword";
+    next(error);
+  }
+};
+
+
+
+///////////////////////////////         Forget Password Func        /////////////////////////////
+
+
+
+const forgetPassword = async (req, res) => {
+  try{
+    const reference = forgetPassword;
+  let { email } = req.body;
+  const seller = await sellerService.getSeller({ email });
+    if (!seller) {
+      throw new AppError(reference, "Seller not found", 404);
+    }
+  const otp = util.generateOtp();
+  const hashedOtp = util.generateHash(otp);
+  const findingOtpInForget = await OtpSeller.findOne({ email });
+  if (findingOtpInForget) {
+    findingOtpInForget.otp = hashedOtp;
+  } else {
+    await OtpSeller.create({ email: email, otp: hashedOtp });
+  }
+  const payload = { to: email, subject: otp };
+  await sendMailer(payload);
+  res.status(200).send({ message: "Otp send successfully!" });
+}catch (error) {
+  error.reference = error.reference ? error.reference : "POST /seller/forgetPassword";
+  next(error);
+}
+};
+
+//////////////////////////////         Verify Changed OTP        /////////////////////////////
+
+const verifyChangedOtp = async (req, res, next) => {
+  try{
+    const reference = verifyChangedOtp;
+  let { email, otp, newPassword } = req.body;
+  const verifyingOtp = await OtpSeller.findOne({ email });
+    if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
+      throw new AppError(reference, "Incorrect Otp or Bad request", 400);
+    }
+  const hash = await bcrypt.hash(newPassword, 10);
+  await Seller.findOneAndUpdate({ email: { $gte: email } }, { password: hash });
+  await OtpSeller.findOneAndDelete({ email: { $gte: email } });
+  res.send("Password Updated");
+}catch (error) {
+  error.reference = error.reference ? error.reference : "POST /seller/verifyChangedOtp";
+  next(error);
+}
+}
+
 
 
 module.exports = {
@@ -166,6 +188,6 @@ module.exports = {
   changePassword,
   signUp,
   verifyOtp,
-  forgetPasswordFunc,
-  verifyChangedOtp
+  forgetPassword,
+  verifyChangedOtp,
 };
