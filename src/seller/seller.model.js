@@ -59,21 +59,21 @@ const sellerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// const otpSellerSchema = Schema(
-//   {
-//     email: {
-//       type: String,
-//       required: true,
-//     },
-//     otp: {
-//       type: String,
-//       required: true,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
+const otpSellerSchema = Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    otp: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 sellerSchema.methods.generateJWT = function () {
   const token = jwt.sign(
@@ -88,6 +88,5 @@ sellerSchema.methods.generateJWT = function () {
 };
 
 const Seller = mongoose.model("Seller", sellerSchema);
-// const OtpSeller = mongoose.model("otpSeller", otpSellerSchema);
-// module.exports = { Seller, OtpSeller };
-module.exports = Seller
+const OtpSeller = mongoose.model("otpSeller", otpSellerSchema);
+module.exports = { Seller, OtpSeller };
