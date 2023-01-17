@@ -17,7 +17,7 @@ module.exports.getCategory=(req, res) => {
 module.exports.addCategory =  (req, res) => {
     const { productId } = req.body;
     const categoryId = uuidv4(); 
-    WishListModel.create({ sellerId,categoryId, productId})
+    CategoryModel.create({ sellerId,categoryId, productId})
         .then(result => {
             res.status(201).send({ message: "Category added Successfully", result: "result" })
         })
@@ -32,7 +32,7 @@ module.exports.addCategory =  (req, res) => {
 module.exports.removeCategory = (req, res) => {
     const { categoryId } = req.body;
 
-    WishListModel.findOneAndDelete({ categoryId : categoryId })
+    CategoryModel.findOneAndDelete({ categoryId : categoryId })
         .then(result => {
             res.status(200).send({ message: "Category removed Successfully" })
         })
