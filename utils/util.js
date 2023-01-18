@@ -26,13 +26,13 @@ module.exports.compareHash = (data, hash) => {
 // }
 
 
-// module.exports.signout = async (refreshToken) => {
-//   const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
-//   if (!refreshTokenDoc) {
-//     throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
-//   }
-//   await refreshTokenDoc.remove();
-// };
+module.exports.signout = async (refreshToken) => {
+  const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
+  if (!refreshTokenDoc) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
+  }
+  await refreshTokenDoc.remove();
+};
 
 
 
