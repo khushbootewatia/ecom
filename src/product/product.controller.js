@@ -1,14 +1,11 @@
-// const productSchema = require('../product/product.model')
 const productSchema = require("../product/product.model")
 const sellerSchema = require('../seller/seller.model')
-const { AppError } = require("../../utils/errorHandler");
-const {upload} = require('../../utils/awsS3')
+const AppError = require('../errorHandler/appError')
+const { upload } = require('../../utils/awsS3')
 const { application } = require('express')
 
 const productCreation = async function (req, res, next) {
     try {
-        // const sellerId = req.params.sellerId
-        // console.log(sellerId);               
         const data = req.body
         // let files = req.files
         let location = []
@@ -17,15 +14,9 @@ const productCreation = async function (req, res, next) {
         }
         data.image = location
         console.log(req.files[0].location);
-             
-        // const findSeller = await sellerSchema.Seller.findOne({ _id:sellerId})
-        // console.log(findSeller)        
+        const sellerId = await sellerSchema.Seller.findOne({ email1: req.decodedToken.email })
 
-        await productSchema.save({ sellerId })
-        // if (!findSeller)
-        //     throw new AppError("provide valid sellerId", 400)
-         
-        const product = await productSchema.create(data)
+        const product = await productSchema.create({ ...data, sellerId: sellerId._id })
         return res.status(200).send({ status: true, result: product })
     }
     catch (error) {
@@ -34,15 +25,14 @@ const productCreation = async function (req, res, next) {
 }
 
 
+
 const getAllProducts = async function (req, res) {
     try {
         const queryParams = req.query;
 
-        const data = await productSchema.find({ isDeleted: false, ...queryParams })
-
-        const sortedProducts = data.sort((a, b) =>
-            a.productName.localeCompare(b.productName)
-        )
+        const data = await productSchema.find({ isDeleted: false, ...queryParams }).sort({ productPrice: 1 })
+        if (data.length)
+            res.send({ status: false, msg: "not found"})
         res.status(200).send({ status: true, msg: sortedProducts })
     }
     catch (error) {
