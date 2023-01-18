@@ -6,7 +6,7 @@ const schema = Joi.object({
     email: Joi.string().email().lowercase().required(),
     address: Joi.string().required(),
     password: Joi.string().required().min(6),
-    mobile: Joi.string().regex(/^[0-9]{10}$/).required(),
+    mobile: Joi.string().length(10),
     accountHolderName: Joi.string().required(),
     accountNumber: Joi.string().required(),
     ifscCode: Joi.required(),

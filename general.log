@@ -420,7 +420,6 @@ Jan-11-2023 12:11:22 [info] {"message":"localhost:3000/api/seller/forgetPassword
 Jan-11-2023 14:49:54 [info] {"message":"localhost:3000/api/sller/forgetPasswordFunc - POST - ::1"}
 >>>>>>> features/yatin/seller
 Jan-12-2023 11:57:13 [info] {"message":"localhost:3000/api/sellerr/verifyChangedOtp - POST - ::1"}
-<<<<<<< HEAD
 Jan-12-2023 16:30:18 [info] {"message":"localhost:3000/ - GET - ::1"}
 Jan-16-2023 11:03:31 [info] {"message":"localhost:3000/api/seller/signup - POST - ::1"}
 Jan-16-2023 11:04:25 [info] {"message":"localhost:3000/api/seller/signup - POST - ::1"}
@@ -541,12 +540,10 @@ Jan-17-2023 13:42:08 [error] {"message":"Error: {reference: validationMiddleware
 Jan-17-2023 13:42:28 [error] {"message":"Error: {reference: validationMiddleware, message: email is required, errorCode: 412, errors: [], error: email is required}"}
 Jan-17-2023 13:42:46 [error] {"message":"Error: {reference: async (req, res, next) => {\r\n  try{\r\n    const reference = verifyChangedOtp;\r\n  let { email, otp, newPassword } = req.body;\r\n  const verifyingOtp = await OtpSeller.findOne({ email });\r\n    if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {\r\n      throw new AppError(reference, \"Incorrect Otp or Bad request\", 400);\r\n    }\r\n  const hash = await bcrypt.hash(newPassword, 10);\r\n  await Seller.findOneAndUpdate({ email: { $gte: email } }, { password: hash });\r\n  await OtpSeller.findOneAndDelete({ email: { $gte: email } });\r\n  res.send(\"Password Updated\");\r\n}catch (error) {\r\n  error.reference = error.reference ? error.reference : \"POST /seller/verifyChangedOtp\";\r\n  next(error);\r\n}\r\n}, message: Incorrect Otp or Bad request, errorCode: 400, errors: [], error: Incorrect Otp or Bad request}"}
 Jan-17-2023 13:42:51 [error] {"message":"Error: {reference: validationMiddleware, message: email is required, errorCode: 412, errors: [], error: email is required}"}
-=======
 Jan-13-2023 20:42:09 [error] {"message":"400 - Unexpected token } in JSON at position 14"}
 Jan-13-2023 20:42:09 [error] {"message":"400 - Unexpected token } in JSON at position 14"}
 Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at position 33"}
 Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at position 33"}
->>>>>>> da6afeaf85b20773743efe052a071fdf054b5f92
 Jan-17-2023 15:50:44 [info] http://localhost:3000/api/seller/signup - POST METHOD  
 Jan-17-2023 15:50:44 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
 Jan-17-2023 15:50:49 [info] http://localhost:3000/api/seller/signup - POST METHOD  
@@ -593,3 +590,142 @@ Jan-18-2023 00:24:20 [info] http://localhost:3000/api/seller/signup - POST METHO
 Jan-18-2023 00:24:21 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
 Jan-18-2023 00:24:58 [info] http://localhost:3000/api/seller/signup - POST METHOD  
 Jan-18-2023 00:25:21 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:07:56 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:08:38 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-17-2023 16:13:08 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:13:43 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-17-2023 16:14:51 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-17-2023 16:14:51 [error] Error: {reference: verifyOtp, message: Incorrect Otp, errorCode: 400, errors: [], error: Incorrect Otp} 
+Jan-17-2023 16:17:03 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:17:03 [error] Error: {reference: signup, message: Seller already exists, errorCode: 409, errors: [], error: Seller already exists} 
+Jan-17-2023 16:17:23 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:17:48 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-18-2023 13:39:30 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:42:07 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:43:38 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:48:19 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:52:10 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:53:36 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:54:10 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:54:50 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 13:55:49 [info] http://localhost:3000/api/user/signUp - POST METHOD  
+Jan-18-2023 14:00:45 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:00:54 [info] http://localhost:3000/api/checkOut - POST METHOD  
+Jan-18-2023 14:01:27 [info] http://localhost:3000/api/checkOut - GET METHOD  
+Jan-18-2023 14:01:50 [info] http://localhost:3000/api/checkout - GET METHOD  
+Jan-18-2023 14:01:57 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:03:25 [info] http://localhost:3000/api/checkOut - POST METHOD  
+Jan-18-2023 14:05:20 [info] http://localhost:3000/api/checkOut - POST METHOD  
+Jan-18-2023 14:08:55 [info] http://localhost:3000/api/checkOut - POST METHOD  
+Jan-18-2023 14:08:56 [info] http://localhost:3000/api/checkOut - POST METHOD  
+Jan-18-2023 14:09:10 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:10:19 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:10:43 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:11:34 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:13:18 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:17:49 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:19:33 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:20:30 [info] http://localhost:3000/api/checkout - POST METHOD  
+Jan-18-2023 14:20:36 [info] http://localhost:3000/api/checkOut - POST METHOD  
+Jan-18-2023 14:33:37 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 14:33:37 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot destructure property 'houseNo' of 'req.body.homeAddress' as it is undefined.} 
+Jan-18-2023 14:49:31 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 14:49:31 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: cart is not defined} 
+Jan-18-2023 14:51:33 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 14:51:33 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot destructure property 'houseNo' of 'req.body.homeAddress' as it is undefined.} 
+Jan-18-2023 15:00:38 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:00:38 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: User.findOne is not a function} 
+Jan-18-2023 15:01:08 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:01:08 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'houseNo')} 
+Jan-18-2023 15:02:04 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:02:05 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'houseNo')} 
+Jan-18-2023 15:03:08 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:03:08 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:03:21 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:03:23 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:03:28 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:03:28 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:07:25 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:07:25 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:07:46 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:07:46 [error] Error: {reference: checkOut, message: Area is required, errorCode: 400, errors: [], error: Area is required} 
+Jan-18-2023 15:08:06 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:08:06 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:08:22 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:08:22 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:08:42 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:08:42 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:09:10 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:09:10 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:09:12 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:09:12 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:09:53 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:09:53 [error] Error: {reference: checkOut, message: State is required, errorCode: 400, errors: [], error: State is required} 
+Jan-18-2023 15:10:21 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:10:21 [error] Error: {reference: checkOut, message: Country is required, errorCode: 400, errors: [], error: Country is required} 
+Jan-18-2023 15:10:42 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:10:42 [error] Error: {reference: checkOut, message: Country is required, errorCode: 400, errors: [], error: Country is required} 
+Jan-18-2023 15:11:48 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:14:23 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:17:26 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:27:00 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:27:00 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: homeAddress is not defined} 
+Jan-18-2023 15:27:35 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:29:54 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:30:29 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:36:02 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:37:10 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:37:44 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:38:19 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:38:32 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 15:45:56 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 15:46:14 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 15:46:14 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
+Jan-18-2023 15:48:16 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-18-2023 15:48:16 [error] Error: {reference: validationMiddleware, message: otp must be a number, errorCode: 412, errors: [], error: otp must be a number} 
+Jan-18-2023 15:48:22 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-18-2023 15:48:38 [info] http://localhost:3000/api/seller/signin - POST METHOD  
+Jan-18-2023 15:52:26 [info] http://localhost:3000/api/seller/forgetPassword - GET METHOD  
+Jan-18-2023 15:52:35 [info] http://localhost:3000/api/seller/forgetPassword - POST METHOD  
+Jan-18-2023 15:52:35 [error] Error: {reference: validationMiddleware, message: email must be a valid email, errorCode: 412, errors: [], error: email must be a valid email} 
+Jan-18-2023 15:52:40 [info] http://localhost:3000/api/seller/forgetPassword - POST METHOD  
+Jan-18-2023 15:52:40 [error] Error: {reference: validationMiddleware, message: email must be a valid email, errorCode: 412, errors: [], error: email must be a valid email} 
+Jan-18-2023 15:52:48 [info] http://localhost:3000/api/seller/forgetPassword - POST METHOD  
+Jan-18-2023 15:54:09 [info] http://localhost:3000/api/seller/verifyChangedOtp - POST METHOD  
+Jan-18-2023 15:54:13 [info] http://localhost:3000/api/seller/verifyChangedOtp - POST METHOD  
+Jan-18-2023 15:54:13 [error] Error: {reference: async (req, res, next) => {
+  try{
+    const reference = verifyChangedOtp;
+  let { email, otp, newPassword } = req.body;
+  const verifyingOtp = await Otp.findOne({ email });
+    if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
+      throw new AppError(reference, "Incorrect Otp or Bad request", 400);
+    }
+  const hash = await bcrypt.hash(newPassword, 10);
+  await Seller.findOneAndUpdate({ email: { $gte: email } }, { password: hash });
+  await Otp.findOneAndDelete({ email: { $gte: email } });
+  res.send("Password Updated");
+}catch (error) {
+  error.reference = error.reference ? error.reference : "POST /seller/verifyChangedOtp";
+  next(error);
+}
+}, message: Incorrect Otp or Bad request, errorCode: 400, errors: [], error: Incorrect Otp or Bad request} 
+Jan-18-2023 16:14:52 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 16:14:52 [error] Error: {reference: validationMiddleware, message: mobile length must be 10 characters long, errorCode: 412, errors: [], error: mobile length must be 10 characters long} 
+Jan-18-2023 16:50:28 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 16:50:28 [error] Error: {reference: validationMiddleware, message: mobile length must be 10 characters long, errorCode: 412, errors: [], error: mobile length must be 10 characters long} 
+Jan-18-2023 16:50:51 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 16:50:51 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'city')} 
+Jan-18-2023 17:07:50 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:07:50 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'houseNo')} 
+Jan-18-2023 17:08:54 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:08:54 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'city')} 
+Jan-18-2023 17:10:14 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 17:10:44 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:10:44 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of null (reading 'homeAddress')} 
+Jan-18-2023 17:19:26 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:20:18 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:20:20 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:21:56 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:23:09 [info] http://localhost:3000/api/checkOut/checkOut - POST METHOD  
+Jan-18-2023 17:23:09 [error] Error: {reference: checkOut, message: homeAddress is required, errorCode: 400, errors: [], error: homeAddress is required} 

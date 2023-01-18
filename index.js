@@ -5,6 +5,7 @@ const userRoute = require('./src/user/user.route')
 const wishlistRoute = require('./src/wishlist/wishlist.route')
 const route = require('./src/user/user.route')
 const sellerRoute = require('./src/seller/seller.route')
+const checkOutRoute = require('./src/checkout/checkout.route')
 //const forgetPasswordRoute = require("./src/forgetPassword/forgetPassword.route")
 
 const logger = require('./utils/logger')
@@ -30,6 +31,7 @@ app.use('/api/product',apiLogger,productRoute)
 app.use('/api/wishlist',apiLogger, wishlistRoute)
 app.use('/api/category',apiLogger, categoryRoute)
 app.use('/api/cart',apiLogger,cartRoute)
+app.use('/api/checkOut',apiLogger,checkOutRoute);
 
 // app.all('*', (req, res, next) => {
 //     throw new appError(`Requested URL localhost:5001${req.path} not found!`, 404);

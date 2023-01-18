@@ -1,11 +1,8 @@
 Jan-06-2023 14:16:32 [error] {"message":"text error"}
 Jan-06-2023 14:17:41 [error] {"message":"text error"}
 Jan-06-2023 14:27:35 [error] {"message":"text error"}
-<<<<<<< HEAD
 Jan-06-2023 15:47:39 [error] {"message":"text error"}
 Jan-09-2023 14:59:07 [error] {"message":"text error"}
-=======
->>>>>>> features/yatin/seller
 Jan-06-2023 17:24:18 [error] {"message":"text error"}
 Jan-06-2023 17:27:09 [error] {"message":"text error"}
 Jan-06-2023 17:28:46 [error] {"message":"text error"}
@@ -269,6 +266,7 @@ Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at po
 Jan-17-2023 15:50:44 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
 Jan-17-2023 15:50:57 [error] Error: {reference: validationMiddleware, message: password is required, errorCode: 412, errors: [], error: password is required} 
 Jan-17-2023 15:51:10 [error] Error: {reference: changePassword, message: Current Password Incorrect, errorCode: 401, errors: [], error: Current Password Incorrect} 
+<<<<<<< HEAD
 Jan-18-2023 00:00:20 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
 Jan-18-2023 00:00:26 [error] Error: {reference: validationMiddleware, message: name length must be less than or equal to 10 characters long, errorCode: 412, errors: [], error: name length must be less than or equal to 10 characters long} 
 Jan-18-2023 00:00:47 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
@@ -286,3 +284,55 @@ Jan-18-2023 00:21:33 [error] Error: {reference: POST /seller/signup, message: Du
 Jan-18-2023 00:21:35 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
 Jan-18-2023 00:23:37 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
 Jan-18-2023 00:24:21 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+=======
+Jan-17-2023 16:14:51 [error] Error: {reference: verifyOtp, message: Incorrect Otp, errorCode: 400, errors: [], error: Incorrect Otp} 
+Jan-17-2023 16:17:03 [error] Error: {reference: signup, message: Seller already exists, errorCode: 409, errors: [], error: Seller already exists} 
+>>>>>>> 576507919095258be64b7180645d9317be270e48
+Jan-18-2023 14:33:37 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot destructure property 'houseNo' of 'req.body.homeAddress' as it is undefined.} 
+Jan-18-2023 14:49:31 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: cart is not defined} 
+Jan-18-2023 14:51:33 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot destructure property 'houseNo' of 'req.body.homeAddress' as it is undefined.} 
+Jan-18-2023 15:00:38 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: User.findOne is not a function} 
+Jan-18-2023 15:01:08 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'houseNo')} 
+Jan-18-2023 15:02:05 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'houseNo')} 
+Jan-18-2023 15:03:08 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:03:23 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:03:28 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:07:25 [error] Error: {reference: checkOut, message: House No is required, errorCode: 400, errors: [], error: House No is required} 
+Jan-18-2023 15:07:46 [error] Error: {reference: checkOut, message: Area is required, errorCode: 400, errors: [], error: Area is required} 
+Jan-18-2023 15:08:06 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:08:22 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:08:42 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:09:10 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:09:12 [error] Error: {reference: checkOut, message: City is required, errorCode: 400, errors: [], error: City is required} 
+Jan-18-2023 15:09:53 [error] Error: {reference: checkOut, message: State is required, errorCode: 400, errors: [], error: State is required} 
+Jan-18-2023 15:10:21 [error] Error: {reference: checkOut, message: Country is required, errorCode: 400, errors: [], error: Country is required} 
+Jan-18-2023 15:10:42 [error] Error: {reference: checkOut, message: Country is required, errorCode: 400, errors: [], error: Country is required} 
+Jan-18-2023 15:27:00 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: homeAddress is not defined} 
+Jan-18-2023 15:46:14 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
+Jan-18-2023 15:48:16 [error] Error: {reference: validationMiddleware, message: otp must be a number, errorCode: 412, errors: [], error: otp must be a number} 
+Jan-18-2023 15:52:35 [error] Error: {reference: validationMiddleware, message: email must be a valid email, errorCode: 412, errors: [], error: email must be a valid email} 
+Jan-18-2023 15:52:40 [error] Error: {reference: validationMiddleware, message: email must be a valid email, errorCode: 412, errors: [], error: email must be a valid email} 
+Jan-18-2023 15:54:13 [error] Error: {reference: async (req, res, next) => {
+  try{
+    const reference = verifyChangedOtp;
+  let { email, otp, newPassword } = req.body;
+  const verifyingOtp = await Otp.findOne({ email });
+    if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
+      throw new AppError(reference, "Incorrect Otp or Bad request", 400);
+    }
+  const hash = await bcrypt.hash(newPassword, 10);
+  await Seller.findOneAndUpdate({ email: { $gte: email } }, { password: hash });
+  await Otp.findOneAndDelete({ email: { $gte: email } });
+  res.send("Password Updated");
+}catch (error) {
+  error.reference = error.reference ? error.reference : "POST /seller/verifyChangedOtp";
+  next(error);
+}
+}, message: Incorrect Otp or Bad request, errorCode: 400, errors: [], error: Incorrect Otp or Bad request} 
+Jan-18-2023 16:14:52 [error] Error: {reference: validationMiddleware, message: mobile length must be 10 characters long, errorCode: 412, errors: [], error: mobile length must be 10 characters long} 
+Jan-18-2023 16:50:28 [error] Error: {reference: validationMiddleware, message: mobile length must be 10 characters long, errorCode: 412, errors: [], error: mobile length must be 10 characters long} 
+Jan-18-2023 16:50:51 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'city')} 
+Jan-18-2023 17:07:50 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'houseNo')} 
+Jan-18-2023 17:08:54 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of undefined (reading 'city')} 
+Jan-18-2023 17:10:44 [error] Error: {reference: POST /checkOut, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of null (reading 'homeAddress')} 
+Jan-18-2023 17:23:09 [error] Error: {reference: checkOut, message: homeAddress is required, errorCode: 400, errors: [], error: homeAddress is required} 

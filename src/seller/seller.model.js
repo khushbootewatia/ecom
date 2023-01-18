@@ -59,7 +59,7 @@ const sellerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const otpSellerSchema = Schema(
+const otpSchema = Schema(
   {
     email: {
       type: String,
@@ -88,5 +88,5 @@ sellerSchema.methods.generateJWT = function () {
 };
 
 const Seller = mongoose.model("Seller", sellerSchema);
-const OtpSeller = mongoose.model("otpSeller", otpSellerSchema);
-module.exports = { Seller, OtpSeller };
+const Otp = mongoose.model("otp", otpSchema);
+module.exports = { Seller, Otp };
