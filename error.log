@@ -269,3 +269,5 @@ Jan-16-2023 15:07:12 [error] {"message":"400 - Unexpected token \n in JSON at po
 Jan-17-2023 15:50:44 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
 Jan-17-2023 15:50:57 [error] Error: {reference: validationMiddleware, message: password is required, errorCode: 412, errors: [], error: password is required} 
 Jan-17-2023 15:51:10 [error] Error: {reference: changePassword, message: Current Password Incorrect, errorCode: 401, errors: [], error: Current Password Incorrect} 
+Jan-17-2023 16:14:51 [error] Error: {reference: verifyOtp, message: Incorrect Otp, errorCode: 400, errors: [], error: Incorrect Otp} 
+Jan-17-2023 16:17:03 [error] Error: {reference: signup, message: Seller already exists, errorCode: 409, errors: [], error: Seller already exists} 

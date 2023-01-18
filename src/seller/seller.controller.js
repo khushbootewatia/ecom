@@ -1,4 +1,5 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+
 const util = require("../../utils/util");
 const { Seller, OtpSeller } = require("../seller/seller.model");
 const sellerService = require("./seller.service");
@@ -58,7 +59,7 @@ const verifyOtp = async (req, res, next) => {
     let { email, otp } = req.body;
     const verifyingOtp = await OtpSeller.findOne({ email });
     if (!verifyingOtp || !util.compareHash(otp, verifyingOtp.otp)) {
-      throw new AppError(reference, "Incorrect Otp", 400);
+      throw new AppError(reference, "Incorrect Otp or bad request", 400);
     }
     await Seller.findOneAndUpdate(
       { email: { $gte: email } },

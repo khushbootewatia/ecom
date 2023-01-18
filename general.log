@@ -556,3 +556,13 @@ Jan-17-2023 15:51:02 [info] http://localhost:3000/api/seller/signin - POST METHO
 Jan-17-2023 15:51:10 [info] http://localhost:3000/api/seller/changePassword - POST METHOD  
 Jan-17-2023 15:51:10 [error] Error: {reference: changePassword, message: Current Password Incorrect, errorCode: 401, errors: [], error: Current Password Incorrect} 
 Jan-17-2023 15:51:15 [info] http://localhost:3000/api/seller/changePassword - POST METHOD  
+Jan-17-2023 16:07:56 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:08:38 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-17-2023 16:13:08 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:13:43 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-17-2023 16:14:51 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
+Jan-17-2023 16:14:51 [error] Error: {reference: verifyOtp, message: Incorrect Otp, errorCode: 400, errors: [], error: Incorrect Otp} 
+Jan-17-2023 16:17:03 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:17:03 [error] Error: {reference: signup, message: Seller already exists, errorCode: 409, errors: [], error: Seller already exists} 
+Jan-17-2023 16:17:23 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-17-2023 16:17:48 [info] http://localhost:3000/api/seller/verifyOtp - POST METHOD  
