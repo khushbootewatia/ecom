@@ -556,3 +556,40 @@ Jan-17-2023 15:51:02 [info] http://localhost:3000/api/seller/signin - POST METHO
 Jan-17-2023 15:51:10 [info] http://localhost:3000/api/seller/changePassword - POST METHOD  
 Jan-17-2023 15:51:10 [error] Error: {reference: changePassword, message: Current Password Incorrect, errorCode: 401, errors: [], error: Current Password Incorrect} 
 Jan-17-2023 15:51:15 [info] http://localhost:3000/api/seller/changePassword - POST METHOD  
+Jan-18-2023 00:00:20 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:00:20 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
+Jan-18-2023 00:00:26 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:00:26 [error] Error: {reference: validationMiddleware, message: name length must be less than or equal to 10 characters long, errorCode: 412, errors: [], error: name length must be less than or equal to 10 characters long} 
+Jan-18-2023 00:00:47 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:00:47 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:10:25 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:10:25 [error] Error: {reference: signup, message: Seller already exists, errorCode: 409, errors: [], error: Seller already exists} 
+Jan-18-2023 00:10:45 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:10:47 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:11:46 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:11:47 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:13:24 [info] http://localhost:3000/api/seller/signin - POST METHOD  
+Jan-18-2023 00:14:47 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:14:48 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:15:34 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:15:34 [error] Error: {reference: validationMiddleware, message: name is required, errorCode: 412, errors: [], error: name is required} 
+Jan-18-2023 00:15:40 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:15:40 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:20:17 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:20:17 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:20:35 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:20:35 [error] Error: {reference: validationMiddleware, message: mobile with value 111111111 fails to match the required pattern: /^[0-9]{10}$/, errorCode: 412, errors: [], error: mobile with value 111111111 fails to match the required pattern: /^[0-9]{10}$/} 
+Jan-18-2023 00:20:43 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:20:43 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:20:59 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:21:00 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:21:33 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:21:33 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:21:35 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:21:35 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:23:37 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:23:37 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:24:20 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:24:21 [error] Error: {reference: POST /seller/signup, message: Duplicate Key Violates unique constraint, errorCode: 412, errors: [], error: E11000 duplicate key error collection: ecommerce.sellers index: account.accountNumber_1 dup key: { account.accountNumber: null }} 
+Jan-18-2023 00:24:58 [info] http://localhost:3000/api/seller/signup - POST METHOD  
+Jan-18-2023 00:25:21 [info] http://localhost:3000/api/seller/signup - POST METHOD  

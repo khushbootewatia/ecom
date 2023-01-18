@@ -20,6 +20,7 @@ const {
 
 const signUp = async (req, res, next) => {
   try {
+    console.log(req.body)
     const { email } = req.body;
     const reference = "signup";
     const sellerEmail = await sellerService.getSeller({ email });
@@ -27,6 +28,7 @@ const signUp = async (req, res, next) => {
       throw new AppError(reference, "Seller already exists", 409);
     }
     const hash = await bcrypt.hash(req.body.password, 10);
+    console.log("<<<<<<");
     const seller = await Seller.create({
       name: req.body.name,
       email: req.body.email,
