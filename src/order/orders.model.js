@@ -41,19 +41,19 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
-      image: {
-        type: String,
-        required: true,
-      },
+      // image: {
+      //   type: String,
+      //   required: true,
+      // },
       product: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: "Product",
         required: true,
       },
     },
   ],
   user: {
-    type: mongoose.Schema.ObjectId,
+    type: mongoose.SchemaTypes.ObjectId,
     ref: "User",
     required: true,
   },

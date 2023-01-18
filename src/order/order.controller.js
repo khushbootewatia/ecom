@@ -3,6 +3,7 @@ const Product = require("../product/product.model");
 
 // Create new Order
 exports.newOrder = async (req, res, next) => {
+  console.log(req.user)
   const {
     shippingInfo,
     orderItems,
@@ -22,7 +23,7 @@ exports.newOrder = async (req, res, next) => {
     shippingPrice,
     totalPrice,
     paidAt: Date.now(),
-    user: req.user._id,
+    user: req.user._id
   });
 
   res.status(201).json({
@@ -50,7 +51,7 @@ exports.getSingleOrder = async (req, res, next) => {
 
 // get logged in user Orders
 exports.myOrders = async (req, res, next) => {
-  const orders = await Order.find({ user: req.user._id });
+  const orders = await Order.findOne({ user: req.user._id });
 
   res.status(200).json({
     success: true,
