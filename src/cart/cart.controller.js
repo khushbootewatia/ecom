@@ -8,6 +8,8 @@ const { AppError } = require('../../utils/errorHandler');
 
 //******************************Add new item in user cart*************************************
 const addItemInCart = (req, res, next) => {
+   
+   
     const { userId, categoryId, productId, qty } = req.body;
     const cartItemId = uuidv4();
     try {

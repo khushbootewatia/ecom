@@ -13,7 +13,7 @@ const { AppError } = require("../../utils/errorHandler");
 const signUp = async (req, res, next) => {
   try {
 
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
 
     if (!email || !name || !password) {
       throw new AppError("signUp", "fields is required", 400)
@@ -28,12 +28,10 @@ const signUp = async (req, res, next) => {
         name, email, password
       })
     }
-    const otp = util.generateOtp();
-    const hashedOtp = util.generateHash(otp)
     await TransientUser.findOneAndUpdate({ email: email }, { $set: { otpHash: hashedOtp } }, { upsert: true }).then(update => { //TODO: move otp related functions to otp module
       const payload = { to: email, otp }
       sendGrid.sendEmail(payload)
-      res.status(200).send({ "message": "Otp send successfully!" });
+      res.status(200).json({ "message": "Otp send successfully!" });
     })
 
   } catch (error) {
@@ -56,16 +54,16 @@ const verifyOtp = async (req, res, next) => { //TODO: move this function to otp 
     if (transientUsers) {
       let user = await User.findOneAndUpdate({ email }, { $set: { isVerified: true } }, { new: true })
       if (user) {
-      
-          if (user && user.isVerified) {
-            return res.status(200).send({ "message": "otp verified successfully" })
-          }
-          throw new AppError(verifyOtp, "something went wrong please try again", 400)
+
+        if (user && user.isVerified) {
+          return res.status(200).send({ "message": "otp verified successfully" })
         }
+        throw new AppError(verifyOtp, "something went wrong please try again", 400)
       }
     }
+  }
 
-  
+
   catch (error) {
     error.reference = error.reference ? error.reference : "POST /user/verifyOtp";
     next(error);
@@ -81,16 +79,16 @@ const signIn = async (req, res, next) => {
   const { email, password } = req.body
   try {
     const signInUser = await User.findOne({ email });
-    console.log(signInUser);
-    if (!signInUser) {
+
+    if (signInUser && signInUser.isVerified == false) {
       throw new AppError("signIn", "Invalid Email", 401)
     }
     if (!signInUser || !util.compareHash(password, signInUser.password))
       throw new AppError("signIn", "Incorrect email or password", 403)
     else {
-      console.log(signInUser._id)
+      // console.log(signInUser._id)
       res.json({
-        token: util.generateToken({ id: signInUser._id }), 
+        token: util.generateToken({ id: signInUser._id }),
       })
     }
   } catch (error) {
@@ -118,7 +116,7 @@ const signIn = async (req, res, next) => {
 const forgetPassword = async (req, res, next) => {
   const { email } = req.body;
   try {
-    const user = await User.findOne({ email }) 
+    const user = await User.findOne({ email })
 
     if (!user) {
       throw new AppError(forgetPassword, "User not found", 401);
@@ -130,13 +128,13 @@ const forgetPassword = async (req, res, next) => {
       await user.save()
       const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
       sendGrid.sendEmailForResetPassword(payload)
-      res.status(200).json({ message: "Link send successfully!" }); 
+      res.status(200).json({ message: "Link send successfully!" });
     }
 
   } catch (error) {
     error.reference = error.reference ? error.reference : "POST /user/forgetPassword";
 
-    next(error); 
+    next(error);
   }
 };
 
@@ -154,19 +152,16 @@ const resetPassword = async (req, res, next) => {
     if (!user) {
       throw new AppError(resetPassword, "Password reset token is invalid or has expired.", 401);
     } else {
-      user.password = util.generateHash(password);
+     user.password = util.generateHash(password);
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
-      user.save((err) => { //TODO: avoid using callbacks
-        if (err) {
-          res.status(500).json({ message: err }); //FIXME: error should be handled with global error handler
-        } else {
+      await user.save()
           res.status(200).json({ message: "Password reset successful." });
         }
-      });
+      }
 
-    }
-  }
+
+  
 
   catch (error) {
     error.reference = error.reference ? error.reference : "POST /user/forgetPassword";

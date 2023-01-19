@@ -4,7 +4,7 @@ module.exports.validationMiddleware = (validator)=> (req,res,next)=>{
         const reference = "validationMiddleware"
         const {error} = validator(req.body)
         if (error) {
-            throw new AppError(reference, error.details?.[0]?.message.replace('"', ""), 412)
+            throw new AppError(reference, error.details?.[0]?.message.replace(/"/g, ""), 412)
         }
         next()
     } catch (error) {

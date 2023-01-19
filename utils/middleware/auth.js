@@ -7,7 +7,7 @@ const authentication = function (req, res, next) {
         const bearerToken = req.headers.authorization
         if (typeof bearerToken == 'undefined')
             throw new AppError(reference,"token is missing", 403)
-        let decodedToken = jwt.verify(bearerToken, process.env.KEY)
+        let decodedToken = jwt.verify(bearerToken, process.env.JWT_SECRET_KEY)
             if (!decodedToken) {
                 throw new AppError(reference,"token invalid", 401)
             }

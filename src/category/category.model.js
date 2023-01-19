@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-// const ObjectId = mongoose.Schema.Types.ObjectId
+const ObjectId = mongoose.Schema.Types.ObjectId
 const categorySchema = mongoose.Schema({
  
    
     
     sellerId :{
-        type : String
-        // ref:'Seller'
+        type : ObjectId,
+        ref:'Seller'
     },
     categoryName : {
         type : String

@@ -1,34 +1,42 @@
-const joi = require('joi');
-const { AppError } = require("../../utils/errorHandler");;
-
-const createUserSchema = joi.object().keys({
-    name: joi
-        .string()
-        .required()
-        .error(new Error("Name field is empty or incorrect")),
-
-    email: joi
-        .string()
-        .email()
-        .required()
-        .error(new Error("Email is not correct")),
-
-    password: joi
-        .string()
-        .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
-        .error(new Error("Password should contain one Capital letter, one special character and alphanumeric"))
-})
-
-const validateCreateUserSchema = async (req, res, next) => {
-    const {error} = createUserSchema.validate(req.body)
-    if(!error)
-    next();
-    else {
-        return res.json((`${error.message}`));
-        // throw new AppError("Bad request", 400);
-    }
+const Joi = require('joi');
+const signUpSchema = (payload) => {
+    const schema = Joi.object({
+        name: Joi.string().min(2).max(10).required(),
+        email: Joi.string().email().lowercase().required(),
+        password: Joi.string().pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).required(),
+    })
+    return schema.validate(payload)
 }
-
+const signInSchema = (payload) => {
+    const schema = Joi.object({
+        email: Joi.string().email().lowercase().required(),
+        password: Joi.string().pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).required(),
+    })
+    return schema.validate(payload)
+}
+const verifyOtpSchema = (payload) => {
+    const schema = Joi.object({
+        email: Joi.string().required().email(),
+        otp: Joi.number().required()
+    })
+    return schema.validate(payload)
+}
+const forgetPasswordSchema = (payload) => {
+    const schema = Joi.object({
+        email: Joi.string().required().email()
+    })
+    return schema.validate(payload)
+}
+const resetPasswordSchema = (payload) => {
+    const schema = Joi.object({
+        password: Joi.string().pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).required(),
+    })
+    return schema.validate(payload)
+}
 module.exports = {
-    validateCreateUserSchema
+    signUpSchema,
+    signInSchema,
+    verifyOtpSchema,
+    forgetPasswordSchema,
+    resetPasswordSchema
 }

@@ -3,10 +3,10 @@ const { Schema, model } = require('mongoose');
 
 
 const userSchema = Schema({
-  
+
     email: {
         type: String,
-        required: true, 
+        required: true,
         unique: true
     },
     isVerified: {
@@ -22,8 +22,54 @@ const userSchema = Schema({
         required: true
     },
     resetPasswordToken: String,
-    
+
     resetPasswordExpires: Date,
+    address: {
+        shippingAddress: {
+            state: {
+                type: String
+            },
+            zipcode: {
+                type: String
+            },
+            city: {
+                type: String
+            },
+            street: {
+                type: String
+            },
+            landmark: {
+                type: String
+            },
+            houseNumber: {
+                type: String
+            },
+
+
+        },
+        billingAddress: {
+            state: {
+                type: String
+            },
+            zipcode: {
+                type: String
+            },
+            city: {
+                type: String
+            },
+            street: {
+                type: String
+            },
+            landmark: {
+                type: String
+            },
+            houseNumber: {
+                type: String
+            },
+
+
+        }
+    }
 
 }, { timestamps: true });
 
@@ -37,10 +83,10 @@ const transientUserSchema = Schema(
         otpHash: {
             type: String,
             required: true
-            
+
 
         },
-       
+
         // After 60 seconds it deleted automatically from the database
     },
     {
@@ -52,4 +98,4 @@ const transientUserSchema = Schema(
 
 
 module.exports.User = model('User', userSchema);
-module.exports.TransientUser= model('transient_user', transientUserSchema);
+module.exports.TransientUser = model('Otp', transientUserSchema);
