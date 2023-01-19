@@ -1,41 +1,51 @@
 const CartModel = require('./cart.model')
 
 
-const { v4: uuidv4} = require("uuid");
+const { v4: uuidv4 } = require("uuid");
+const { AppError } = require('../../utils/errorHandler');
 
 
 
-//******************************8add new item in user cart*************************************
-module.exports.addItemInCart =(req, res) => {
+//******************************Add new item in user cart*************************************
+const addItemInCart = (req, res, next) => {
     const { userId, categoryId, productId, qty } = req.body;
-    const cartItemId = uuidv4(); 
-    CartModel.create({ cartItemId, userId, categoryId, productId, qty })
+    const cartItemId = uuidv4();
+    try {
+        CartModel.create({ cartItemId, userId, categoryId, productId, qty })
         .then(result => {
             res.status(201).send({ message: "Item added Success", result: "result" })
         })
         .catch(err => {
-            res.status(400).send({ message: "Failed", error: err })
+            throw new AppError(removeItemInCart,"Failed", 401)
         })
+    } catch (error) {
+        
+    }
+   
 }
 
 //***************************remove item from the cart 3**************************************
-module.exports.removeItemInCart = (req, res) => {
-    const { cartItemId } = req.body;
-
-    CartModel.findOneAndDelete({ cartItemId : cartItemId })
-        .then(result => {
-            res.status(200).send({ message: "Item removed Successfully" })
-        })
-        .catch(err => {
-            res.status(400).send({ message: "Failed", error: err })
-        })
+const removeItemInCart = (req, res, next) => {
+    const { userId,cartItemId } = req.body;
+   try {
+    CartModel.findOneAndDelete({ cartItemId: cartItemId })
+    .then(result => {
+        res.status(200).send({ message: "Item removed Successfully" })
+    })
+    .catch(err => {
+       
+    })
+   } catch (error) {
+    
+   }
+   
 }
 
 //********************************update quantity*********************************************
-module.exports.updateQuantity = (req, res) => {
+const updateQuantity = (req, res, next) => {
     const { cartItemId, qty } = req.body;
 
-    CartModel.findOneAndUpdate({ cartItemId : cartItemId  },{$set:{qty : qty}})
+    CartModel.findOneAndUpdate({ cartItemId: cartItemId }, { $set: { quantity: qty } })
         .then(result => {
             res.status(200).send({ message: "Quantity Updated Successfully" })
         })
@@ -43,3 +53,5 @@ module.exports.updateQuantity = (req, res) => {
             res.status(400).send({ message: "Failed", error: err })
         })
 }
+
+module.exports = { addItemInCart, removeItemInCart, updateQuantity }

@@ -1078,3 +1078,421 @@ Jan-18-2023 13:47:41 [error] Error: {reference: async (req, res, next) => {
 
 
 }, message: incorrect otp, errorCode: 401, errors: [], error: incorrect otp} 
+Jan-18-2023 15:19:46 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:20:12 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:20:12 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ email: 'sunayraufdftela08@gmail.com' })} 
+Jan-18-2023 15:21:31 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:21:31 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ email: 'sunayraufdftela08@gmail.com' })} 
+Jan-18-2023 15:22:32 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:22:32 [error] Error: {reference: POST /user/forgotPassword, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ email: 'sunayraufdftela08@gmail.com' })} 
+Jan-18-2023 15:23:53 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:23:53 [error] Error: {reference: POST /user/forgotPassword, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ email: 'sunayraufdftela08@gmail.com' })} 
+Jan-18-2023 15:23:54 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:23:54 [error] Error: {reference: POST /user/forgotPassword, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ email: 'sunayraufdftela08@gmail.com' })} 
+Jan-18-2023 15:26:53 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:26:53 [error] Error: {reference: POST /user/forgotPassword, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ email: 'sunayraufdftela08@gmail.com' })} 
+Jan-18-2023 15:26:54 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:26:54 [error] Error: {reference: POST /user/forgotPassword, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ email: 'sunayraufdftela08@gmail.com' })} 
+Jan-18-2023 15:29:26 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:30:03 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:30:05 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:30:54 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:31:12 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:33:18 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:38:35 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:40:02 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:40:16 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:41:10 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:43:24 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:46:27 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:46:55 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:48:50 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:51:56 [info] http://localhost:3000/api/user/signin - POST METHOD  
+Jan-18-2023 15:51:56 [error] Error: {reference: async (req, res, next) => {
+  const { email, password } = req.body
+  try {
+    const signInUser = await User.findOne({ email: email });
+    console.log(signInUser);
+    if (!signInUser) {
+      throw new AppError(signIn, "Invalid Email", 401)
+    }
+    if (!signInUser || !util.compareHash(password, signInUser.password))
+      throw new AppError(signIn, "Incorrect email or password", 403)
+    else {
+      console.log(signInUser._id)
+      res.send({
+        token: util.generateToken({ id: signInUser._id }),
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}, message: Incorrect email or password, errorCode: 403, errors: [], error: Incorrect email or password} 
+Jan-18-2023 15:52:02 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:55:45 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:55:45 [error] Error: {reference: async (req, res,next) => {
+  const { email } = req.body;
+try {
+  const user=  await User.findOne({ email: email })
+  // console.log(user);
+  if(!user){
+    throw new AppError(forgetPassword,"User not found",401);
+  }
+  if(user){
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+    await user.save()
+    const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
+        sendGrid.sendEmailForResetPassword(payload)
+        res.status(200).send({ message: "Link send successfully!" });
+  }
+  
+} catch (error) {
+  next(error);
+}
+
+    // if (err) {
+    //   res.status(500).json({ message: err });
+    // } else if (!user) {
+    //   throw new AppError(forgetPassword,"User not found",401);
+    // } else {
+      // // Generate and set a password reset token
+      // const resetToken = crypto.randomBytes(20).toString("hex");
+      // user.resetPasswordToken = resetToken;
+      // user.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+      // user.save((err) => {
+      //   if (err) {
+      //     res.status(500).json({ message: err });
+      //   } else {
+      //     // Send the password reset email
+      //     const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
+      //     sendGrid.sendEmailForResetPassword(payload)
+      //     res.status(200).send({ message: "Link send successfully!" });
+
+
+      //   }
+      // }
+      // );
+      // await user.save()
+      // const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
+      //     sendGrid.sendEmailForResetPassword(payload)
+      //     res.status(200).send({ message: "Link send successfully!" });
+
+    
+  }, message: User not found, errorCode: 401, errors: [], error: User not found} 
+Jan-18-2023 15:57:43 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:57:43 [error] Error: {reference: async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email: email })
+    // console.log(user);
+    if (!user) {
+      throw new AppError(forgetPassword, "User not found", 401);
+    }
+    if (user) {
+      const resetToken = crypto.randomBytes(20).toString("hex");
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+      await user.save()
+      const payload = { to: email, resetToken: resetToken, subject: "verification Email" }
+      sendGrid.sendEmailForResetPassword(payload)
+      res.status(200).send({ message: "Link send successfully!" });
+    }
+
+  } catch (error) {
+    next(error);
+  }
+}, message: User not found, errorCode: 401, errors: [], error: User not found} 
+Jan-18-2023 15:58:01 [info] http://localhost:3000/api/user/forgetPassword - POST METHOD  
+Jan-18-2023 15:59:32 [info] http://localhost:3000/api/user/resetPassword/a3d1d9147a5ed197940ac2719dd66f1f55be0588 - POST METHOD  
+Jan-18-2023 15:59:32 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Query was already executed: User.findOne({ resetPasswordToken: 'a3d1d9147a5ed197940ac271...} 
+Jan-18-2023 15:59:59 [info] http://localhost:3000/api/user/resetPassword/a3d1d9147a5ed197940ac2719dd66f1f55be0588 - POST METHOD  
+Jan-18-2023 16:01:29 [info] http://localhost:3000/api/user/resetPassword/a3d1d9147a5ed197940ac2719dd66f1f55be0588 - POST METHOD  
+Jan-18-2023 16:03:36 [info] http://localhost:3000/api/user/resetPassword/a3d1d9147a5ed197940ac2719dd66f1f55be0588 - POST METHOD  
+Jan-18-2023 16:03:36 [error] Error: {reference: async (req, res,next) => {
+  const { password } = req.body;
+
+  let { token } = req.params;
+  // console.log(User);
+  // console.log(token);
+  try {
+  const user = await User.findOne({ resetPasswordToken: token })
+  if (!user) {
+        throw new AppError( resetPassword,"Password reset token is invalid or has expired.",401);
+      } else {
+        user.password = util.generateHash(password);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        user.save((err) => {
+          if (err) {
+            res.status(500).json({ message: err });
+          } else {
+            res.status(200).json({ message: "Password reset successful." });
+          }
+        });
+  
+      }
+    }
+    
+  catch (error) {
+    next(error);
+  }
+  
+}, message: Password reset token is invalid or has expired., errorCode: 401, errors: [], error: Password reset token is invalid or has expired.} 
+Jan-18-2023 16:25:11 [info] http://localhost:3000/api/user/signin - POST METHOD  
+Jan-18-2023 16:25:11 [error] Error: {reference: async (req, res, next) => {
+  const { email, password } = req.body
+  try {
+    const signInUser = await User.findOne({ email: email });
+    console.log(signInUser);
+    if (!signInUser) {
+      throw new AppError(signIn, "Invalid Email", 401)
+    }
+    if (!signInUser || !util.compareHash(password, signInUser.password))
+      throw new AppError(signIn, "Incorrect email or password", 403)
+    else {
+      console.log(signInUser._id)
+      res.send({
+        token: util.generateToken({ id: signInUser._id }),
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}, message: Incorrect email or password, errorCode: 403, errors: [], error: Incorrect email or password} 
+Jan-18-2023 16:26:09 [info] http://localhost:3000/api/user/signin - POST METHOD  
+Jan-18-2023 16:26:09 [error] Error: {reference: async (req, res, next) => {
+  const { email, password } = req.body
+  try {
+    const signInUser = await User.findOne({ email: email });
+    console.log(signInUser);
+    if (!signInUser) {
+      throw new AppError(signIn, "Invalid Email", 401)
+    }
+    if (!signInUser || !util.compareHash(password, signInUser.password))
+      throw new AppError(signIn, "Incorrect email or password", 403)
+    else {
+      console.log(signInUser._id)
+      res.send({
+        token: util.generateToken({ id: signInUser._id }),
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}, message: Incorrect email or password, errorCode: 403, errors: [], error: Incorrect email or password} 
+Jan-18-2023 16:26:20 [info] http://localhost:3000/api/user/signup - POST METHOD  
+Jan-18-2023 16:26:20 [error] Error: {reference: async (req, res, next) => {
+
+  try {
+
+    let { name, email, password } = req.body;
+
+
+    if (!email || !name || !password) {
+      throw new AppError(signUp, "fields is required", 400)
+    }
+
+    const user = await User.findOne({
+      email: email,
+
+    });
+
+    if (user && user.isVerified) throw new AppError(signUp, "User already registered with the same Email id!", 409);
+    if (!user) {
+      password = util.generateHash(password)
+      await User.create({
+        name, email, password
+      })
+
+    }
+    //otp generate
+
+    const otp = util.generateOtp();
+
+
+
+
+    console.log(otp);
+    const hashedOtp = util.generateHash(otp)
+    console.log(hashedOtp);
+
+    await TransientUser.findOneAndUpdate({ email: email }, { $set: { otpHash: hashedOtp } }, { upsert: true }).then(update => {
+      const payload = { to: email, otp }
+      sendGrid.sendEmail(payload)
+      res.status(200).send({ message: "Otp send successfully!", otp });
+    })
+
+  } catch (error) {
+    error.reference = error.reference ? error.reference : "POST /user/signup";
+
+    next(error)
+
+  }
+}, message: User already registered with the same Email id!, errorCode: 409, errors: [], error: User already registered with the same Email id!} 
+Jan-18-2023 16:26:33 [info] http://localhost:3000/api/user/signin - POST METHOD  
+Jan-18-2023 16:34:16 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Unexpected token } in JSON at position 51} 
+Jan-18-2023 16:34:20 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:34:20 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Cannot read property 'id' of undefined} 
+Jan-18-2023 16:34:22 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:34:22 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Cannot read property 'id' of undefined} 
+Jan-18-2023 16:36:50 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:37:28 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:38:13 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:38:29 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:39:10 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:39:41 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:40:10 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:40:24 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:42:27 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Unexpected token } in JSON at position 52} 
+Jan-18-2023 16:42:53 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:44:10 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:46:00 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:47:07 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:48:17 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 16:50:31 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:00:37 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:00:39 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:00:44 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:01:19 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:01:43 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:01:43 [error] Error: {reference: async (req, res,next) => {
+    // const sellerId = req.decodedToken.id
+  try {
+    const { productId ,categoryName} = req.body;
+    const categoryFound = await CategoryModel.findOne({categoryName})
+    if(categoryFound){
+        throw new AppError(addCategory,"category already exist",409)
+    }
+    CategoryModel.create({ categoryName,
+        productId })
+        .then(result => {
+            res.status(201).send({ message: "Category added Successfully", result: "result" })
+        })
+        .catch(err => {
+            res.status(400).send({ message: "Failed", error: err })
+        })
+  } catch (error) {
+    next(error);
+  }
+    
+}, message: category already exist, errorCode: 409, errors: [], error: category already exist} 
+Jan-18-2023 17:03:16 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:03:16 [error] Error: {reference: async (req, res,next) => {
+    // const sellerId = req.decodedToken.id
+  try {
+    const { productId ,categoryName} = req.body;
+    const categoryFound = await CategoryModel.findOne({categoryName})
+    if(categoryFound){
+        throw new AppError(addCategory,"category already exist",409)
+    }
+    CategoryModel.create({ categoryName,
+        productId })
+        .then(result => {
+            res.status(201).send({ message: "Category added Successfully", result: "result" })
+        })
+        .catch(err => {
+          throw new AppError(addCategory,"Failed",424)
+        })
+  } catch (error) {
+    next(error);
+  }
+    
+}, message: category already exist, errorCode: 409, errors: [], error: category already exist} 
+Jan-18-2023 17:03:17 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:03:17 [error] Error: {reference: async (req, res,next) => {
+    // const sellerId = req.decodedToken.id
+  try {
+    const { productId ,categoryName} = req.body;
+    const categoryFound = await CategoryModel.findOne({categoryName})
+    if(categoryFound){
+        throw new AppError(addCategory,"category already exist",409)
+    }
+    CategoryModel.create({ categoryName,
+        productId })
+        .then(result => {
+            res.status(201).send({ message: "Category added Successfully", result: "result" })
+        })
+        .catch(err => {
+          throw new AppError(addCategory,"Failed",424)
+        })
+  } catch (error) {
+    next(error);
+  }
+    
+}, message: category already exist, errorCode: 409, errors: [], error: category already exist} 
+Jan-18-2023 17:03:24 [info] http://localhost:3000/api/category/add - POST METHOD  
+Jan-18-2023 17:03:24 [error] Error: {reference: async (req, res,next) => {
+    // const sellerId = req.decodedToken.id
+  try {
+    const { productId ,categoryName} = req.body;
+    const categoryFound = await CategoryModel.findOne({categoryName})
+    if(categoryFound){
+        throw new AppError(addCategory,"category already exist",409)
+    }
+    CategoryModel.create({ categoryName,
+        productId })
+        .then(result => {
+            res.status(201).send({ message: "Category added Successfully", result: "result" })
+        })
+        .catch(err => {
+          throw new AppError(addCategory,"Failed",424)
+        })
+  } catch (error) {
+    next(error);
+  }
+    
+}, message: category already exist, errorCode: 409, errors: [], error: category already exist} 
+Jan-18-2023 17:06:07 [info] http://localhost:3000/api/category/remove - POST METHOD  
+Jan-18-2023 17:20:36 [info] http://localhost:3000/api/user/signup - POST METHOD  
+Jan-18-2023 17:20:36 [error] Error: {reference: async (req, res, next) => {
+
+  try {
+
+    let { name, email, password } = req.body;
+
+
+    if (!email || !name || !password) {
+      throw new AppError(signUp, "fields is required", 400)
+    }
+
+    const user = await User.findOne({
+      email: email,
+
+    });
+
+    if (user && user.isVerified) throw new AppError(signUp, "User already registered with the same Email id!", 409);
+    if (!user) {
+      password = util.generateHash(password)
+      await User.create({
+        name, email, password
+      })
+
+    }
+    //otp generate
+
+    const otp = util.generateOtp();
+
+
+
+
+    console.log(otp);
+    const hashedOtp = util.generateHash(otp)
+    console.log(hashedOtp);
+
+    await TransientUser.findOneAndUpdate({ email: email }, { $set: { otpHash: hashedOtp } }, { upsert: true }).then(update => {
+      const payload = { to: email, otp }
+      sendGrid.sendEmail(payload)
+      res.status(200).send({ message: "Otp send successfully!", otp });
+    })
+
+  } catch (error) {
+    error.reference = error.reference ? error.reference : "POST /user/signup";
+
+    next(error)
+
+  }
+}, message: fields is required, errorCode: 400, errors: [], error: fields is required} 
+Jan-18-2023 17:21:13 [info] http://localhost:3000/api/user/signup - POST METHOD  
+Jan-18-2023 17:21:13 [error] Error: {reference: signUp, message: fields is required, errorCode: 400, errors: [], error: fields is required} 

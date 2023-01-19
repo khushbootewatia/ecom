@@ -7,11 +7,11 @@ const userSchema = Schema({
         type:String,
         trim : true,
         unique:true
-   },
+   }, //FIXME: remove userId
    
     email: {
         type: String,
-        required: true,
+        required: true, //TODO: add email indexing
 
     },
     isVerified: {
