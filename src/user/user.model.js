@@ -3,16 +3,11 @@ const { Schema, model } = require('mongoose');
 
 
 const userSchema = Schema({
-   userId:{
-        type:String,
-        trim : true,
-        unique:true
-   }, //FIXME: remove userId
-   
+  
     email: {
         type: String,
-        required: true, //TODO: add email indexing
-
+        required: true, 
+        unique: true
     },
     isVerified: {
         type: Boolean,

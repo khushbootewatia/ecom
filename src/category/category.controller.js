@@ -1,6 +1,6 @@
 const { AppError } = require('../../utils/errorHandler');
 const CategoryModel = require('./category.model');
-
+const {getSeller}= require("../seller/seller.service")
 const getCategory = async (req, res) => {
 
     // const categoryId = req.query.categoryId
@@ -16,7 +16,7 @@ const getCategory = async (req, res) => {
 // **********************************Add Category*******************************************
 
 const addCategory = async (req, res,next) => {
-    // const sellerId = req.decodedToken.id
+   const sellerId = await getSeller(req.decodedToken._id) 
   try {
     const { productId ,categoryName} = req.body;
     const categoryFound = await CategoryModel.findOne({categoryName})
@@ -24,7 +24,7 @@ const addCategory = async (req, res,next) => {
         throw new AppError(addCategory,"Category already exist",409)
     }
     CategoryModel.create({ categoryName,
-        productId })
+        productId ,sellerId})
         .then(result => {
             res.status(201).send({ message: "Category added Successfully", result: "result" })
         })

@@ -3,7 +3,7 @@ const util = require("../../utils/util")
 const crypto = require("crypto")
 const { User, TransientUser } = require('../user/user.model');
 const sendGrid = require("../../services/sendgrid_email")
-const { v4: uuidv4 } = require("uuid");
+
 const { AppError } = require("../../utils/errorHandler");
 
 
@@ -21,7 +21,7 @@ const signUp = async (req, res, next) => {
 
     const user = await User.findOne({ email });
 
-    if (user && user.isVerified) throw new AppError(signUp, "User already registered with the same Email id!", 409);
+    if (user && user.isVerified) throw new AppError("signUp", "User already registered with the same Email id!", 409);
     if (!user) {
       password = util.generateHash(password)
       await User.create({
@@ -56,11 +56,8 @@ const verifyOtp = async (req, res, next) => { //TODO: move this function to otp 
     if (transientUsers) {
       let user = await User.findOneAndUpdate({ email }, { $set: { isVerified: true } }, { new: true })
       if (user) {
-        const uuserId = uuidv4(); //TODO: remove this 
-        let user2 = await User.findOneAndUpdate({ email }, { $set: { userId: uuserId } }, { upsert: true })
-        if (user2) {
-          console.log(user2, "user");
-          if (user2 && user2.isVerified) {
+      
+          if (user && user.isVerified) {
             return res.status(200).send({ "message": "otp verified successfully" })
           }
           throw new AppError(verifyOtp, "something went wrong please try again", 400)
@@ -68,7 +65,7 @@ const verifyOtp = async (req, res, next) => { //TODO: move this function to otp 
       }
     }
 
-  }
+  
   catch (error) {
     error.reference = error.reference ? error.reference : "POST /user/verifyOtp";
     next(error);
