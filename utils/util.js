@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const config = require("../config")
 require('dotenv').config({path: ".env"})
-
+const bytes = require('bytes')
 
 module.exports.generateOtp = () => {
   return Math.floor(Math.pow(10, 3) + Math.random() * 9000)
@@ -16,6 +16,14 @@ module.exports.compareHash = (data, hash) => {
   console.log("data",data,"    hash",hash);
   return bcrypt.compareSync(String(data), hash)
 }
+
+// *****************File Size Converter**********************/
+
+module.exports.convertFileSize = (fileSize) => {
+const fileSizeInBytes = bytes.parse(fileSize);
+return fileSizeInBytes; 
+}
+
 
 // module.exports.generateToken = (userObject) => {
 //   let expireTime;

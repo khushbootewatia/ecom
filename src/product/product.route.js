@@ -2,18 +2,16 @@ const express = require('express')
 const router = express.Router()
 const { productCreation, getAllProducts, deleteById, updateProduct } = require('../product/product.controller')
 const {upload} = require('../../utils/awsS3')
-const {authentic} = require('../../middleware/auth')
+const {authentication} = require('../../utils/middleware/auth')
+const {validationMiddleware} = require('../../utils/middleware/joiValidator')
+const { validateProductSchema } = require('./product.validation')
 
-router.route('/create')
-    .post(upload.array("file"),authentic, productCreation);
+router.post('/create',authentication,validationMiddleware(validateProductSchema),productCreation)
 
-router.route('/getAllProducts')
-    .get(getAllProducts);
+router.get('/getAllProducts',getAllProducts);
 
-router.route('/update/:productId')
-    .put(updateProduct)
+router.put('/update/:productId',updateProduct)
 
-router.route('/delete/:productId')
-    .delete(deleteById)
+router.delete('/delete/:productId',deleteById)
 
 module.exports = router;

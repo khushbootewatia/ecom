@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const util = require("../../utils/util");
 const { Seller, OtpSeller } = require("../seller/seller.model");
+// const otpSeller = require('../seller/seller.model')
+// const sellerSchema = require('../seller/seller.model')
 const sellerService = require("./seller.service");
 const { sendMailer } = require("../../services/nodemailer");
 const { AppError } = require("../../utils/errorHandler");
@@ -88,7 +90,7 @@ const signin = async (req, res, next) => {
       throw new AppError(reference, "Password incorrect", 401);
     }
     res.send({
-      token: util.generateToken({ email }),
+      token: util.generateToken({ id:seller._id}),
     });
   } catch (error) {
     error.reference = error.reference ? error.reference : "POST /seller/signin";

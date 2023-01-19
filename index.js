@@ -3,9 +3,8 @@ const express = require('express')
 const connectDb = require('./config/dbConnection')
 const userRoute = require('./src/user/user.route')
 const wishlistRoute = require('./src/wishlist/wishlist.route')
-const route = require('./src/user/user.route')
 const sellerRoute = require('./src/seller/seller.route')
-//const forgetPasswordRoute = require("./src/forgetPassword/forgetPassword.route")
+const awsRoute = require('./src/upload Image/uploadImage.route')
 
 const logger = require('./utils/logger')
 const {errorHandler} = require('./utils/errorHandler')
@@ -29,18 +28,8 @@ app.use('/api/seller', apiLogger,sellerRoute);
 app.use('/api/product',apiLogger,productRoute)
 app.use('/api/wishlist',apiLogger, wishlistRoute)
 app.use('/api/category',apiLogger, categoryRoute)
+app.use('/api/upload',apiLogger, awsRoute)
 app.use('/api/cart',apiLogger,cartRoute)
-
-// app.all('*', (req, res, next) => {
-//     throw new appError(`Requested URL localhost:5001${req.path} not found!`, 404);
-
-// })
-
-
-// app.all('*', (req, res, next) => {
-//     throw new AppError(`Requested URL localhost:3000${req.path} not found!`, 404);
-
-// })
 
 app.use((error, req, res, next) => {
     return errorHandler(error, res)

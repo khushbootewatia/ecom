@@ -2,10 +2,10 @@ const path = require('path');
 
 const cfg = {
     projectName: process.env.PROJECT_NAME,
-    environment: process.env.NODE_ENV,
-    debug: process.env.DEBUG,
+    // environment: process.env.NODE_ENV,
+    // debug: process.env.DEBUG,
     port: process.env.PORT,
-    TAG: process.env.NODE_ENV,
+    // TAG: process.env.NODE_ENV,
     // uploadDir: path.resolve('./uploads'),
 
     sendgrid: {
