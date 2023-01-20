@@ -1,9 +1,9 @@
 const CategoryModel = require('./category.model');
-
+const CategoryService = require('./category.service')
 module.exports.getCategory=(req, res) => {
    
     const categoryId = req.query.categoryId
-    CategoryModel.find({ categoryId: categoryId })
+    CategoryService.getCategory({ categoryId: categoryId })
         .then(result => {
             res.status(200).send({ message: "Success", data: result })
         }).catch(err => {
@@ -32,7 +32,7 @@ module.exports.addCategory =  (req, res) => {
 module.exports.removeCategory = (req, res) => {
     const { categoryId } = req.body;
 
-    CategoryModel.findOneAndDelete({ categoryId : categoryId })
+    CategoryService.deleteCategory({ categoryId : categoryId })
         .then(result => {
             res.status(200).send({ message: "Category removed Successfully" })
         })

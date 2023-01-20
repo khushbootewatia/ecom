@@ -1,7 +1,9 @@
 const CartModel = require('./cart.model')
+const CartService = require('./cart.services')
 
 
 const { v4: uuidv4} = require("uuid");
+
 
 
 
@@ -22,7 +24,7 @@ module.exports.addItemInCart =(req, res) => {
 module.exports.removeItemInCart = (req, res) => {
     const { cartItemId } = req.body;
 
-    CartModel.findOneAndDelete({ cartItemId : cartItemId })
+    CartService.removeCart({ cartItemId : cartItemId })
         .then(result => {
             res.status(200).send({ message: "Item removed Successfully" })
         })
@@ -35,7 +37,7 @@ module.exports.removeItemInCart = (req, res) => {
 module.exports.updateQuantity = (req, res) => {
     const { cartItemId, qty } = req.body;
 
-    CartModel.findOneAndUpdate({ cartItemId : cartItemId  },{$set:{qty : qty}})
+    CartService.updateCart({ cartItemId : cartItemId  },{$set:{qty : qty}})
         .then(result => {
             res.status(200).send({ message: "Quantity Updated Successfully" })
         })

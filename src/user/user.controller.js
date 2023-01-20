@@ -5,6 +5,8 @@ const { User, TransientUser } = require('../user/user.model');
 const sendGrid = require("../../services/sendgrid_email")
 const { v4: uuidv4} = require("uuid");
 const { AppError } = require("../../utils/errorHandler");
+const userService= require("./user.service")
+
 
 
 
@@ -20,7 +22,7 @@ module.exports.signUp = async (req, res, next) => {
       throw new AppError("fields is required", 400)
     }
    
-    const user = await User.findOne({
+    const user = await userService.getUser({
       email: email,
 
     });
@@ -44,7 +46,7 @@ module.exports.signUp = async (req, res, next) => {
     const hashedOtp = util.generateHash(otp)
     console.log(hashedOtp);
 
-    await TransientUser.findOneAndUpdate({ email: email}, {$set:{otpHash: hashedOtp }},{upsert:true}).then(update=>{
+    await userService.updateTransisentUser({ email: email}, {$set:{otpHash: hashedOtp }},{upsert:true}).then(update=>{
       const payload = { to: email,otp}
     sendGrid.sendEmail(payload)
     res.status(200).send({ message: "Otp send successfully!", otp });
@@ -65,16 +67,16 @@ module.exports.verifyOtp = (req, res) => {
   console.log("email", email,"otpHash",otp)
 
 
-  TransientUser.findOne({ email })
+  userService.getTransisentUser({ email })
     .then( transientUser => {
       console.log("transientUser",!transientUser);
       // console.log("!util.compareHash(otpHash, transientUser.otp)",!util.compareHash(otp, transientUser.otpHash));
       if (!transientUser || !util.compareHash(otp, transientUser.otpHash)) return res.status(200).send({ "message": "incorrect otp" })
       
-      return TransientUser.findOneAndDelete({email:email}).then(value=>{
-        return User.findOneAndUpdate({ email }, { $set: { isVerified: true } }, { new: true })}).then(data=>{
+      return userService.removeTransisentUser({email:email}).then(value=>{
+        return userService.updateUser({ email }, { $set: { isVerified: true } }, { new: true })}).then(data=>{
           const uuserId=uuidv4();
-          return User.findOneAndUpdate({ email },  {$set:{userId: uuserId }},{upsert:true})
+          return userService.updateUser({ email },  {$set:{userId: uuserId }},{upsert:true})
         })
       
       .then(user => {
@@ -101,7 +103,7 @@ module.exports.signin = async (req, res) => {
   const { email, password } = req.body
   const hashedEmail = util.generateHash(email)
   console.log("HE -->  ",hashedEmail);
-  const signinUser = await User.findOne({ email });
+  const signinUser = await userService.getUser({ email });
   if (!signinUser || !util.compareHash(password, signinUser.password))
     throw new AppError("Incorrect email or password")
   if (!signinUser) {
@@ -194,7 +196,7 @@ module.exports.signin = async (req, res) => {
 
 module.exports.forgetPassword =(req, res) => {
   const { email } = req.body;
-  User.findOne({ email: email }, (err, user) => {
+  userService.getUser({ email: email }, (err, user) => {
     console.log(user);
     if (err) {
       res.status(500).json({ message: err });
@@ -229,7 +231,7 @@ module.exports.resetPassword = async (req, res) => {
   let { token } = req.params;
   // console.log(User);
   // console.log(token);
-  User.findOne({ resetPasswordToken: token }, (err, user) => {
+  userService.getUser({ resetPasswordToken: token }, (err, user) => {
 
     if (err) {
       res.status(500).json({ message: err });
