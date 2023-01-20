@@ -15,7 +15,6 @@ const { AppError } = require("../../utils/errorHandler");
 
 
 
-
 //******************************SIGNUP********************************//
 
 const signUp = async (req, res, next) => {
@@ -26,9 +25,8 @@ const signUp = async (req, res, next) => {
     if (!email || !name || !password) {
       throw new AppError("signUp", "fields is required", 400)
     }
-   
-    const user = await User.findOne({
-      email: email,
+
+    const user = await getUser({ email });
 
     if (user && user.isVerified) throw new AppError("signUp", "User already registered with the same Email id!", 409);
     if (!user) {
@@ -37,21 +35,10 @@ const signUp = async (req, res, next) => {
         name, email, password
       })
     }
-    //otp generate
-
-    const otp = util.generateOtp();
-
-    
-
-
-    console.log(otp);
-    const hashedOtp = util.generateHash(otp)
-    console.log(hashedOtp);
-
-    await TransientUser.findOneAndUpdate({ email: email}, {$set:{otpHash: hashedOtp }},{upsert:true}).then(update=>{
-      const payload = { to: email,otp}
-    sendGrid.sendEmail(payload)
-    res.status(200).send({ message: "Otp send successfully!", otp });
+    await updateTransisentUser({ email: email }, { $set: { otpHash: hashedOtp } }, { upsert: true }).then(update => { //TODO: move otp related functions to otp module
+      const payload = { to: email, otp }
+      sendGrid.sendEmail(payload)
+      res.status(200).json({ "message": "Otp send successfully!" });
     })
 
   } catch (error) {
@@ -65,28 +52,17 @@ const signUp = async (req, res, next) => {
 
 //********************************VERIFY OTP*********************************//
 
-module.exports.verifyOtp = (req, res) => {
-  let { email, otp } = req.body;
-  
-  
-  console.log("email", email,"otpHash",otp)
+const verifyOtp = async (req, res, next) => { //TODO: move this function to otp module
+  try {
+    const { email, otp } = req.body;
+    const transientUser = await getTransisentUser({ email }) //TODO: move this to otp service
+    if (!transientUser || !util.compareHash(otp, transientUser.otpHash)) throw new AppError(verifyOtp, "incorrect otp", 401)
+    const transientUsers = await removeTransisentUser({ email: email })
+    if (transientUsers) {
+      let user = await updateUser({ email }, { $set: { isVerified: true } }, { new: true })
+      if (user) {
 
-
-  TransientUser.findOne({ email })
-    .then( transientUser => {
-      console.log("transientUser",!transientUser);
-      // console.log("!util.compareHash(otpHash, transientUser.otp)",!util.compareHash(otp, transientUser.otpHash));
-      if (!transientUser || !util.compareHash(otp, transientUser.otpHash)) return res.status(200).send({ "message": "incorrect otp" })
-      
-      return TransientUser.findOneAndDelete({email:email}).then(value=>{
-        return User.findOneAndUpdate({ email }, { $set: { isVerified: true } }, { new: true })}).then(data=>{
-          const uuserId=uuidv4();
-          return User.findOneAndUpdate({ email },  {$set:{userId: uuserId }},{upsert:true})
-        })
-      
-      .then(user => {
-        console.log(user, "user");
-        if (user && user.isVerified)
+        if (user && user.isVerified) {
           return res.status(200).send({ "message": "otp verified successfully" })
         }
         throw new AppError(verifyOtp, "something went wrong please try again", 400)
@@ -108,17 +84,24 @@ module.exports.verifyOtp = (req, res) => {
 
 const signIn = async (req, res, next) => {
   const { email, password } = req.body
-  const hashedEmail = util.generateHash(email)
-  console.log("HE -->  ",hashedEmail);
-  const signinUser = await User.findOne({ email });
-  if (!signinUser || !util.compareHash(password, signinUser.password))
-    throw new AppError("Incorrect email or password")
-  if (!signinUser) {
-    throw new AppError("Invalid Email or Password", 401)
-  } else {
-    res.send({
-      token: util.generateToken({hashedEmail}),
-    });
+  try {
+    const signInUser = await getUser({ email });
+
+    if (signInUser && signInUser.isVerified == false) {
+      throw new AppError("signIn", "Invalid Email", 401)
+    }
+    if (!signInUser || !util.compareHash(password, signInUser.password))
+      throw new AppError("signIn", "Incorrect email or password", 403)
+    else {
+      res.setHeader("token",util.generateToken({ id: signInUser._id }))
+      res.json({
+        message : "SIGN IN SUCCESS",
+      })
+    }
+  } catch (error) {
+    error.reference = error.reference ? error.reference : "POST /user/signIn";
+
+    next(error)
   }
 }
 
@@ -139,14 +122,13 @@ const signIn = async (req, res, next) => {
 
 const forgetPassword = async (req, res, next) => {
   const { email } = req.body;
-  User.findOne({ email: email }, (err, user) => {
-    console.log(user);
-    if (err) {
-      res.status(500).json({ message: err });
-    } else if (!user) {
-      res.status(404).json({ message: "User not found" });
-    } else {
-      // Generate and set a password reset token
+  try {
+    const user = await getUser({ email })
+
+    if (!user) {
+      throw new AppError(forgetPassword, "User not found", 401);
+    }
+    if (user) {
       const resetToken = crypto.randomBytes(20).toString("hex");
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
@@ -171,9 +153,6 @@ const resetPassword = async (req, res, next) => {
   const { password } = req.body;
 
   let { token } = req.params;
-  // console.log(User);
-  // console.log(token);
-  User.findOne({ resetPasswordToken: token }, (err, user) => {
 
   try {
     const user = await getUser({ resetPasswordToken: token })
