@@ -1,16 +1,19 @@
 const { AppError } = require('../../utils/errorHandler');
 const CategoryModel = require('./category.model');
-const { getSeller } = require("../seller/seller.service")
+const { search, oneSearch } = require("../category/category.service");
+const { getSeller } = require('../seller/seller.service');
 
+
+//********************************Get Category By Name********************************************* */
 
 const getCategory = async (req, res) => {
    
     const categoryName = req.query.categoryName
-    CategoryModel.find({ categoryName })
+   await search({ categoryName })
         .then(result => {
             res.status(200).json({ "message": "Success", data: result })
         }).catch(err => {
-            res.status(400).json({ "message": "Something went wrong", error: err })
+            throw new AppError("getCategory", " Something Went Wrong ", 409)
         })
 }
 
@@ -22,14 +25,14 @@ const addCategory = async (req, res, next) => {
     const sellerId = await getSeller(req.decodedToken._id)
     console.log(sellerId);
     try {
-        const { productId, categoryName } = req.body;
-        const categoryFound = await CategoryModel.findOne({ categoryName })
+        const { categoryName } = req.body;
+        const categoryFound = await oneSearch({ categoryName })
         if (categoryFound) {
             throw new AppError("addCategory", "Category already exist", 409)
         }
         CategoryModel.create({
             categoryName,
-            productId, sellerId
+             sellerId
         })
             .then(result => {
                 res.status(201).json({ message: "Category added Successfully", result: "result" })
@@ -51,7 +54,7 @@ const addCategory = async (req, res, next) => {
 const removeCategory = async (req, res) => {
     const { categoryId, categoryName } = req.body;
     try {
-        categogryExistCheck = CategoryModel.findOneAndDelete({ categoryId, categoryName })
+        categogryExistCheck = remove({ categoryId, categoryName })
 
             .then(result => {
                 res.status(200).json({ message: "Category removed Successfully" })

@@ -11,9 +11,7 @@ const categorySchema = mongoose.Schema({
     categoryName : {
         type : String
     },
-    productId :{
-        type:String
-    }
+   
   
 })
 module.exports = new mongoose.model("category", categorySchema);
