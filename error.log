@@ -277,3 +277,33 @@ Jan-19-2023 15:45:49 [error] Error: {reference: validationMiddleware, message: p
 Jan-19-2023 15:46:08 [error] Error: {reference: validationMiddleware, message: location is not allowed, errorCode: 412, errors: [], error: location is not allowed} 
 Jan-19-2023 16:40:10 [error] Error: {reference: validationMiddleware, message: name is not allowed to be empty, errorCode: 412, errors: [], error: name is not allowed to be empty} 
 Jan-19-2023 18:02:10 [error] Error: {reference: signup, message: Seller already exists, errorCode: 409, errors: [], error: Seller already exists} 
+Jan-20-2023 09:39:16 [error] Error: {reference: POST /product/create, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of null (reading '_id')} 
+Jan-20-2023 09:40:19 [error] Error: {reference: POST /product/create, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of null (reading '_id')} 
+Jan-20-2023 09:41:50 [error] Error: {reference: POST /product/create, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of null (reading '_id')} 
+Jan-20-2023 09:43:20 [error] Error: {reference: POST /product/create, message: Server Error!, errorCode: 500, errors: [], error: Cannot read properties of null (reading '_id')} 
+Jan-20-2023 09:44:47 [error] Error: {reference: POST /product/create, message: Server Error!, errorCode: 500, errors: [], error: this.splitPath is not a function} 
+Jan-20-2023 10:05:38 [error] Error: {reference: Only Seller can create product, message: 400, errorCode: 500, errors: [], error: 400} 
+Jan-20-2023 10:06:30 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: invalid signature} 
+Jan-20-2023 10:13:29 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: invalid signature} 
+Jan-20-2023 10:14:19 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: invalid signature} 
+Jan-20-2023 10:14:55 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: invalid signature} 
+Jan-20-2023 10:15:23 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: invalid signature} 
+Jan-20-2023 10:18:26 [error] Error: {reference: authentication, message: token is missing, errorCode: 403, errors: [], error: token is missing} 
+Jan-20-2023 10:20:41 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: Unexpected token  in JSON at position 31} 
+Jan-20-2023 10:29:38 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: invalid token} 
+Jan-20-2023 10:33:22 [error] Error: {reference: authentication, message: token invalid, errorCode: 401, errors: [], error: token invalid} 
+Jan-20-2023 10:33:51 [error] Error: {reference: authentication, message: token invalid, errorCode: 401, errors: [], error: token invalid} 
+Jan-20-2023 10:34:04 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: decodedToken is not defined} 
+Jan-20-2023 10:34:06 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: decodedToken is not defined} 
+Jan-20-2023 11:24:25 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 11:35:43 [error] Error: {reference: update, message: No products with this Id or might be deleted, errorCode: 404, errors: [], error: No products with this Id or might be deleted} 
+Jan-20-2023 11:41:14 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 11:58:46 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 12:23:23 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 12:34:18 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 16:43:55 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 16:45:47 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 16:49:42 [error] Error: {reference: Anonymous, message: Server Error!, errorCode: 500, errors: [], error: File too large} 
+Jan-20-2023 16:52:27 [error] Error: {reference: LIMIT_FILE_SIZE, message: Invalid Body!, errorCode: 500, errors: [], error: Invalid Body!} 
+Jan-20-2023 16:53:11 [error] Error: {reference: LIMIT_FILE_SIZE, message: Invalid Body!, errorCode: 500, errors: [], error: Invalid Body!} 
+Jan-20-2023 16:53:44 [error] Error: {reference: LIMIT_FILE_SIZE, message: LIMIT_FILE_SIZE, errorCode: 500, errors: [], error: LIMIT_FILE_SIZE} 

@@ -1,14 +1,14 @@
 const aws = require('aws-sdk')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
-require('dotenv').config({path: ".env"})
-const {convertFileSize} = require('../utils/util')
-
+require('dotenv').config({ path: ".env" })
+const { convertFileSize } = require('../utils/util')
+const { AppError } = require('./errorHandler')
 const s3 = new aws.S3({
     accessKeyId: process.env.ACCESSKEYID,
     secretAccessKey: process.env.SECRETACCESSKEY,
     region: 'us-west-2'
-    
+
 })
 
 
@@ -20,12 +20,10 @@ exports.upload = multer({
         bucket: "blogapi",
         metadata: function (req, file, callback) {
             callback(null, { fieldName: file.fieldname })
-            // console.log(file.fieldname)
         },
         key: function (req, file, callback) {
-            callback(null, `productImage/${file.originalname}`)
+            callback(null, `productImage/${Date.now()}${file.originalname}`)
         }
-    }),
-    // fileFilter,
+    }), 
     limits: { fileSize: convertFileSize("5MB"), files: 100 },
 })

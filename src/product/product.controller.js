@@ -4,22 +4,23 @@ const { getSeller } = require('../seller/seller.service')
 const { AppError } = require("../../utils/errorHandler");
 const { upload } = require('../../utils/awsS3')
 const { application } = require('express')
+const Mongoose = require('mongoose')
 
 // ********************************product creation*******************************
 
 const productCreation = async function (req, res, next) {
     try {
+        const reference = "creation"
         const data = req.body
-        // let files = req.files
-        // let location = []
-        // for (let i = 0; i < req.files.length; i++) {
-        //     location.push(req.files[i].location)
-        // }
-        const sellerid = await getSeller({ email: req.decodedToken.email })
-        data.sellerId = sellerid._id
-        // data.productImage = location
+        if(req.user.role === "seller"){
+        data.sellerId = req.user.user._id
+        
         const product = await productSchema.create({ ...data })
         return res.status(200).send({ status: true, result: product })
+        }
+        else {
+            throw new AppError(reference, "Only Seller can create product", 400)
+        }
     }
     catch (error) {
         error.reference = error.reference ? error.reference : "POST /product/create";
@@ -75,9 +76,9 @@ const updateProduct = async function (req, res, next) {
 
 const deleteById = async function (req, res, next) {
     try {
-        const productId = req.params.productId
         const reference = "delete"
-
+        const productId = req.params.productId
+        
         const checkProduct = await getProduct({ _id: productId })
 
         if (checkProduct.isDeleted === true)
