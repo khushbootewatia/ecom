@@ -15,13 +15,11 @@ const categoryRoute = require("./src/category/category.route")
 const apiLogger = require("./utils/apiRoute")
 const port = process.env.PORT
 
-// const multer = require('multer')
-// const multer1 = require('./src/util/aws')
 
 const app = express()
 app.use(express.json());
 connectDb();
-// app.use(errorController)
+
 
 app.use('/api/user', apiLogger,userRoute);
 app.use('/api/seller', apiLogger,sellerRoute);
@@ -36,8 +34,6 @@ app.use((error, req, res, next) => {
 })
 
 
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerDocument = require('./swagger.json');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 

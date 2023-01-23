@@ -41,8 +41,6 @@ const authentication = async function (req, res, next) {
         next(err)
     }
 }
-
-
 module.exports = {
     authentication
 }

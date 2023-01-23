@@ -1,42 +1,73 @@
+const { AppError } = require('../../utils/errorHandler');
 const CategoryModel = require('./category.model');
+const { search, oneSearch } = require("../category/category.service");
+const { getSeller } = require('../seller/seller.service');
 
-module.exports.getCategory=(req, res) => {
+
+//********************************Get Category By Name********************************************* */
+
+const getCategory = async (req, res) => {
    
-    const categoryId = req.query.categoryId
-    CategoryModel.find({ categoryId: categoryId })
+    const categoryName = req.query.categoryName
+   await search({ categoryName })
         .then(result => {
-            res.status(200).send({ message: "Success", data: result })
+            res.status(200).json({ "message": "Success", data: result })
         }).catch(err => {
-            res.status(400).send({ message: "Something went wrong", error: err })
+            throw new AppError("getCategory", " Something Went Wrong ", 409)
         })
 }
 
 
 // **********************************Add Category*******************************************
 
-module.exports.addCategory =  (req, res) => {
-    const { productId } = req.body;
-    const categoryId = uuidv4(); 
-    WishListModel.create({ sellerId,categoryId, productId})
-        .then(result => {
-            res.status(201).send({ message: "Category added Successfully", result: "result" })
+const addCategory = async (req, res, next) => {
+
+    const sellerId = await getSeller(req.decodedToken._id)
+    console.log(sellerId);
+    try {
+        const { categoryName } = req.body;
+        const categoryFound = await oneSearch({ categoryName })
+        if (categoryFound) {
+            throw new AppError("addCategory", "Category already exist", 409)
+        }
+        CategoryModel.create({
+            categoryName,
+             sellerId
         })
-        .catch(err => {
-            res.status(400).send({ message: "Failed", error: err })
-        })
+            .then(result => {
+                res.status(201).json({ message: "Category added Successfully", result: "result" })
+            })
+            .catch(err => {
+                throw new AppError(addCategory, "Failed", 424)
+            })
+    } catch (error) {
+        error.reference = error.reference ? error.reference : "POST /category/add";
+
+        next(error);
+    }
+
 }
 
 //************************************Delete Category*************************************** */
 
 
-module.exports.removeCategory = (req, res) => {
-    const { categoryId } = req.body;
+const removeCategory = async (req, res) => {
+    const { categoryId, categoryName } = req.body;
+    try {
+        categogryExistCheck = remove({ categoryId, categoryName })
 
-    WishListModel.findOneAndDelete({ categoryId : categoryId })
-        .then(result => {
-            res.status(200).send({ message: "Category removed Successfully" })
-        })
-        .catch(err => {
-            res.status(400).send({ message: "Failed", error: err })
-        })
+            .then(result => {
+                res.status(200).json({ message: "Category removed Successfully" })
+            })
+            .catch(err => {
+                res.status(400).json({ message: "Failed", error: err })
+            })
+    } catch (error) {
+        error.reference = error.reference ? error.reference : "POST /category/remove";
+    }
+
 }
+
+
+
+module.exports = { getCategory, addCategory, removeCategory }
