@@ -29,16 +29,6 @@ app.use('/api/wishlist',apiLogger, wishlistRoute)
 app.use('/api/category',apiLogger, categoryRoute)
 app.use('/api/cart',apiLogger,cartRoute)
 
-// app.all('*', (req, res, next) => {
-//     throw new appError(`Requested URL localhost:5001${req.path} not found!`, 404);
-
-// })
-
-
-// app.all('*', (req, res, next) => {
-//     throw new AppError(`Requested URL localhost:3000${req.path} not found!`, 404);
-
-// })
 
 app.use((error, req, res, next) => {
     return errorHandler(error, res)
