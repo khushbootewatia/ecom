@@ -5,7 +5,7 @@ const { getCategory, addCategory, removeCategory } = require('./category.control
 
 router.get("/getAll",getCategory);
 router.post("/add",authentication,addCategory);
-router.post("/remove",removeCategory);
+router.post("/remove",authentication,removeCategory);
 
 
 

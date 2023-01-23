@@ -8,9 +8,9 @@ const { getUser } = require('../user/user.service');
 //******************************Add new item in user cart*************************************
 // const addItemInCart = async (req, res, next) => {
 //    const userId =await getUser(req.decodedToken._id)
-   
+
 //     const {  categoryId, productId, qty } = req.body;
-    
+
 //     try {
 //         CartModel.create({ userId, productId, qty })
 //         .then(result => {
@@ -20,49 +20,55 @@ const { getUser } = require('../user/user.service');
 //             throw new AppError(removeItemInCart,"Failed", 401)
 //         })
 //     } catch (error) {
-        
+
 //     }
-   
+
 // }
 const addItemInCart = async (req, res, next) => {
-    // const userId = await getUser(req.decodedToken._id)
-    // console.log("_______",userId);
-    // const {productName, qty } = req.body;
-    let data = req.body
-    if(req.user.role === "user")
-    data.userId  = await req.user.user._id
 
-    
+    const data = req.body
+    if (req.user.role === "user")
+        data.userId = await req.user.user._id
+    const userId = data.userId
+    // console.log(userId);
+    // console.log(data.userId,);
+    const { productName, qty } = req.body;
+
     try {
-        // CartModel.create({ userId,productName, qty })
-        await CartModel.create({...data})
-        .then(result => {
-            res.status(201).json({ message: "Item added Success", result: "result" })
-        })
-        .catch(err => {
-            throw new AppError("addItemInCart","Failed", 401)
-        })
+        await CartModel.create({userId, productName, qty })
+            
+            .then(result => {
+                res.status(201).json({ message: "Item added Success", result: "result" })
+            })
+            .catch(err => {
+                throw new AppError("addItemInCart", "Failed", 401)
+            })
+
     } catch (error) {
         next(error);
     }
-   
+
 }
 
 //***************************remove item from the cart 3**************************************
-const removeItemInCart = (req, res, next) => {
-    const { userId,cartItemId } = req.body;
-   try {
-    removeCart({ cartItemId: cartItemId })
-    .then(result => {
-        res.status(200).json({ message: "Item removed Successfully" })
-    })
-    .catch(err => {
-       
-    })
-   } catch (error) {
-    
-   }
-   
+const removeItemInCart = async (req, res, next) => {
+
+    let data = req.body
+    if (req.user.role === "user")
+        data.userId = await req.user.user._id
+    const { cartItemId } = req.body;
+    try {
+        CartModel.findOneAndDelete({ cartItemId: cartItemId })
+            .then(result => {
+                res.status(200).json({ message: "Item removed Successfully" })
+            })
+            .catch(err => {
+
+            })
+    } catch (error) {
+
+    }
+
 }
 
 //********************************update quantity*********************************************

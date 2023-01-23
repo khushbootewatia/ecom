@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: Date,
     role: {
         type: String,
-        default: "User",
+        default: "user",
       },
     address: {
         shippingAddress: {
