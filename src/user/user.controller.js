@@ -35,6 +35,8 @@ const signUp = async (req, res, next) => {
         name, email, password
       })
     }
+    const otp = util.generateOtp();
+    const hashedOtp = util.generateHash(otp)
     await updateTransisentUser({ email: email }, { $set: { otpHash: hashedOtp } }, { upsert: true }).then(update => { //TODO: move otp related functions to otp module
       const payload = { to: email, otp }
       sendGrid.sendEmail(payload)

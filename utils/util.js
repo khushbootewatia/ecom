@@ -14,7 +14,7 @@ module.exports.generateHash = (data) => {
 
 module.exports.compareHash = (data, hash) => {
   console.log("data",data,"    hash",hash);
-  return bcrypt.compareSync(String(data), hash)
+  return bcrypt.compareSync((data), hash)
 }
 
 // *****************File Size Converter**********************/
