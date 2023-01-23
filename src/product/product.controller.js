@@ -1,10 +1,7 @@
 const productSchema = require("../product/product.model")
-const { getProduct, allProduct } = require('../product/product.service')
-const { getSeller } = require('../seller/seller.service')
+const { getProduct, allProduct, deleteProduct, updation} = require('../product/product.service')
+// const { getSeller } = require('../seller/seller.service')
 const { AppError } = require("../../utils/errorHandler");
-const { upload } = require('../../utils/awsS3')
-const { application } = require('express')
-const Mongoose = require('mongoose')
 
 // ********************************product creation*******************************
 
@@ -61,7 +58,7 @@ const updateProduct = async function (req, res, next) {
         if (checkProduct.isDeleted == true) {
             throw new AppError(reference, "No products with this Id or might be deleted", 404)
         }
-        const updatedProduct = await productSchema.findByIdAndUpdate({ _id: productId }, data, { new: true })
+        const updatedProduct = await updation({ _id: productId }, data, { new: true })
         return res.status(200).send({ status: true, result: updatedProduct })
 
     }
@@ -84,7 +81,7 @@ const deleteById = async function (req, res, next) {
         if (checkProduct.isDeleted === true)
             throw new AppError(reference, "Product already Deleted", 400)
 
-        const delUser = await productSchema.findByIdAndUpdate({ _id: productId }, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
+        const delUser = await deleteProduct({ _id: productId }, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
         return res.status(200).send({ status: true, result: delUser })
     }
     catch (error) {
