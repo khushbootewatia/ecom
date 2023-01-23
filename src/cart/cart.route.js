@@ -1,9 +1,9 @@
 const router = require('express').Router();
+const { authentication } = require('../../utils/middleware/auth');
 const { addItemInCart, removeItemInCart, updateQuantity } = require('./cart.controller');
 
-// router.get("/category",getCategoryById);
-router.post("/addItem",addItemInCart);
-router.post("/removeItem",removeItemInCart);
-router.post('/updateQuantity',updateQuantity);
+router.post("/addItem",authentication,addItemInCart);
+router.post("/removeItem",authentication,removeItemInCart);
+router.post('/updateQuantity',authentication,updateQuantity);
 module.exports = router;
   

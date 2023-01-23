@@ -1,8 +1,8 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model} = require('mongoose');
 
+const mongoose = require("mongoose")
 
-
-const userSchema = Schema({
+const userSchema = new mongoose.Schema({
 
     email: {
         type: String,
@@ -24,6 +24,10 @@ const userSchema = Schema({
     resetPasswordToken: String,
 
     resetPasswordExpires: Date,
+    role: {
+        type: String,
+        default: "User",
+      },
     address: {
         shippingAddress: {
             state: {
@@ -73,7 +77,7 @@ const userSchema = Schema({
 
 }, { timestamps: true });
 
-const transientUserSchema = Schema(
+const transientUserSchema = new mongoose.Schema(
     {
         email: {
             type: String,
@@ -98,4 +102,4 @@ const transientUserSchema = Schema(
 
 
 module.exports.User = model('User', userSchema);
-module.exports.TransientUser = model('Otp', transientUserSchema);
+module.exports.TransientUser = model('transient_users', transientUserSchema);

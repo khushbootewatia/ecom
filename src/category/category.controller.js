@@ -6,10 +6,10 @@ const { getSeller } = require('../seller/seller.service');
 
 //********************************Get Category By Name********************************************* */
 
-const getCategory = async (req, res) => {
-   
+const getCategory = async (req, res,next) => {
+
     const categoryName = req.query.categoryName
-   await search({ categoryName })
+    await search({ categoryName })
         .then(result => {
             res.status(200).json({ "message": "Success", data: result })
         }).catch(err => {
@@ -22,31 +22,46 @@ const getCategory = async (req, res) => {
 
 const addCategory = async (req, res, next) => {
 
-    const sellerId = await getSeller(req.decodedToken._id)
-    console.log(sellerId);
-    try {
-        const { categoryName } = req.body;
-        const categoryFound = await oneSearch({ categoryName })
-        if (categoryFound) {
-            throw new AppError("addCategory", "Category already exist", 409)
+    const j = JWT.verify(req.header.authorisation, process.env.KEY, 
+        async function (err, decodedToken) {
+        if (err) { /* handle token err */ }
+        else {
+            req.sellerId = decodedToken.id;   // Add to req object
+            next();
         }
-        CategoryModel.create({
-            categoryName,
-             sellerId
-        })
-            .then(result => {
-                res.status(201).json({ message: "Category added Successfully", result: "result" })
-            })
-            .catch(err => {
-                throw new AppError(addCategory, "Failed", 424)
-            })
-    } catch (error) {
-        error.reference = error.reference ? error.reference : "POST /category/add";
+    });
 
-        next(error);
+
+try {
+    const { categoryName } = req.body;
+    const categoryFound = oneSearch({ categoryName })
+    if (categoryFound) {
+        throw new AppError("addCategory", "Category already exist", 409)
     }
+    CategoryModel.create({
+        categoryName,
+        sellerId
+    })
+        .then(result => {
+            res.status(201).json({ message: "Category added Successfully", result: "result" })
+        })
+        .catch(err => {
+            throw new AppError("addCategory", "Failed", 424)
+        })
+        next();
+} catch (error) {
+
+    error.reference = error.reference ? error.reference : "POST /category/add";
+  
+    next(error);
+}
 
 }
+
+// const sellerId = await getSeller(req.decodedToken._id)
+// console.log(sellerId);
+
+
 
 //************************************Delete Category*************************************** */
 

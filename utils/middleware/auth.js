@@ -1,21 +1,40 @@
 const { AppError } = require('../errorHandler')
 const jwt = require('jsonwebtoken');
+const { Seller } = require('../../src/seller/seller.model');
+const { User } = require('../../src/user/user.model');
+const mongoose = require('mongoose')
 require('dotenv').config({ path: ".env" })
-const authentication = function (req, res, next) {
+const authentication = async function (req, res, next) {
+   
     try {
         const reference = "authentication"
         const bearerToken = req.headers.authorization
+        //  decodedToken
         if (typeof bearerToken == 'undefined')
-            throw new AppError(reference,"token is missing", 403)
-        let decodedToken = jwt.verify(bearerToken, process.env.JWT_SECRET_KEY)
-            if (!decodedToken) {
-                throw new AppError(reference,"token invalid", 401)
-            }
+            throw new AppError(reference, "token is missing", 403)
+        try{
+         var decodedToken = jwt.verify(bearerToken, process.env.KEY)
             req.decodedToken = decodedToken
-            //TODO: check what is the role. if role seller - seller.findone else user - user.findone
-            //TODO: if user doesn't exist, 
-            //TODO: req.userId = user._id
-            next();
+            console.log("decoded token",decodedToken);
+        }
+        catch(err){
+            throw new AppError(reference, "token invalid", 401)
+        }
+        const seller = await Seller.findOne({ _id:mongoose.Types.ObjectId(decodedToken.id)  })
+        if (seller) {
+            // console.log(seller);
+            req.user = { user: seller, role: 'seller' }
+        } else {
+            const user = await User.findOne({ _id: mongoose.Types.ObjectId(decodedToken.id)})
+            if (user) {
+                req.user = { user: user, role: 'user' }
+            }
+            else {
+                throw new AppError(reference, "token invalid", 401)
+            }
+        }
+       
+        next()        
     }
     catch (err) {
         next(err)
