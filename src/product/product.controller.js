@@ -1,18 +1,23 @@
 const productSchema = require("../product/product.model")
 const { getProduct, allProduct, deleteProduct, updation} = require('../product/product.service')
-// const { getSeller } = require('../seller/seller.service')
 const { AppError } = require("../../utils/errorHandler");
+const categorySchema = require("../category/category.model")
 
 // ********************************product creation*******************************
 
 const productCreation = async function (req, res, next) {
     try {
         const reference = "creation"
+        const categoryId = req.params.categoryId
+        console.log(categoryId)
         const data = req.body
         if(req.user.role === "seller"){
         data.sellerId = req.user.user._id
+
+        const checkCategoryId = await categorySchema.findOne({_id: categoryId})
+        data.categoryId = checkCategoryId
         
-        const product = await productSchema.create({ ...data })
+        const product = await productSchema.create({ ...data, categoryId})
         return res.status(200).send({ status: true, result: product })
         }
         else {
@@ -35,7 +40,7 @@ const getAllProducts = async function (req, res, next) {
         if (!data.length)
             throw new AppError(reference, "not found", 404)
 
-        res.status(200).send({ status: true, msg: data })
+        res.status(200).send({ status: true, data: data })
     }
     catch (error) {
         error.reference = error.reference ? error.reference : "GET /product/getAllProduct";
@@ -82,6 +87,7 @@ const deleteById = async function (req, res, next) {
             throw new AppError(reference, "Product already Deleted", 400)
 
         const delUser = await deleteProduct({ _id: productId }, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
+        console.log(delUser);
         return res.status(200).send({ status: true, result: delUser })
     }
     catch (error) {

@@ -3,7 +3,7 @@ const multer = require('multer')
 const multerS3 = require('multer-s3')
 require('dotenv').config({ path: ".env" })
 const { convertFileSize } = require('../utils/util')
-const { AppError } = require('./errorHandler')
+
 const s3 = new aws.S3({
     accessKeyId: process.env.ACCESSKEYID,
     secretAccessKey: process.env.SECRETACCESSKEY,

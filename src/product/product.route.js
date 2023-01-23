@@ -6,7 +6,7 @@ const {authentication} = require('../../utils/middleware/auth')
 const {validationMiddleware} = require('../../utils/middleware/joiValidator')
 const { validateProductSchema } = require('./product.validation')
 
-router.post('/create',authentication,validationMiddleware(validateProductSchema),productCreation)
+router.post('/create/:categoryId',authentication,validationMiddleware(validateProductSchema),productCreation)
 
 router.get('/getAllProducts',getAllProducts);
 

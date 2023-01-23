@@ -15,7 +15,7 @@ const authentication = async function (req, res, next) {
 
         try{
             decodedToken = jwt.verify(bearerToken, process.env.KEY)
-            req.decodedToken = decodedToken
+            // req.decodedToken = decodedToken
         }
         catch(err){
             throw new AppError(reference, "token invalid", 401)
@@ -32,7 +32,7 @@ const authentication = async function (req, res, next) {
                 req.user = { user: user, role: 'user' }
             }
             else {
-                throw new AppError(reference,)
+                throw new AppError(reference, "either not a user nor a seller")
             }
         }
         next()        

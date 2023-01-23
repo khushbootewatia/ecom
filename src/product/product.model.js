@@ -21,9 +21,14 @@ const productSchema = new mongoose.Schema({
         required: true
     },
 
-    category: {
-        type: String,
-        required: true
+    // category: {
+    //     type: String,
+    //     required: true
+    // },
+
+    categoryId: {
+        type: objectId,
+        ref: "category"
     },
 
     productImage: {
