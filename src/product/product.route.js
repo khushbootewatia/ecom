@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const { productCreation, getAllProducts, deleteById, updateProduct } = require('../product/product.controller')
-const {upload} = require('../../utils/awsS3')
 const {authentication} = require('../../utils/middleware/auth')
 const {validationMiddleware} = require('../../utils/middleware/joiValidator')
 const { validateProductSchema } = require('./product.validation')

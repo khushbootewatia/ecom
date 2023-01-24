@@ -1,5 +1,5 @@
 const productSchema = require("../product/product.model")
-const { getProduct, allProduct, deleteProduct, updation} = require('../product/product.service')
+const { getProduct, allProduct, deleteProduct, updatedProduct} = require('../product/product.service')
 const { AppError } = require("../../utils/errorHandler");
 const categorySchema = require("../category/category.model")
 
@@ -9,10 +9,9 @@ const productCreation = async function (req, res, next) {
     try {
         const reference = "creation"
         const categoryId = req.params.categoryId
-        console.log(categoryId)
         const data = req.body
-        if(req.user.role === "seller"){
-        data.sellerId = req.user.user._id
+        if(req.seller.role === "seller"){
+        data.sellerId = req.seller.seller._id
 
         const checkCategoryId = await categorySchema.findOne({_id: categoryId})
         data.categoryId = checkCategoryId
@@ -63,7 +62,7 @@ const updateProduct = async function (req, res, next) {
         if (checkProduct.isDeleted == true) {
             throw new AppError(reference, "No products with this Id or might be deleted", 404)
         }
-        const updatedProduct = await updation({ _id: productId }, data, { new: true })
+        const updatedProduct = await updatedProduct({ _id: productId }, data, { new: true })
         return res.status(200).send({ status: true, result: updatedProduct })
 
     }

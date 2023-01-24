@@ -10,7 +10,7 @@ const getCategory = async (req, res, next) => {
     const categoryName = req.query.categoryName
     await search({ categoryName })
         .then(result => {
-            res.status(200).json({ "message": "Success", data: result })
+            res.status(200).json({ message: "Success", data: result })
         }).catch(err => {
             throw new AppError("getCategory", " Something Went Wrong ", 409)
         })

@@ -12,7 +12,7 @@ const deleteProduct = async(p1,p2,p3) => {
     return await productSchema.findOneAndUpdate(p1,p2,p3)
 }
 
-const updation = async(p1,p2,p3) => {
+const updatedProduct = async(p1,p2,p3) => {
     return await productSchema.findByIdAndUpdate(p1,p2,p3)
 }
 
@@ -21,6 +21,6 @@ module.exports = {
     getProduct,
     allProduct,
     deleteProduct,
-    updation
+    updatedProduct
 }
 

@@ -25,22 +25,22 @@ return fileSizeInBytes;
 }
 
 
-// module.exports.generateToken = (userObject) => {
-//   let expireTime;
-//   expireTime = 6 * 30 * config.cfg.tokenExpirationTime; //6 months
+module.exports.generateToken = (userObject) => {
+  let expireTime;
+  expireTime = 6 * 30 * config.cfg.tokenExpirationTime; //6 months
 
-//   return jwt.sign(userObject, config.cfg.jwtSecretKey, { expiresIn: expireTime })
+  return jwt.sign(userObject, config.cfg.jwtSecretKey, { expiresIn: expireTime })
 
-// }
+}
 
 
-module.exports.signout = async (refreshToken) => {
-  const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
-  if (!refreshTokenDoc) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
-  }
-  await refreshTokenDoc.remove();
-};
+// module.exports.signout = async (refreshToken) => {
+//   const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
+//   if (!refreshTokenDoc) {
+//     throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
+//   }
+//   await refreshTokenDoc.remove();
+// };
 
 
 
@@ -58,25 +58,25 @@ module.exports.signout = async (refreshToken) => {
 //     }
 //   }
 // }
-class ApiError extends Error {
-  constructor(statusCode, message, isOperational = true, stack = '') {
-    super(message);
-    this.statusCode = statusCode;
-    this.isOperational = isOperational;
-    if (stack) {
-      this.stack = stack;
-    } else {
-      Error.captureStackTrace(this, this.constructor);
-    }
-  }
-}
-module.exports.generateToken = (userObject)=> {
-    let expireTime;
-    if (userObject.tokenExpirationTime)
-        expireTime = userObject.tokenExpirationTime;
-    else
-        expireTime = 6 * 30 * config.cfg.tokenExpirationTime; //6 months
-        delete userObject.tokenExpirationTime;
-        return jwt.sign(userObject, config.cfg.jwtSecretKey, { expiresIn: expireTime })
+// class ApiError extends Error {
+//   constructor(statusCode, message, isOperational = true, stack = '') {
+//     super(message);
+//     this.statusCode = statusCode;
+//     this.isOperational = isOperational;
+//     if (stack) {
+//       this.stack = stack;
+//     } else {
+//       Error.captureStackTrace(this, this.constructor);
+//     }
+//   }
+// }
+// module.exports.generateToken = (userObject)=> {
+//     let expireTime;
+//     if (userObject.tokenExpirationTime)
+//         expireTime = userObject.tokenExpirationTime;
+//     else
+//         expireTime = 6 * 30 * config.cfg.tokenExpirationTime; //6 months
+//         delete userObject.tokenExpirationTime;
+//         return jwt.sign(userObject, config.cfg.jwtSecretKey, { expiresIn: expireTime })
         
-}
+

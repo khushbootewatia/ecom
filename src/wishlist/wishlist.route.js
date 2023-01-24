@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const { wishlistAddItem, wishlistRemoveItem, wishList } = require('../wishlist/wishlist.controller')
+const { wishlistAddItem, wishlistRemoveItem, getWishList } = require('../wishlist/wishlist.controller')
 
 
 router.post('/addItem', wishlistAddItem);
 
-router.post('/removeItem', wishlistRemoveItem);
+router.delete('/removeItem', wishlistRemoveItem);
 
-router.get('/getItems',wishList)
+router.get('/getItems',getWishList)
 
 
 
