@@ -1,7 +1,7 @@
 const CategoryModel = require("./category.model")
 
 const search = async(params) => {
-    return await CategoryModel.findOne(params)
+    return await CategoryModel.find(params)
 }
 
 const remove = async(params) => {

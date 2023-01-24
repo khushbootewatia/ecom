@@ -15,9 +15,7 @@ const wishlistSchema = mongoose.Schema({
     productId: {
         type: String
     },
-    wishlistItemsId: {
-        type: String
-    }
+   
 
 })
 module.exports = new mongoose.model("wishlist", wishlistSchema);

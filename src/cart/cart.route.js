@@ -2,8 +2,9 @@ const router = require('express').Router();
 const { authentication } = require('../../utils/middleware/auth');
 const { addItemInCart, removeItemInCart, updateQuantity } = require('./cart.controller');
 
-router.post("/addItem",authentication,addItemInCart);
-router.post("/removeItem",authentication,removeItemInCart);
-router.post('/updateQuantity',authentication,updateQuantity);
+router.post("/addItem/:productId",authentication,addItemInCart);
+router.post("/removeItem/:productId",authentication,removeItemInCart);
+router.post("/updateQuantity/:productId",authentication,updateQuantity);
 module.exports = router;
   
+//todo : get items 

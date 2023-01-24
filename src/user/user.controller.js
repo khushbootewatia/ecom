@@ -159,7 +159,7 @@ const resetPassword = async (req, res, next) => {
   try {
     const user = await getUser({ resetPasswordToken: token })
     if (!user) {
-      throw new AppError(resetPassword, "Password reset token is invalid or has expired.", 401);
+      throw new AppError("resetPassword", "Password reset token is invalid or has expired.", 401);
     } else {
      user.password = util.generateHash(password);
       user.resetPasswordToken = undefined;

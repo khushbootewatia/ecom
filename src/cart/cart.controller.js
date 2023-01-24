@@ -1,48 +1,32 @@
 const CartModel = require('./cart.model')
-const CartService = require('./cart.services')
+const { updateCart, removeCart } = require('./cart.services')
 const { AppError } = require('../../utils/errorHandler');
 const { getUser } = require('../user/user.service');
 
 
 
 //******************************Add new item in user cart*************************************
-// const addItemInCart = async (req, res, next) => {
-//    const userId =await getUser(req.decodedToken._id)
 
-//     const {  categoryId, productId, qty } = req.body;
-
-//     try {
-//         CartModel.create({ userId, productId, qty })
-//         .then(result => {
-//             res.status(201).json({ message: "Item added Success", result: "result" })
-//         })
-//         .catch(err => {
-//             throw new AppError(removeItemInCart,"Failed", 401)
-//         })
-//     } catch (error) {
-
-//     }
-
-// }
 const addItemInCart = async (req, res, next) => {
 
-    const data = req.body
+    let { userId, quantity } = req.body
     if (req.user.role === "user")
-        data.userId = await req.user.user._id
-    const userId = data.userId
-    // console.log(userId);
-    // console.log(data.userId,);
-    const { productName, qty } = req.body;
+        userId = await req.user.user._id
+    // const userId = data.userId
+    const productId = req.params.productId
+    console.log("productId----->", productId);
+   
 
     try {
-        await CartModel.create({userId, productName, qty })
-            
+        await CartModel.create({ userId, productId, quantity })
+
             .then(result => {
-                res.status(201).json({ message: "Item added Success", result: "result" })
+                res.status(201).json({ message: "Item added Success", result: result })
             })
             .catch(err => {
                 throw new AppError("addItemInCart", "Failed", 401)
             })
+        next();
 
     } catch (error) {
         next(error);
@@ -53,35 +37,41 @@ const addItemInCart = async (req, res, next) => {
 //***************************remove item from the cart 3**************************************
 const removeItemInCart = async (req, res, next) => {
 
-    let data = req.body
+    let { userId, productId } = req.body
     if (req.user.role === "user")
-        data.userId = await req.user.user._id
-    const { cartItemId } = req.body;
+        userId = await req.user.user._id
+
     try {
-        CartModel.findOneAndDelete({ cartItemId: cartItemId })
+        await removeCart({ userId, productId })
             .then(result => {
-                res.status(200).json({ message: "Item removed Successfully" })
+                res.status(200).json({ message: "Item removed Successfully", result })
             })
             .catch(err => {
-
+                throw new AppError("removeItemInCart", "Failed", 401)
             })
+        next();
     } catch (error) {
-
+        next();
     }
 
 }
 
 //********************************update quantity*********************************************
-const updateQuantity = (req, res, next) => {
-    const { cartItemId, qty } = req.body;
+const updateQuantity = async (req, res, next) => {
+    const {productId}=  req.params.productId
+    const { quantity } = req.body;
+    console.log("quantit--->",quantity);
+    console.log("producID---->",productId);
 
-    CartModel.findOneAndUpdate({ cartItemId: cartItemId }, { $set: { quantity: qty } })
+    await updateCart({productId}, { $set: { quantity: quantity } })
         .then(result => {
-            res.status(200).json({ message: "Quantity Updated Successfully" })
+            res.status(200).json({ message: "Quantity Updated Successfully" ,result:result})
         })
         .catch(err => {
-            res.status(400).json({ message: "Failed", error: err })
+            throw new AppError("updateQuantity", "unable to update quantity", 409)
         })
+    next();
+
 }
 
 module.exports = { addItemInCart, removeItemInCart, updateQuantity }

@@ -36,4 +36,7 @@ router.post(
   validationMiddleware(verifyChangedOtpSchema),
   verifyChangedOtp
 );
+// TODO: fetch all products listed by seller
+// 
 module.exports = router;
+ 
