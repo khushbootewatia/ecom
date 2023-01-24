@@ -8,8 +8,11 @@ const updateCart = async(params,params2) => {
 const removeCart = async(params) => {
     return await CartModel.findOneAndDelete(params)
 }
-
+const find = async(param)=>{
+    return CartModel.find(param)
+}
 module.exports = {
     updateCart,
-    removeCart
+    removeCart,
+    find
 }
