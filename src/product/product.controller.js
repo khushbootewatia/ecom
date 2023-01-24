@@ -1,7 +1,8 @@
 const productSchema = require("../product/product.model")
-const { getProduct, allProduct, deleteProduct, updatedProduct} = require('../product/product.service')
+const { getProduct, allProduct, deleteProduct, updatingProduct} = require('../product/product.service')
 const { AppError } = require("../../utils/errorHandler");
-const categorySchema = require("../category/category.model")
+const categorySchema = require("../category/category.model");
+const { Seller } = require("../seller/seller.model");
 
 // ********************************product creation*******************************
 
@@ -33,8 +34,8 @@ const productCreation = async function (req, res, next) {
 
 const getAllProducts = async function (req, res, next) {
     try {
-        const queryParams = req.query;
         const reference = "getAllProducts";
+        const queryParams = req.query;
         const data = await allProduct({ isDeleted: false, ...queryParams })
         if (!data.length)
             throw new AppError(reference, "not found", 404)
@@ -44,6 +45,28 @@ const getAllProducts = async function (req, res, next) {
     catch (error) {
         error.reference = error.reference ? error.reference : "GET /product/getAllProduct";
         next(error)
+    }
+}
+
+// *************************************get Products By SellerId*********************************/
+
+const getProductsBySeller = async function(req, res, next) {
+    try{
+        const reference = "getProductsBySeller"
+        const sellerId = await req.seller.seller.id
+        console.log("sellerId-->",sellerId);
+        const findSeller = await productSchema.findOne({sellerId:sellerId})
+        console.log("findseller--->",findSeller);
+        if(!findSeller) {
+        throw new AppError(reference, "Data doesn't exist with this Id",404)
+        }else{           
+        const data = await allProduct({sellerId:sellerId})
+        return res.status(200).send({status:true, data:data})
+        }
+    }
+    catch(error){
+        error.reference = error.reference ? error.reference : "GET /product/getAllProduct";
+        next(error);
     }
 }
 
@@ -62,7 +85,7 @@ const updateProduct = async function (req, res, next) {
         if (checkProduct.isDeleted == true) {
             throw new AppError(reference, "No products with this Id or might be deleted", 404)
         }
-        const updatedProduct = await updatedProduct({ _id: productId }, data, { new: true })
+        const updatedProduct = await updatingProduct({ _id: productId }, data, { new: true })
         return res.status(200).send({ status: true, result: updatedProduct })
 
     }
@@ -97,6 +120,7 @@ const deleteById = async function (req, res, next) {
 
 module.exports = {
     productCreation,
+    getProductsBySeller,
     getAllProducts,
     updateProduct,
     deleteById

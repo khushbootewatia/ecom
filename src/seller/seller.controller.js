@@ -17,6 +17,7 @@ const {
   forgetPasswordSchema,
   verifyChangedOtpSchema,
 } = require("./seller.validation");
+const { USER_ROLES } = require("../../utils/constants");
 
 ///////////////////////////////         SIGN UP        /////////////////////////////
 
@@ -90,7 +91,7 @@ const signin = async (req, res, next) => {
       throw new AppError(reference, "Password incorrect", 401);
     }
     res.send({
-      token: util.generateToken({ id:seller._id}),
+      token: util.generateToken({ id:seller._id, role: USER_ROLES.SELLER}),
     });
   } catch (error) {
     error.reference = error.reference ? error.reference : "POST /seller/signin";

@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const { productCreation, getAllProducts, deleteById, updateProduct } = require('../product/product.controller')
-const {authentication} = require('../../utils/middleware/auth')
+const { productCreation, getAllProducts, deleteById, updateProduct, getProductsBySeller } = require('../product/product.controller')
+const {authentication, authorization} = require('../../utils/middleware/auth')
 const {validationMiddleware} = require('../../utils/middleware/joiValidator')
 const { validateProductSchema } = require('./product.validation')
 
@@ -9,8 +9,10 @@ router.post('/create/:categoryId',authentication,validationMiddleware(validatePr
 
 router.get('/getAllProducts',getAllProducts);
 
-router.put('/update/:productId',updateProduct)
+router.get('/getBySellerId',authentication, getProductsBySeller)
 
-router.delete('/delete/:productId',deleteById)
+router.patch('/update/:productId',authentication, authorization, updateProduct)
+
+router.delete('/delete/:productId',authentication, authorization, deleteById)
 
 module.exports = router;

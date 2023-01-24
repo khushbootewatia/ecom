@@ -12,6 +12,7 @@ removeTransisentUser
 } = require("../user/user.service")
 
 const { AppError } = require("../../utils/errorHandler");
+const { USER_ROLES } = require("../../utils/constants");
 
 
 
@@ -95,9 +96,11 @@ const signIn = async (req, res, next) => {
     if (!signInUser || !util.compareHash(password, signInUser.password))
       throw new AppError("signIn", "Incorrect email or password", 403)
     else {
-      res.setHeader("token",util.generateToken({ id: signInUser._id }))
+      // res.setHeader("token",util.generateToken({ id: signInUser._id }))
       res.json({
-        message : "SIGN IN SUCCESS",
+        // message : "SIGN IN SUCCESS",
+        status: true,
+        data: util.generateToken({ id: signInUser._id, role: USER_ROLES.USER })
       })
     }
   } catch (error) {

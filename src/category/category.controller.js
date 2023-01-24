@@ -24,7 +24,8 @@ const addCategory = async (req, res, next) => {
    
     const data = req.body
    
-        data.sellerId = req.user.user._id
+        data.sellerId = req.seller._id.toString()
+        // data.sellerId = req.seller._id
         const sellerId = data.sellerId
         try {
             const { categoryName } = req.body;
