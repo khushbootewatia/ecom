@@ -21,8 +21,9 @@ const getCategory = async (req, res, next) => {
 
 const addCategory = async (req, res, next) => {
 
+   
     const data = req.body
-    if (req.user.role === "seller") {
+   
         data.sellerId = req.user.user._id
         const sellerId = data.sellerId
         try {
@@ -48,7 +49,7 @@ const addCategory = async (req, res, next) => {
         }
 
     }
-}
+
 // const sellerId = await getSeller(req.decodedToken._id)
 // console.log(sellerId);
 
@@ -58,7 +59,6 @@ const addCategory = async (req, res, next) => {
 
 
 const removeCategory = async (req, res, next) => {
-    const { categoryName } = req.body;
     try {
         const { categoryName } = req.body;
         const categoryFound = await oneSearch({ categoryName })

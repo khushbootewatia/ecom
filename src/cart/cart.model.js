@@ -19,10 +19,7 @@ const cartSchema = mongoose.Schema({
     quantity: {
         type: Number
     },
-    productName: {
-        type: ObjectId,
-        ref: 'Product'
-    }
+  
 
 },{timestamp: true})
 
